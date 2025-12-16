@@ -1,22 +1,20 @@
 /* width */
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-  }
-  
-  /* track */
-  ::-webkit-scrollbar-track {
-    background: #1E1E1E; /* slate-900 vibes */
-  }
-  
-  /* handle */
-  ::-webkit-scrollbar-thumb {
-    background: #FF6B35; /* indigo */
-    border-radius: 8px;
-  }
-  
-  /* handle on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    background: #FF6B35;
-  }
-  
+  width: 3px;
+}
+
+/* track */
+::-webkit-scrollbar-track {
+  background: #1e1e1e;
+}
+
+/* handle */
+::-webkit-scrollbar-thumb {
+  background: #ff6b35;
+  border-radius: 8px;
+}
+
+/* handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #ff6b35;
+}
