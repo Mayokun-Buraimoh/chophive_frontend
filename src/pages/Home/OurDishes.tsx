@@ -75,7 +75,7 @@ const dishes: Dish[] = [
 const cafetarias = ["cafe1", "cafe2", "cafe3", "cafe4", "cafe5", "cafe6"];
 
 export default function OurDishes() {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   return (
     <section id="menu" className="bg-[#1E1E1E] py-12 md:py-20">
@@ -149,14 +149,7 @@ export default function OurDishes() {
                               const price = parseFloat(
                                 dish.price.replace("$", "")
                               );
-                              addItem({
-                                id: `dish-${dish.id}`,
-                                name: dish.name,
-                                description: dish.description,
-                                price: price,
-                                image: dish.image,
-                                cafeteria: dish.cafetaria
-                              });
+                              addToCart({ id: dish.id, price: dish.price }, 1);
                             }}
                           >
                             <Plus size={16} />

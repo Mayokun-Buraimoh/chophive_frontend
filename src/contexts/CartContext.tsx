@@ -1,106 +1,141 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-
-export interface CartItem {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  quantity: number;
-  cafeteria: string;
-}
+import {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from "react";
+import { Cart } from "../lib/interface";
+import {
+  fetchCart,
+  addCartItem,
+  updateCartItem,
+  deleteCartItem,
+} from "../../api";
 
 interface CartContextType {
-  items: CartItem[];
+  cart: Cart | null;
   isOpen: boolean;
+  loading: boolean;
+
   openCart: () => void;
   closeCart: () => void;
-  addItem: (item: Omit<CartItem, "quantity">) => void;
-  removeItem: (id: string) => void;
-  updateQuantity: (id: string, quantity: number) => void;
-  clearCart: () => void;
-  getTotalItems: () => number;
-  getSubtotal: () => number;
-  getDeliveryFee: () => number;
-  getTax: () => number;
-  getTotal: () => number;
+
+  addToCart: (
+    foodItem: {
+      id: number;
+      price: string;
+    },
+    quantity: number
+  ) => Promise<void>;
+  increaseQuantity: (cartItemId: number) => Promise<void>;
+  decreaseQuantity: (cartItemId: number) => Promise<void>;
+  deleteItem: (cartItemId: number) => Promise<void>;
+  refreshCart: () => Promise<void>;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<Cart>({
+    item_count: 0,
+    items: [],
+    total_amount: "",
+    created_at: "",
+    updated_at: "",
+    id: 0,
+  });
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  const loadCart = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchCart();
+      setCart(data);
+    } catch (error) {
+      console.error("Failed to load cart:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadCart();
+  }, []);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
 
-  const addItem = (item: Omit<CartItem, "quantity">) => {
-    setItems((prevItems) => {
-      const existingItem = prevItems.find((i) => i.id === item.id);
-      if (existingItem) {
-        return prevItems.map((i) =>
-          i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
-        );
-      }
-      return [...prevItems, { ...item, quantity: 1 }];
-    });
-  };
+  // ---------------- CART ACTIONS ----------------
 
-  const removeItem = (id: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  };
+  const addToCart = async (
+    foodItem: {
+      id: number;
+      price: string;
+    },
+    quantity = 1
+  ) => {
+    try {
+      const userId = localStorage.getItem("user_id");
+      console.log("user_id: " + userId)
+      const payload = {
+        item_id: foodItem.id,
+        user_id: userId,
+        qty: quantity,
+        price: foodItem.price,
+        shipping_amount: "500.00",
+        service_fee: "200.00",
+        cart_id: localStorage.getItem("cart_id")!,
+      };
+console.log(payload);
 
-  const updateQuantity = (id: string, quantity: number) => {
-    if (quantity <= 0) {
-      removeItem(id);
-      return;
+      await addCartItem(payload);
+      await loadCart();
+    } catch (error) {
+      console.error("Add to cart failed:", error);
     }
-    setItems((prevItems) =>
-      prevItems.map((item) => (item.id === id ? { ...item, quantity } : item))
-    );
   };
 
-  const clearCart = () => {
-    setItems([]);
+  const increaseQuantity = async (cartItemId: number) => {
+    const item = cart?.items.find((i) => i.id === cartItemId);
+    if (!item) return;
+
+    await updateCartItem(cartItemId, item.quantity + 1);
+    await loadCart();
   };
 
-  const getTotalItems = () => {
-    return items.reduce((total, item) => total + item.quantity, 0);
+  const decreaseQuantity = async (cartItemId: number) => {
+    const item = cart?.items.find((i) => i.id === cartItemId);
+    if (!item) return;
+
+    if (item.quantity <= 1) {
+      await deleteCartItem(cartItemId);
+    } else {
+      await updateCartItem(cartItemId, item.quantity - 1);
+    }
+
+    await loadCart();
   };
 
-  const getSubtotal = () => {
-    return items.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
-
-  const getDeliveryFee = () => {
-    return 3.99;
-  };
-
-  const getTax = () => {
-    return getSubtotal() * 0.08; // 8% tax
-  };
-
-  const getTotal = () => {
-    return getSubtotal() + getDeliveryFee() + getTax();
+  const deleteItem = async (cartItemId: number) => {
+    await deleteCartItem(cartItemId);
+    await loadCart();
   };
 
   return (
     <CartContext.Provider
       value={{
-        items,
+        cart,
         isOpen,
+        loading,
         openCart,
         closeCart,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clearCart,
-        getTotalItems,
-        getSubtotal,
-        getDeliveryFee,
-        getTax,
-        getTotal,
+        addToCart,
+        increaseQuantity,
+        decreaseQuantity,
+        deleteItem,
+        refreshCart: loadCart,
       }}
     >
       {children}
@@ -110,7 +145,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
 export function useCart() {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error("useCart must be used within a CartProvider");
   }
   return context;

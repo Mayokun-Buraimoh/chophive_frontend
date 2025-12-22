@@ -6,6 +6,8 @@ import { Input } from "../../components/ui/input";
 import { Mail, Lock, ChefHat } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { loginSchema, type LoginFormData } from "../../lib/validations";
+import api from "../../../api";
+import { getUserIdFromToken } from "../../lib/auth";
 
 function Login() {
   const {
@@ -21,12 +23,22 @@ function Login() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Login data:", data);
-      // TODO: Implement actual login logic
-    } catch (error) {
-      console.error("Login error:", error);
+      const res = await api.post("/user/token/", data)
+
+      const { refresh, access } = res.data;
+
+      localStorage.setItem("refresh_token", refresh);
+      localStorage.setItem("access_token", access);
+
+      const userId = getUserIdFromToken();
+      if (userId) {
+        localStorage.setItem("user_id", String(userId));
+      }
+
+          window.location.href = "/";
+
+    } catch (error:any) {
+      console.error("Login error:", error.response?.data || error.message);
     }
   };
 

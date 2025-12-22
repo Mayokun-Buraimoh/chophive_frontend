@@ -53,7 +53,7 @@ const salads: Salad[] = [
 ];
 
 export default function FeaturedSalads() {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -98,15 +98,7 @@ export default function FeaturedSalads() {
                       size="icon"
                       className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 md:h-10 md:w-10"
                       onClick={() => {
-                        const price = parseFloat(salad.price.replace("$", ""));
-                        addItem({
-                          id: `salad-${salad.id}`,
-                          name: salad.name,
-                          description: `${salad.calories} ${salad.persons}`,
-                          price: price,
-                          image: salad.image,
-                          cafeteria: salad.cafeteria,
-                        });
+                        addToCart({id: salad.id, price: salad.price}, 1);
                       }}
                     >
                       <Plus size={16} />

@@ -5,8 +5,8 @@ import { useState } from "react";
 import { useCart } from "../contexts/CartContext";
 
 export default function Header() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const { openCart, getTotalItems } = useCart();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const { openCart, cart } = useCart();
 
   return (
     <header className="bg-[#FF6B35] border-b border-gray-800 sticky top-0 z-50">
@@ -66,9 +66,9 @@ export default function Header() {
               onClick={openCart}
             >
               <ShoppingCart size={20} />
-              {getTotalItems() > 0 && (
+              {cart && cart.item_count && cart.item_count > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {getTotalItems()}
+                  {cart.item_count}
                 </span>
               )}
             </Button>
@@ -130,9 +130,9 @@ export default function Header() {
               >
                 <ShoppingCart size={18} className="mr-2" />
                 Cart
-                {getTotalItems() > 0 && (
+                {cart?.item_count && cart?.item_count > 0 && (
                   <span className="ml-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full px-2 py-0.5">
-                    {getTotalItems()}
+                    {cart.item_count}
                   </span>
                 )}
               </Button>

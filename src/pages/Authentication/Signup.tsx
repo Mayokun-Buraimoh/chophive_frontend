@@ -1,11 +1,12 @@
 import { Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Mail, Lock, User, ChefHat } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { signupSchema, type SignupFormData } from "../../lib/validations";
+import api from "../../../api";
 
 function Signup() {
   const {
@@ -19,14 +20,26 @@ function Signup() {
     },
   });
 
-  const onSubmit = async (data: SignupFormData) => {
+  const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      console.log("Signup data:", data);
-      // TODO: Implement actual signup logic
-    } catch (error) {
-      console.error("Signup error:", error);
+      //Register
+      await api.post("/user/register/", data);
+
+      //Auto Login
+      const autoLogin = await api.post("/user/token/", {
+        email: data.email,
+        password: data.password,
+      });
+
+      const { refresh, access } = autoLogin.data;
+
+      localStorage.setItem("access_token", access);
+      localStorage.setItem("refresh_token", refresh);
+
+      window.location.href = "/";
+
+    } catch (error:any) {
+      console.error("Signup error:", error.response?.data || error.message);
     }
   };
 
@@ -148,6 +161,34 @@ function Signup() {
                   <p className="text-xs text-gray-500 mt-1">
                     Must contain uppercase, lowercase, and a number
                   </p>
+                </div>
+
+                <div className="space-y-2">
+                  <label
+                    htmlFor="password2"
+                    className="text-sm font-medium text-gray-300"
+                  >
+                    Confirm Password
+                  </label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                    <Input
+                      type="password"
+                      id="password2"
+                      placeholder="Confirm your password"
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35] h-12 ${
+                        errors.password2
+                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                          : ""
+                      }`}
+                      {...register("password2")}
+                    />
+                  </div>
+                  {errors.password2 && (
+                    <p className="text-sm text-red-500 mt-1">
+                      {errors.password2.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="space-y-2 pt-2">

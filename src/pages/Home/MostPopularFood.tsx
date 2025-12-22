@@ -8,7 +8,7 @@ interface PopularFood {
   name: string;
   rating: number;
   image: string;
-  price: number;
+  price: string;
   cafeteria: string;
 }
 
@@ -18,7 +18,7 @@ const popularFoods: PopularFood[] = [
     name: "Chicken Meal",
     rating: 4.8,
     image: "🍗",
-    price: 15.99,
+    price: "15.99",
     cafeteria: "cafe1",
   },
   {
@@ -26,7 +26,7 @@ const popularFoods: PopularFood[] = [
     name: "Skewers",
     rating: 4.8,
     image: "🍢",
-    price: 12.99,
+    price: "12.99",
     cafeteria: "cafe2",
   },
   {
@@ -34,7 +34,7 @@ const popularFoods: PopularFood[] = [
     name: "Egg Sandwich",
     rating: 4.9,
     image: "🥪",
-    price: 8.99,
+    price: "8.99",
     cafeteria: "cafe3",
   },
   {
@@ -42,13 +42,13 @@ const popularFoods: PopularFood[] = [
     name: "Beef Burger",
     rating: 4.7,
     image: "🍔",
-    price: 11.99,
+    price: "11.99",
     cafeteria: "cafe4",
   },
 ];
 
 export default function MostPopularFood() {
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -103,14 +103,7 @@ export default function MostPopularFood() {
                     size="icon"
                     className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10"
                     onClick={() => {
-                      addItem({
-                        id: `popular-${food.id}`,
-                        name: food.name,
-                        description: `Rated ${food.rating} stars`,
-                        price: food.price || 10.99,
-                        image: food.image,
-                        cafeteria: food.cafeteria,
-                      });
+                      addToCart({ id: food.id, price: food.price }, 1);
                     }}
                   >
                     <Plus size={18} />
