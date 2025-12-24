@@ -37,16 +37,9 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | null>(null);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Cart>({
-    item_count: 0,
-    items: [],
-    total_amount: "",
-    created_at: "",
-    updated_at: "",
-    id: 0,
-  });
+  const [cart, setCart] = useState<Cart>();
   const [isOpen, setIsOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const loadCart = async () => {
     setLoading(true);

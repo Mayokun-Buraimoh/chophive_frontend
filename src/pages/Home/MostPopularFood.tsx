@@ -2,53 +2,11 @@ import { ChevronRight, ArrowUpRight, Plus } from "lucide-react";
 import { useRef } from "react";
 import { Button } from "../../components/ui/button";
 import { useCart } from "../../contexts/CartContext";
-
-interface PopularFood {
-  id: number;
-  name: string;
-  rating: number;
-  image: string;
-  price: string;
-  cafeteria: string;
-}
-
-const popularFoods: PopularFood[] = [
-  {
-    id: 1,
-    name: "Chicken Meal",
-    rating: 4.8,
-    image: "🍗",
-    price: "15.99",
-    cafeteria: "cafe1",
-  },
-  {
-    id: 2,
-    name: "Skewers",
-    rating: 4.8,
-    image: "🍢",
-    price: "12.99",
-    cafeteria: "cafe2",
-  },
-  {
-    id: 3,
-    name: "Egg Sandwich",
-    rating: 4.9,
-    image: "🥪",
-    price: "8.99",
-    cafeteria: "cafe3",
-  },
-  {
-    id: 4,
-    name: "Beef Burger",
-    rating: 4.7,
-    image: "🍔",
-    price: "11.99",
-    cafeteria: "cafe4",
-  },
-];
+import { useFood } from "../../contexts/FoodContext";
 
 export default function MostPopularFood() {
   const { addToCart } = useCart();
+  const { foods } = useFood();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -80,7 +38,7 @@ export default function MostPopularFood() {
             className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {popularFoods.map((food) => (
+            {foods.map((food) => (
               <div key={food.id} className="flex-shrink-0 relative">
                 <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl">
                   <div className="absolute left-1/2 -translate-x-1/2">
@@ -114,7 +72,7 @@ export default function MostPopularFood() {
                       {food.name}
                     </h3>
                     <span className="text-white font-semibold text-sm md:text-base">
-                      {food.rating} ★
+                      {food.description}
                     </span>
                   </div>
                 </div>

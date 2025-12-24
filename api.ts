@@ -1,5 +1,5 @@
 import axios from "axios";
-import { AddToCartPayload, Cart } from "./src/lib/interface";
+import { AddToCartPayload, Cart, FoodItem } from "./src/lib/interface";
 
 const API_BASE_URL = "http://127.0.0.1:8000/api/v1";
 
@@ -42,6 +42,11 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export const FetchFoodItems = async (): Promise<FoodItem[]> => {
+  const res = await api.get("/food-items/");
+  return res.data;
+};
 
 export const fetchCart = async (): Promise<Cart> => {
   const res = await api.get("/cart-view/");

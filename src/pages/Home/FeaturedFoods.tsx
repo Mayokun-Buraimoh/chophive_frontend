@@ -2,58 +2,11 @@ import { Button } from "../../components/ui/button";
 import { Plus, ChevronRight } from "lucide-react";
 import { useCart } from "../../contexts/CartContext";
 import { useRef } from "react";
-
-interface Salad {
-  id: number;
-  name: string;
-  calories: string;
-  persons: string;
-  price: string;
-  image: string;
-  cafeteria: string;
-}
-
-const salads: Salad[] = [
-  {
-    id: 1,
-    name: "Fresh and Health Salad",
-    calories: "60 calories",
-    persons: "4 persons",
-    price: "$2.65",
-    image: "🥗",
-    cafeteria: "cafe1",
-  },
-  {
-    id: 2,
-    name: "Cashewnut Chicken Salad",
-    calories: "85 calories",
-    persons: "2 persons",
-    price: "$3.20",
-    image: "🥙",
-    cafeteria: "cafe2",
-  },
-  {
-    id: 3,
-    name: "Greek Feta Salad",
-    calories: "70 calories",
-    persons: "3 persons",
-    price: "$2.90",
-    image: "🥗",
-    cafeteria: "cafe3",
-  },
-  {
-    id: 4,
-    name: "Mediterranean Salad",
-    calories: "75 calories",
-    persons: "4 persons",
-    price: "$3.15",
-    image: "🥙",
-    cafeteria: "cafe4",
-  },
-];
+import { useFood } from "../../contexts/FoodContext";
 
 export default function FeaturedSalads() {
   const { addToCart } = useCart();
+  const { foods } = useFood();
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -75,30 +28,30 @@ export default function FeaturedSalads() {
             className="flex gap-4 md:gap-6 overflow-x-auto scrollbar-hide pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {salads.map((salad) => (
+            {foods.map((food) => (
               <div
-                key={salad.id}
+                key={food.id}
                 className="flex-shrink-0 w-[280px] sm:w-[300px] bg-gray-800 rounded-lg p-4 md:p-6"
               >
                 <div className="flex flex-col items-center text-center">
                   <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-700 flex items-center justify-center text-5xl md:text-6xl mb-4">
-                    {salad.image}
+                    {food.image}
                   </div>
                   <h3 className="text-white font-semibold text-sm md:text-base mb-2">
-                    {salad.name}
+                    {food.name}
                   </h3>
                   <p className="text-gray-400 text-xs md:text-sm mb-3">
-                    {salad.calories} {salad.persons}
+                    {food.description} {food.vendor_name}
                   </p>
                   <div className="flex items-center justify-between w-full">
                     <span className="text-white font-bold text-lg md:text-xl">
-                      {salad.price}
+                      {food.price}
                     </span>
                     <Button
                       size="icon"
                       className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 md:h-10 md:w-10"
                       onClick={() => {
-                        addToCart({id: salad.id, price: salad.price}, 1);
+                        addToCart({id: food.id, price: food.price}, 1);
                       }}
                     >
                       <Plus size={16} />
