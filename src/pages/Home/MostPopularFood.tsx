@@ -3,8 +3,10 @@ import { useRef } from "react";
 import { Button } from "../../components/ui/button";
 import { useCart } from "../../contexts/CartContext";
 import { useFood } from "../../contexts/FoodContext";
+import { useNavigate } from "react-router-dom";
 
 export default function MostPopularFood() {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const { foods } = useFood();
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -53,6 +55,7 @@ export default function MostPopularFood() {
                   <button
                     className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-lg hover:scale-105 transition"
                     title="View Details"
+                    onClick={() => navigate(`/food/${food.item_id}`)}
                   >
                     <ArrowUpRight className="w-5 h-5 text-black" />
                   </button>

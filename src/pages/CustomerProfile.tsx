@@ -5,6 +5,7 @@ import { Loader2, UserCircle } from "lucide-react";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import Footer from "../components/Footer";
 
 export default function CustomerProfile() {
   const navigate = useNavigate();
@@ -97,6 +98,7 @@ export default function CustomerProfile() {
         </div>
         <p>Joined on {profile.user.date_joined}</p>
       </div>
+      <Footer />
     </section>
   );
 }

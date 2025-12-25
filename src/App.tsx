@@ -11,6 +11,7 @@ import "./App.css";
 import { FoodProvider } from "./contexts/FoodContext";
 import CustomerProfile from "./pages/CustomerProfile";
 import { AuthProvider } from "./contexts/AuthContext";
+import FoodDetails from "./pages/FoodDetails";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
+              <Route path="/food/:itemId" element={<FoodDetails />} />
             </Routes>
             <Cart />
           </BrowserRouter>

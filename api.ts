@@ -54,7 +54,7 @@ export const FetchFoodItems = async (): Promise<FoodItem[]> => {
 };
 
 export const fetchCart = async (): Promise<Cart> => {
-  const res = await api.get("/cart-view/");
+  const res = await api.get("/cart-list/");
   return res.data;
 };
 
