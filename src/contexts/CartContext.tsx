@@ -12,6 +12,7 @@ import {
   updateCartItem,
   deleteCartItem,
 } from "../../api";
+import { useAuth } from "./AuthContext";
 
 interface CartContextType {
   cart: Cart | null;
@@ -34,18 +35,21 @@ interface CartContextType {
   refreshCart: () => Promise<void>;
 }
 
-const CartContext = createContext<CartContextType | null>(null);
+const CartContext = createContext<CartContextType>({} as CartContextType);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [cart, setCart] = useState<Cart>();
+  const [cart, setCart] = useState<Cart | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const { userId, isAuthenticated } = useAuth();
 
   const loadCart = async () => {
     setLoading(true);
     try {
+      console.log("Fetching cart...");
       const data = await fetchCart();
       setCart(data);
+      console.log("Cart loaded:", data);
     } catch (error) {
       console.error("Failed to load cart:", error);
     } finally {
@@ -54,8 +58,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    loadCart();
-  }, []);
+    if (isOpen) loadCart();
+  }, [isOpen]);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
@@ -70,8 +74,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
     quantity = 1
   ) => {
     try {
-      const userId = localStorage.getItem("user_id");
-      console.log("user_id: " + userId)
+      console.log("user_id: " + userId);
+      if (!isAuthenticated) {
+        console.warn("No user_id found. User not authenticated.");
+        return;
+      }
       const payload = {
         item_id: foodItem.id,
         user_id: userId,
@@ -81,7 +88,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         service_fee: "200.00",
         cart_id: localStorage.getItem("cart_id")!,
       };
-console.log(payload);
+      console.log(payload);
 
       await addCartItem(payload);
       await loadCart();

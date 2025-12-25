@@ -43,6 +43,11 @@ api.interceptors.response.use(
   }
 );
 
+export const fetchUserProfile = async (userId: string | null) => {
+  const res = await api.get(`/user/profile/${userId}/`);
+  return res.data;
+};
+
 export const FetchFoodItems = async (): Promise<FoodItem[]> => {
   const res = await api.get("/food-items/");
   return res.data;

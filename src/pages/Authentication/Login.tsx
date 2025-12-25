@@ -7,9 +7,10 @@ import { Mail, Lock, ChefHat } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { loginSchema, type LoginFormData } from "../../lib/validations";
 import api from "../../../api";
-import { getUserIdFromToken } from "../../lib/auth";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Login() {
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -23,21 +24,12 @@ function Login() {
 
   const onSubmit = async (data: LoginFormData) => {
     try {
-      const res = await api.post("/user/token/", data)
+      const res = await api.post("/user/token/", data);
 
       const { refresh, access } = res.data;
-
-      localStorage.setItem("refresh_token", refresh);
-      localStorage.setItem("access_token", access);
-
-      const userId = getUserIdFromToken();
-      if (userId) {
-        localStorage.setItem("user_id", String(userId));
-      }
-
-          window.location.href = "/";
-
-    } catch (error:any) {
+      login(access, refresh);
+      window.location.href = "/";
+    } catch (error: any) {
       console.error("Login error:", error.response?.data || error.message);
     }
   };

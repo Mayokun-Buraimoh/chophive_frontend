@@ -7,8 +7,10 @@ import { Mail, Lock, User, ChefHat } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { signupSchema, type SignupFormData } from "../../lib/validations";
 import api from "../../../api";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Signup() {
+  const { login } = useAuth();
   const {
     register,
     handleSubmit,
@@ -33,12 +35,10 @@ function Signup() {
 
       const { refresh, access } = autoLogin.data;
 
-      localStorage.setItem("access_token", access);
-      localStorage.setItem("refresh_token", refresh);
+      login(access, refresh);
 
       window.location.href = "/";
-
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
     }
   };

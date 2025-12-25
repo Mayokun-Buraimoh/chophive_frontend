@@ -9,24 +9,29 @@ import Checkout from "./pages/Checkout";
 import OrderSuccess from "./pages/OrderSuccess";
 import "./App.css";
 import { FoodProvider } from "./contexts/FoodContext";
+import CustomerProfile from "./pages/CustomerProfile";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
-    <FoodProvider>
+    <AuthProvider>
       <CartProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/order-success" element={<OrderSuccess />} />
-          </Routes>
-          <Cart />
-        </BrowserRouter>
+        <FoodProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/signup" element={<Signup />} />
+              <Route path="/contact" element={<Contact />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/order-success" element={<OrderSuccess />} />
+              <Route path="/customer-profile" element={<CustomerProfile />} />
+            </Routes>
+            <Cart />
+          </BrowserRouter>
+        </FoodProvider>
       </CartProvider>
-    </FoodProvider>
+    </AuthProvider>
   );
 }
 

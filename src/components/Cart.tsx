@@ -5,6 +5,8 @@ import { Button } from "./ui/button";
 import { useCart } from "../contexts/CartContext";
 
 export default function Cart() {
+  console.log("🛒 Cart component mounted");
+
   const navigate = useNavigate();
 
   const {
@@ -69,6 +71,8 @@ export default function Cart() {
     return `$${price.toFixed(2)}`;
   };
 
+  
+
   return (
     <>
       {/* Backdrop */}
@@ -104,24 +108,22 @@ export default function Cart() {
 
         {/* Cart Items - Scrollable */}
         <div className="flex-1 overflow-y-auto px-6 py-4">
-          {cart?.item_count === 0 ? (
-            <div className="flex flex-col items-center justify-center h-full text-center">
-              {loading ? (
-                <div className="flex items-center justify-center h-full">
-                  <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-                </div>
-              ) : (
-                <div className="flex flex-col items-center justify-center h-full">
-                  <p className="text-gray-400 text-lg mb-2">Your cart is empty</p>
-                  <p className="text-gray-500 text-sm">
-                    Add some delicious meals to get started!
-                  </p>
-                </div>
-              )}
+          {loading && (
+            <div className="flex items-center justify-center h-full">
+              <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
             </div>
-          ) : (
+          )}
+          {!loading && (!cart || cart?.item_count === 0) && (
+            <div className="flex flex-col items-center justify-center h-full text-center">
+              <p className="text-gray-400 text-lg mb-2">Your cart is empty</p>
+              <p className="text-gray-500 text-sm">
+                Add some delicious meals to get started!
+              </p>
+            </div>
+          )}
+          {!loading && cart && cart.item_count > 0 && (
             <div className="space-y-4">
-              {cart?.items?.map((item) => (
+              {cart.items.map((item) => (
                 <div
                   key={item.id}
                   className="flex gap-4 pb-4 border-b border-gray-800 last:border-b-0"
@@ -167,9 +169,7 @@ export default function Cart() {
                           </button>
                         ) : (
                           <button
-                            onClick={() =>
-                              decreaseQuantity(item.id)
-                            }
+                            onClick={() => decreaseQuantity(item.id)}
                             className="w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                             aria-label="Decrease quantity"
                           >
@@ -180,9 +180,7 @@ export default function Cart() {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() =>
-                            increaseQuantity(item.id)
-                          }
+                          onClick={() => increaseQuantity(item.id)}
                           className="w-8 h-8 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                           aria-label="Increase quantity"
                         >
@@ -224,7 +222,7 @@ export default function Cart() {
                     Total
                   </span>
                   <span className="text-[#FF6B35] font-bold text-lg">
-                    {formatPrice(Number(cart?.total_amount) + 10.00 + 10.00)}
+                    {formatPrice(Number(cart?.total_amount) + 10.0 + 10.0)}
                   </span>
                 </div>
               </div>

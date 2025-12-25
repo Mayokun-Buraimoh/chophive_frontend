@@ -1,12 +1,17 @@
 import { Link } from "react-router-dom";
 import { Button } from "./ui/button";
-import { Menu, ShoppingCart, X } from "lucide-react";
+import { Menu, ShoppingCart, UserCircle, X } from "lucide-react";
 import { useState } from "react";
 import { useCart } from "../contexts/CartContext";
+import { useAuth } from "../contexts/AuthContext";
+
 
 export default function Header() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const { openCart, cart } = useCart();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
+  const { openCart, cart } = useCart();
+  const { logout } = useAuth();
+  const rtoken = localStorage.getItem("refresh_token");
 
   return (
     <header className="bg-[#FF6B35] border-b border-gray-800 sticky top-0 z-50">
@@ -66,25 +71,68 @@ export default function Header() {
               onClick={openCart}
             >
               <ShoppingCart size={20} />
-              {cart && cart.item_count && cart.item_count > 0 && (
+              {cart?.item_count > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cart.item_count}
+                  {cart?.item_count}
                 </span>
               )}
             </Button>
-            <Link to="/login">
-              <Button
-                variant="outline"
-                className="border-2 border-[#1E1E1E] text-white bg-transparent hover:text-white hover:bg-[#1E1E1E]"
-              >
-                Login
-              </Button>
-            </Link>
-            <Link to="/signup">
-              <Button className="bg-[#1E1E1E] hover:bg-transparent hover:border-[#1E1E1E] border-2 border-[#FF6B35] text-white">
-                Sign Up
-              </Button>
-            </Link>
+            {rtoken ? (
+              <div>
+                <Button
+                  variant="outline"
+                  className="border-2 border-[#1E1E1E] text-white bg-transparent hover:text-white hover:bg-[#1E1E1E]"
+                  onClick={() => setProfileOpen((prev) => !prev)}
+                >
+                  <UserCircle size={20} />
+                </Button>
+                {profileOpen && (
+                  <div
+                    className="absolute right-0 mt-2 w-48 bg-[#1E1E1E] border border-gray-700 rounded-md shadow-lg z-50"
+                    onMouseLeave={() => setProfileOpen(false)}
+                  >
+                    <Link
+                      to="/customer-profile"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-800"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      My Account
+                    </Link>
+
+                    <Link
+                      to="/orders"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-800"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      My Orders
+                    </Link>
+
+                    <button
+                      onClick={logout}
+                      className="w-full text-left px-4 py-2 text-sm text-red-400 hover:bg-gray-800"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div>
+                <Link to="/login">
+                  <Button
+                    variant="outline"
+                    className="border-2 border-[#1E1E1E] text-white bg-transparent hover:text-white hover:bg-[#1E1E1E]"
+                  >
+                    Login
+                  </Button>
+                </Link>
+                <Link to="/signup">
+                  <Button className="bg-[#1E1E1E] hover:bg-transparent hover:border-[#1E1E1E] border-2 border-[#FF6B35] text-white">
+                    Sign Up
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -106,10 +154,7 @@ export default function Header() {
             <a href="#menu" className="block text-white hover:text-white">
               Menu
             </a>
-            <a
-              href="#cafeterias"
-              className="block text-white hover:text-white"
-            >
+            <a href="#cafeterias" className="block text-white hover:text-white">
               Cafeterias
             </a>
             <Link
@@ -119,7 +164,7 @@ export default function Header() {
             >
               Contact Us
             </Link>
-            <div className="flex flex-col space-y-2 pt-4">
+            <div className="flex flex-col pt-4">
               <Button
                 variant="outline"
                 className="w-full border-[#1E1E1E] bg-transparent text-white relative"
@@ -130,25 +175,59 @@ export default function Header() {
               >
                 <ShoppingCart size={18} className="mr-2" />
                 Cart
-                {cart?.item_count && cart?.item_count > 0 && (
+                {cart?.item_count > 0 && (
                   <span className="ml-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full px-2 py-0.5">
-                    {cart.item_count}
+                    {cart?.item_count}
                   </span>
                 )}
               </Button>
-              <Link to={"/login"} onClick={() => setMobileMenuOpen(false)}>
-                <Button
-                  variant="outline"
-                  className="w-full border-[#1E1E1E] bg-transparent text-white"
-                >
-                  Login
-                </Button>
-              </Link>
-              <Link to={"/signup"} onClick={() => setMobileMenuOpen(false)}>
-                <Button className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/90 text-white">
-                  Sign Up
-                </Button>
-              </Link>
+              {rtoken ? (
+                <div className="flex flex-col space-y-2 pt-4">
+                  <Link
+                    to="/customer-profile"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <Button
+                      variant="outline"
+                      className="w-full border-[#1E1E1E] text-white bg-transparent "
+                    >
+                      My Account
+                    </Button>
+                  </Link>
+
+                  <Link to="/orders" onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-[#1E1E1E] text-white bg-transparent"
+                    >
+                      My Orders
+                    </Button>
+                  </Link>
+
+                  <Button
+                    onClick={logout}
+                    className="w-full bg-red-600 hover:bg-red-700 text-white"
+                  >
+                    Logout
+                  </Button>
+                </div>
+              ) : (
+                <div>
+                  <Link to={"/login"} onClick={() => setMobileMenuOpen(false)}>
+                    <Button
+                      variant="outline"
+                      className="w-full border-[#1E1E1E] bg-transparent text-white"
+                    >
+                      Login
+                    </Button>
+                  </Link>
+                  <Link to={"/signup"} onClick={() => setMobileMenuOpen(false)}>
+                    <Button className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/90 text-white">
+                      Sign Up
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         )}
