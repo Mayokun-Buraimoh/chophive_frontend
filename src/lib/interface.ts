@@ -45,26 +45,33 @@ export type FoodItem = {
   updated_at: string;
 };
 
-export type CartItem = {
+export interface CartItem {
   id: number;
-  cart: number;
   food_item: FoodItem;
   quantity: number;
   price: string;
   subtotal: string;
-  created_at: string;
-  updated_at: string;
-};
+}
 
-export type Cart = {
-  id: number;
+export interface Cart {
   items: CartItem[];
-  total_amount: string;
   item_count: number;
+  total_amount: string;
+  cart_id: string | null;
+}
+
+
+// What backend ACTUALLY returns
+export interface BackendCartItem {
+  id: number;
+  food_item: FoodItem;
+  qty: number;
+  price: string;
+  sub_total: string;
+  cart_id: string;
   created_at: string;
   updated_at: string;
-};
-
+}
 export interface AddToCartPayload {
     item_id: number;
     user_id: string | null;
@@ -72,5 +79,28 @@ export interface AddToCartPayload {
     price: string;
     shipping_amount: string;
     service_fee: string;
-    cart_id: string;
-  }
+    cart_id: string | null;
+}
+  
+export interface Vendor {
+  id: number;
+  username: string;
+}
+export interface OrderItem {
+  id: number;
+  quantity: number;
+  total: string;
+  food_item: FoodItem;
+  vendor: Vendor;
+}
+
+export interface Checkout {
+  oid: string;
+  order_item: OrderItem[];
+  sub_total: string;
+  service_fee: string;
+  total: string;
+  payment_status: string;
+  delivery_address: string;
+  created_at: string;
+}

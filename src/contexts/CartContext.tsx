@@ -18,6 +18,7 @@ interface CartContextType {
   cart: Cart | null;
   isOpen: boolean;
   loading: boolean;
+  cartId: string | null;
 
   openCart: () => void;
   closeCart: () => void;
@@ -66,6 +67,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   // ---------------- CART ACTIONS ----------------
 
+  const cartId = cart?.cart_id ?? null;
+
   const addToCart = async (
     foodItem: {
       id: number;
@@ -77,17 +80,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.log("user_id: " + userId);
       if (!isAuthenticated) {
         console.warn("No user_id found. User not authenticated.");
+        // return;
+      }
+
+      if (!cartId) {
+        console.warn("Cart not initialized yet");
         return;
       }
+
       const payload = {
         item_id: foodItem.id,
-        user_id: userId,
+        user_id: isAuthenticated ? userId : null,
         qty: quantity,
         price: foodItem.price,
         shipping_amount: "500.00",
         service_fee: "200.00",
-        cart_id: localStorage.getItem("cart_id")!,
+        cart_id: cartId,
       };
+
       console.log(payload);
 
       await addCartItem(payload);
@@ -98,6 +108,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const increaseQuantity = async (cartItemId: number) => {
+    if (!cartId) {
+      console.warn("Cart not initialized yet");
+      return;
+    }
     const item = cart?.items.find((i) => i.id === cartItemId);
     if (!item) return;
 
@@ -106,11 +120,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const decreaseQuantity = async (cartItemId: number) => {
+    if (!cartId) {
+      console.warn("Cart not initialized yet");
+      return;
+    }
     const item = cart?.items.find((i) => i.id === cartItemId);
     if (!item) return;
 
     if (item.quantity <= 1) {
-      await deleteCartItem(cartItemId);
+      await deleteCartItem({
+        cartId,
+        cartItemId,
+        userId,
+      });
     } else {
       await updateCartItem(cartItemId, item.quantity - 1);
     }
@@ -119,8 +141,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteItem = async (cartItemId: number) => {
-    await deleteCartItem(cartItemId);
-    await loadCart();
+    try {
+      if (!cartId) {
+        console.warn("Cart not initialized yet");
+        return;
+      }
+      await deleteCartItem({
+        cartId,
+        cartItemId, // ✅ CartItem.id
+        userId,
+      });
+
+      await loadCart();
+    } catch (error) {
+      console.error("Delete cart item failed:", error);
+    }
   };
 
   return (
@@ -129,6 +164,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         isOpen,
         loading,
+        cartId,
         openCart,
         closeCart,
         addToCart,
