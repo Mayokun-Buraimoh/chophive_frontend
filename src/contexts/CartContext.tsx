@@ -6,7 +6,7 @@ import {
   useEffect,
 } from "react";
 import { Cart } from "../lib/interface";
-import {
+import api, {
   fetchCart,
   addCartItem,
   updateCartItem,
@@ -18,7 +18,7 @@ interface CartContextType {
   cart: Cart | null;
   isOpen: boolean;
   loading: boolean;
-  cartId: string | null;
+  // cartId: string | null;
 
   openCart: () => void;
   closeCart: () => void;
@@ -47,8 +47,11 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const loadCart = async () => {
     setLoading(true);
     try {
+      if (!isAuthenticated) {
+        console.warn("No user_id found. User not authenticated.");
+      }
       console.log("Fetching cart...");
-      const data = await fetchCart();
+      const data = await fetchCart("555", userId);
       setCart(data);
       console.log("Cart loaded:", data);
     } catch (error) {
@@ -66,9 +69,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const closeCart = () => setIsOpen(false);
 
   // ---------------- CART ACTIONS ----------------
-
-  const cartId = cart?.cart_id ?? null;
-
   const addToCart = async (
     foodItem: {
       id: number;
@@ -80,22 +80,21 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.log("user_id: " + userId);
       if (!isAuthenticated) {
         console.warn("No user_id found. User not authenticated.");
-        // return;
       }
 
-      if (!cartId) {
-        console.warn("Cart not initialized yet");
-        return;
-      }
+      // if (!cartId) {
+      //   console.warn("Cart not initialized yet");
+      //   return;
+      // }
 
       const payload = {
         item_id: foodItem.id,
         user_id: isAuthenticated ? userId : null,
         qty: quantity,
         price: foodItem.price,
-        shipping_amount: "500.00",
-        service_fee: "200.00",
-        cart_id: cartId,
+        // shipping_amount: "500.00",
+        // service_fee: "200.00",
+        cart_id: null,
       };
 
       console.log(payload);
@@ -108,10 +107,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const increaseQuantity = async (cartItemId: number) => {
-    if (!cartId) {
-      console.warn("Cart not initialized yet");
-      return;
-    }
+    // if (!cartId) {
+    //   console.warn("Cart not initialized yet");
+    //   return;
+    // }
     const item = cart?.items.find((i) => i.id === cartItemId);
     if (!item) return;
 
@@ -120,16 +119,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const decreaseQuantity = async (cartItemId: number) => {
-    if (!cartId) {
-      console.warn("Cart not initialized yet");
-      return;
-    }
+    // if (!cartId) {
+    //   console.warn("Cart not initialized yet");
+    //   return;
+    // }
     const item = cart?.items.find((i) => i.id === cartItemId);
     if (!item) return;
 
     if (item.quantity <= 1) {
       await deleteCartItem({
-        cartId,
+        cartId : "555",
         cartItemId,
         userId,
       });
@@ -142,13 +141,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const deleteItem = async (cartItemId: number) => {
     try {
-      if (!cartId) {
-        console.warn("Cart not initialized yet");
-        return;
-      }
+      // if (!cartId) {
+      //   console.warn("Cart not initialized yet");
+      //   return;
+      // }
       await deleteCartItem({
-        cartId,
-        cartItemId, // ✅ CartItem.id
+        cartId : "555",
+        cartItemId,
         userId,
       });
 
@@ -164,7 +163,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cart,
         isOpen,
         loading,
-        cartId,
+        // cartId,
         openCart,
         closeCart,
         addToCart,
