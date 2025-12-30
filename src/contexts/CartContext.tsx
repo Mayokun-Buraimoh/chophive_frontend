@@ -6,15 +6,10 @@ import {
   useEffect,
 } from "react";
 import { Cart, FoodItem } from "../lib/interface";
-import {
-  fetchCart,
-  addCartItem,
-  deleteCartItem,
-  getCartId,
-} from "../../api";
+import { fetchCart, addCartItem, deleteCartItem, getCartId } from "../../api";
 import { useAuth } from "./AuthContext";
 import { getGuestCartId } from "../lib/cart";
-import { addGuestCartItem, getGuestCart } from "../lib/indexedDB";
+import { addGuestCartItem, getGuestCart, openCartDB } from "../lib/indexedDB";
 import { mapGuestCartToCart } from "../lib/mapGuestCartToCart";
 
 interface CartContextType {
@@ -125,7 +120,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         user_id: isAuthenticated ? userId : null,
         qty: quantity,
         price: food.price,
-        // cart_id: cartId,
       };
 
       console.log(payload);
@@ -149,7 +143,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       await addGuestCartItem({
         ...item,
-        qty: item.qty + 1,
+        qty: 1,
         sub_total: (Number(item.price) * (item.qty + 1)).toFixed(2),
         total: (Number(item.price) * (item.qty + 1)).toFixed(2),
         updated_at: new Date().toISOString(),
@@ -165,7 +159,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const payload = {
       item_id: item.food_item.id,
       user_id: userId,
-      qty: item.quantity + 1,
+      qty: 1,
       price: item.price,
     };
 
@@ -179,18 +173,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
     if (!isAuthenticated) {
       const guestCartId = getGuestCartId();
       const guestCart = await getGuestCart(guestCartId);
-  
-      const item = guestCart.find(i => i.id === cartItemId);
+
+      const item = guestCart.find((i) => i.id === cartItemId);
       if (!item) return;
-  
+
       await addGuestCartItem({
         ...item,
-        qty: item.qty + 1,
-        sub_total: (Number(item.price) * (item.qty + 1)).toFixed(2),
-        total: (Number(item.price) * (item.qty + 1)).toFixed(2),
+        qty: -1,
+        sub_total: (Number(item.price) * (item.qty - 1)).toFixed(2),
+        total: (Number(item.price) * (item.qty - 1)).toFixed(2),
         updated_at: new Date().toISOString(),
       });
-  
+
       await loadCart();
       return;
     }
@@ -219,11 +213,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const deleteItem = async (cartItemId: number) => {
+    if (!cartId && isAuthenticated) {
+      console.warn("Cart not initialized yet");
+      return;
+    }
+
     try {
-      if (!cartId) {
-        console.warn("Cart not initialized yet");
+      // 👉 GUEST USER FLOW
+      if (!isAuthenticated) {
+        const guestCartId = getGuestCartId();
+        if (!guestCartId) return;
+
+        const db = await openCartDB();
+        const tx = db.transaction("cart_items", "readwrite");
+        const store = tx.objectStore("cart_items");
+
+        await new Promise<void>((resolve, reject) => {
+          const request = store.delete(cartItemId);
+
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+
+        tx.oncomplete = async () => {
+          await loadCart();
+        };
+
         return;
       }
+
+      // 👉 AUTHENTICATED USER FLOW
       await deleteCartItem({
         cartId,
         cartItemId,
