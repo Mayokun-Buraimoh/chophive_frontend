@@ -7,7 +7,7 @@ interface ToastContainerProps {
 
 export default function ToastContainer({
   toasts,
-  onClose,
+  onClose, 
 }: ToastContainerProps) {
   if (toasts.length === 0) return null;
 
