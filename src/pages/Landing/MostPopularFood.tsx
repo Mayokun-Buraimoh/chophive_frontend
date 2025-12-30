@@ -64,7 +64,7 @@ export default function MostPopularFood() {
                     size="icon"
                     className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10"
                     onClick={() => {
-                      addToCart({ id: food.id, price: food.price }, 1);
+                      addToCart(food, 1);
                     }}
                   >
                     <Plus size={18} />

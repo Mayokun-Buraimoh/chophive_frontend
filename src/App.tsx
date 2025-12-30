@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./components/Cart";
-import Home from "./pages/Home/Home";
+import Home from "./pages/Landing/Home";
 import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup";
 import Contact from "./pages/Contact";
@@ -12,6 +12,7 @@ import { FoodProvider } from "./contexts/FoodContext";
 import CustomerProfile from "./pages/CustomerProfile";
 import { AuthProvider } from "./contexts/AuthContext";
 import FoodDetails from "./pages/FoodDetails";
+import FoodMenu from "./pages/FoodMenu";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />
+              <Route path="/food-menu" element={<FoodMenu/>}/>
             </Routes>
             <Cart />
           </BrowserRouter>

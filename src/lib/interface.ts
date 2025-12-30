@@ -27,7 +27,6 @@ export interface UserProfile {
   user: User;
 }
 
-
 export type FoodItem = {
   id: number;
   vendor: number;
@@ -78,12 +77,26 @@ export interface AddToCartPayload {
     user_id: string | null;
     qty: number;
     price: string;
-    cart_id: string | null;
+    // cart_id: string | null;
 }
   
 export interface Vendor {
   id: number;
-  username: string;
+  name: string;
+  description: string;
+  address: string;
+  logo: string;
+  is_active: boolean;
+  slug: string;
+  created_at: string;
+  user: User;
+}
+export interface Category{
+  id: number;
+  name: string;
+  description: string;
+  created_at: string;
+  slug: string;
 }
 export interface OrderItem {
   id: number;
@@ -108,25 +121,15 @@ export interface Checkout {
 
 //IndexedDB Schema
 export interface GuestCartItem {
-  id?: number; // IndexedDB PK
+  id?: number;
   cart_id: string;
 
-  food_item: {
-    id: number;
-    vendor: number;
-    vendor_name: string;
-    vendor_slug: string;
-    name: string;
-    slug: string;
-    price: string;
-    image: string | null;
-    stock_qty: number;
-    item_id: string;
-  };
+  food_item_id: number; // 👈 flat index key
+
+  food_item: FoodItem;
 
   qty: number;
   price: string;
-
   sub_total: string;
   delivery_fee: string;
   service_fee: string;

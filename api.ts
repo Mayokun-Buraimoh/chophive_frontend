@@ -60,11 +60,16 @@ export const FetchFoodItems = async (): Promise<FoodItem[]> => {
   return res.data;
 };
 
+export const getCartId = async (userId: string | null): Promise<string | null> => {
+  const res = await api.get(`/get-cart-id/${userId}`);
+  return res.data;
+}
+
 export const fetchCart = async (
   cartId: string | null,
   userId: string | null
 ): Promise<Cart> => {
-  const url = userId ? `/cart-list/${cartId}/${userId}/` : `/cart-view/`;
+  const url = `/cart-list/${cartId}/${userId}/`;
   const res = await api.get(url);
   const backendItems = res.data as BackendCartItem[];
 
@@ -90,7 +95,7 @@ export const fetchCart = async (
     total_amount: backendItems
       .reduce((sum, i) => sum + Number(i.sub_total), 0)
       .toFixed(2),
-    cart_id: backendItems[0].cart_id | null,
+    cart_id: backendItems[0].cart_id,
     user_id: userId,
   };
 };
@@ -100,15 +105,12 @@ export const addCartItem = async (payload: AddToCartPayload) => {
   return response.data;
 };
 
-export const updateCartItem = (cartItemId: number, quantity: number) =>
-  api.patch(`/cart-detail/${cartItemId}/`, { qty: quantity });
-
 export const deleteCartItem = async ({
   cartId,
   cartItemId,
   userId,
 }: {
-  cartId: string;
+  cartId: string | null;
   cartItemId: number;
   userId?: string | null;
 }) => {
@@ -124,7 +126,7 @@ export const createOrder = async ({
   deliveryAddress,
   userId,
 }: {
-  cartId: string;
+  cartId: string | null;
   deliveryAddress: string;
   userId: string | null;
 }) => {
@@ -147,5 +149,15 @@ export const getCheckout = async (orderOid: string) => {
     console.error(error);
   }
 };
+
+export const fetchCategory = async () => {
+  const res = await api.get("/category/");
+  return res.data;
+}
+
+export const fetchVendors = async () => {
+  const res = await api.get("/vendor-list/");
+  return res.data;
+}
 
 export default api;

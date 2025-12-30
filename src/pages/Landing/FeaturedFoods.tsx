@@ -51,7 +51,7 @@ export default function FeaturedSalads() {
                       size="icon"
                       className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 md:h-10 md:w-10"
                       onClick={() => {
-                        addToCart({id: food.id, price: food.price}, 1);
+                        addToCart(food, 1);
                       }}
                     >
                       <Plus size={16} />

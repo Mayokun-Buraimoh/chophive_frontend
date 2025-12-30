@@ -1,3 +1,4 @@
+// indexeddb.ts
 import { GuestCartItem } from "./interface";
 
 const DB_NAME = "chopHiveCartDB";
@@ -18,8 +19,7 @@ export function openCartDB(): Promise<IDBDatabase> {
         });
 
         store.createIndex("cart_id", "cart_id", { unique: false });
-        store.createIndex("food_item_id", "food_item.id", { unique: false });
-        store.createIndex("vendor", "food_item.vendor", { unique: false });
+        store.createIndex("food_item_id", "food_item_id", { unique: false });
       }
     };
 
@@ -28,37 +28,47 @@ export function openCartDB(): Promise<IDBDatabase> {
   });
 }
 
-export async function addGuestCartItem(item: GuestCartItem) {
+/* ---------------- ADD / UPDATE ITEM ---------------- */
+export async function addGuestCartItem(item: GuestCartItem): Promise<void> {
   const db = await openCartDB();
-  const tx = db.transaction(STORE_NAME, "readwrite");
-  const store = tx.objectStore(STORE_NAME);
-  const index = store.index("food_item_id");
 
-  const existingReq = index.get(item.food_item.id);
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index("food_item_id");
 
-  existingReq.onsuccess = () => {
-    const existing = existingReq.result;
+    const req = index.get(item.food_item_id);
 
-    if (existing) {
-      existing.qty += item.qty;
-      existing.sub_total = (Number(existing.price) * existing.qty).toFixed(2);
-      existing.updated_at = new Date().toISOString();
-      store.put(existing);
-    } else {
-      store.add(item);
-    }
-  };
+    req.onsuccess = () => {
+      const existing = req.result;
 
-  return tx.complete;
+      if (existing) {
+        existing.qty += item.qty;
+        existing.sub_total = (
+          Number(existing.price) * existing.qty
+        ).toFixed(2);
+        existing.total = existing.sub_total;
+        existing.updated_at = new Date().toISOString();
+        store.put(existing);
+      } else {
+        store.add(item);
+      }
+    };
+
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+  });
 }
 
+/* ---------------- GET CART ---------------- */
 export async function getGuestCart(cartId: string): Promise<GuestCartItem[]> {
   const db = await openCartDB();
-  const tx = db.transaction(STORE_NAME, "readonly");
-  const store = tx.objectStore(STORE_NAME);
-  const index = store.index("cart_id");
 
   return new Promise((resolve) => {
+    const tx = db.transaction(STORE_NAME, "readonly");
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index("cart_id");
+
     const items: GuestCartItem[] = [];
     const cursorReq = index.openCursor(IDBKeyRange.only(cartId));
 
@@ -74,21 +84,25 @@ export async function getGuestCart(cartId: string): Promise<GuestCartItem[]> {
   });
 }
 
-export async function clearGuestCart(cartId: string) {
+/* ---------------- CLEAR CART ---------------- */
+export async function clearGuestCart(cartId: string): Promise<void> {
   const db = await openCartDB();
-  const tx = db.transaction(STORE_NAME, "readwrite");
-  const store = tx.objectStore(STORE_NAME);
-  const index = store.index("cart_id");
 
-  const cursorReq = index.openCursor(IDBKeyRange.only(cartId));
+  return new Promise((resolve) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const index = store.index("cart_id");
 
-  cursorReq.onsuccess = () => {
-    const cursor = cursorReq.result;
-    if (cursor) {
-      store.delete(cursor.primaryKey);
-      cursor.continue();
-    }
-  };
+    const cursorReq = index.openCursor(IDBKeyRange.only(cartId));
 
-  return tx.complete;
+    cursorReq.onsuccess = () => {
+      const cursor = cursorReq.result;
+      if (cursor) {
+        store.delete(cursor.primaryKey);
+        cursor.continue();
+      }
+    };
+
+    tx.oncomplete = () => resolve();
+  });
 }

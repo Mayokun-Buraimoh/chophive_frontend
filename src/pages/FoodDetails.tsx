@@ -79,7 +79,7 @@ export default function FoodDetails() {
           <Button
             disabled={!food.is_available}
             className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-black mt-4"
-            onClick={() => addToCart({ id: food.id, price: food.price }, 1)}
+            onClick={() => addToCart(food, 1)}
           >
             Add to Cart
           </Button>

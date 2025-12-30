@@ -39,9 +39,7 @@ export default function OurDishes() {
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8 md:mb-12">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            OUR DISHES
-          </h2>
+          <h2 className="text-3xl font-bold text-white mb-4">OUR DISHES</h2>
           <p className="text-gray-400 max-w-2xl mx-auto">
             Browse meals by cafeteria. Each vendor cooks their own magic.
           </p>
@@ -65,15 +63,10 @@ export default function OurDishes() {
 
           {/* 3️⃣ Foods per Vendor */}
           {vendors.map((vendor) => (
-            <TabsContent
-              key={vendor.vendor_slug}
-              value={vendor.vendor_slug}
-            >
+            <TabsContent key={vendor.vendor_slug} value={vendor.vendor_slug}>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {foods
-                  .filter(
-                    (food) => food.vendor_slug === vendor.vendor_slug
-                  )
+                  .filter((food) => food.vendor_slug === vendor.vendor_slug)
                   .map((food) => (
                     <div
                       key={food.id}
@@ -121,15 +114,7 @@ export default function OurDishes() {
                           <Button
                             size="icon"
                             className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 rounded-full h-9 w-9"
-                            onClick={() =>
-                              addToCart(
-                                {
-                                  id: food.id,
-                                  price: food.price,
-                                },
-                                1
-                              )
-                            }
+                            onClick={() => addToCart(food, 1)}
                           >
                             <Plus size={16} />
                           </Button>
