@@ -13,6 +13,7 @@ import CustomerProfile from "./pages/CustomerProfile";
 import { AuthProvider } from "./contexts/AuthContext";
 import FoodDetails from "./pages/FoodDetails";
 import FoodMenu from "./pages/FoodMenu";
+import VendorDetails from "./pages/VendorDetails";
 
 function App() {
   return (
@@ -29,7 +30,8 @@ function App() {
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />
-              <Route path="/food-menu" element={<FoodMenu/>}/>
+              <Route path="/food-menu" element={<FoodMenu />} />
+              <Route path="vendors/:vendorId" element={<VendorDetails/>}/>
             </Routes>
             <Cart />
           </BrowserRouter>

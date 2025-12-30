@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import api from "../../api";
 import { Button } from "../components/ui/button";
@@ -12,6 +12,7 @@ export default function FoodDetails() {
   const [food, setFood] = useState<FoodItem | null>(null);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchFood = async () => {
@@ -65,6 +66,9 @@ export default function FoodDetails() {
           <p className="text-lg">
             Vendor: <span className="font-semibold">{food.vendor_name}</span>
           </p>
+          <Button onClick={() => navigate(`/vendors/${food.vendor}`)}>
+            View {food.vendor_name} details
+          </Button>
 
           <p className="text-2xl font-bold text-[#FF6B35]">₦{food.price}</p>
 
