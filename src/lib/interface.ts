@@ -58,6 +58,7 @@ export interface Cart {
   item_count: number;
   total_amount: string;
   cart_id: string | null;
+  user_id: string | null;
 }
 
 
@@ -68,7 +69,7 @@ export interface BackendCartItem {
   qty: number;
   price: string;
   sub_total: string;
-  cart_id: string;
+  cart_id: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -77,8 +78,6 @@ export interface AddToCartPayload {
     user_id: string | null;
     qty: number;
     price: string;
-    shipping_amount: string;
-    service_fee: string;
     cart_id: string | null;
 }
   
@@ -103,4 +102,36 @@ export interface Checkout {
   payment_status: string;
   delivery_address: string;
   created_at: string;
+}
+
+
+
+//IndexedDB Schema
+export interface GuestCartItem {
+  id?: number; // IndexedDB PK
+  cart_id: string;
+
+  food_item: {
+    id: number;
+    vendor: number;
+    vendor_name: string;
+    vendor_slug: string;
+    name: string;
+    slug: string;
+    price: string;
+    image: string | null;
+    stock_qty: number;
+    item_id: string;
+  };
+
+  qty: number;
+  price: string;
+
+  sub_total: string;
+  delivery_fee: string;
+  service_fee: string;
+  total: string;
+
+  created_at: string;
+  updated_at: string;
 }

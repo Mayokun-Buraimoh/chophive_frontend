@@ -60,41 +60,40 @@ export const FetchFoodItems = async (): Promise<FoodItem[]> => {
   return res.data;
 };
 
-export const fetchCart = async (): Promise<Cart> => {
-  const res = await api.get("/cart-view/");
+export const fetchCart = async (
+  cartId: string | null,
+  userId: string | null
+): Promise<Cart> => {
+  const url = userId ? `/cart-list/${cartId}/${userId}/` : `/cart-view/`;
+  const res = await api.get(url);
   const backendItems = res.data as BackendCartItem[];
 
-  if (backendItems.length === 0) {
+  if (!backendItems.length) {
     return {
       items: [],
       item_count: 0,
       total_amount: "0.00",
-      cart_id: null,
+      cart_id: cartId,
+      user_id: userId,
     };
   }
 
-  const cart_id = backendItems[0].cart_id;
-
-  const items: CartItem[] = backendItems.map((item) => ({
-    id: item.id, // ✅ CartItem.id (THIS is item_id)
-    food_item: item.food_item,
-    quantity: item.qty,
-    price: item.price,
-    subtotal: item.sub_total,
-  }));
-
-  const total_amount = items
-    .reduce((sum, item) => sum + Number(item.subtotal), 0)
-    .toFixed(2);
-
   return {
-    items,
-    item_count: items.length,
-    total_amount,
-    cart_id,
+    items: backendItems.map((item) => ({
+      id: item.id,
+      food_item: item.food_item,
+      quantity: item.qty,
+      price: item.price,
+      subtotal: item.sub_total,
+    })),
+    item_count: backendItems.length,
+    total_amount: backendItems
+      .reduce((sum, i) => sum + Number(i.sub_total), 0)
+      .toFixed(2),
+    cart_id: backendItems[0].cart_id | null,
+    user_id: userId,
   };
 };
-
 
 export const addCartItem = async (payload: AddToCartPayload) => {
   const response = await api.post("/cart-view/", payload);
