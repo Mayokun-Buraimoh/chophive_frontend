@@ -15,6 +15,7 @@ const api = axios.create({
   headers: {
     "Content-Type": "application/json",
   },
+  withCredentials: true, // Enable sending cookies (session) with requests
 });
 
 api.interceptors.request.use((config) => {
@@ -35,7 +36,8 @@ api.interceptors.response.use(
       try {
         const res = await axios.post(
           "http://localhost:8000/api/v1/user/token/refresh/",
-          { refresh }
+          { refresh },
+          { withCredentials: true }
         );
 
         localStorage.setItem("access_token", res.data.access);
