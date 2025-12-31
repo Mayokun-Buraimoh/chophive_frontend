@@ -6,7 +6,13 @@ import {
   useEffect,
 } from "react";
 import { Cart, FoodItem } from "../lib/interface";
-import { fetchCart, addCartItem, deleteCartItem, getCartId } from "../../api";
+import {
+  fetchCart,
+  addCartItem,
+  deleteCartItem,
+  getCartId,
+  updateCartItemQuantity,
+} from "../../api";
 import { useAuth } from "./AuthContext";
 import { getGuestCartId } from "../lib/cart";
 import { addGuestCartItem, getGuestCart, openCartDB } from "../lib/indexedDB";
@@ -200,33 +206,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
         cartItemId,
         userId,
       });
-    } else if (newQty === 1 && item.quantity === 2) {
-      // Special case: When decreasing from 2 to 1, the backend treats qty=1 as increment
-      // Workaround: Delete and re-add with quantity 1
-      await deleteCartItem({
-        cartId,
+    } else {
+      // Use the PATCH endpoint to update quantity directly
+      await updateCartItemQuantity({
         cartItemId,
+        quantity: newQty,
         userId,
       });
-
-      // Re-add the item with quantity 1
-      const payload = {
-        item_id: item.food_item.id,
-        user_id: userId,
-        qty: 1,
-        price: item.price,
-      };
-      await addCartItem(payload);
-    } else {
-      // For other cases, send the new quantity directly
-      const payload = {
-        item_id: item.food_item.id,
-        user_id: userId,
-        qty: newQty,
-        price: item.price,
-      };
-
-      await addCartItem(payload);
     }
 
     await loadCart();

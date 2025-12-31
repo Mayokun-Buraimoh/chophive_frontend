@@ -111,6 +111,22 @@ export const addCartItem = async (payload: AddToCartPayload) => {
   return response.data;
 };
 
+export const updateCartItemQuantity = async ({
+  cartItemId,
+  quantity,
+  userId,
+}: {
+  cartItemId: number;
+  quantity: number;
+  userId?: string | null;
+}) => {
+  const response = await api.patch(`/cart-item-update/${cartItemId}/`, {
+    quantity,
+    user_id: userId,
+  });
+  return response.data;
+};
+
 export const deleteCartItem = async ({
   cartId,
   cartItemId,
