@@ -324,68 +324,62 @@ function FoodMenu() {
             {filteredFoods.map((food, index) => (
               <div
                 key={food.id}
-                className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-[#FF6B35] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF6B35]/20 opacity-0 animate-fade-in"
+                className="flex-shrink-0 relative opacity-0 animate-fade-in group"
                 style={{
                   animationDelay: `${index * 50}ms`,
                   animationFillMode: "forwards",
                 }}
               >
-                <div className="flex flex-col items-center text-center">
-                  {/* Image */}
-                  <div className="relative w-32 h-32 rounded-full bg-gray-700 overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300">
-                    {food.image ? (
-                      <img
-                        src={food.image}
-                        alt={food.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-5xl">
-                        🍽️
-                      </div>
-                    )}
-                    {!food.is_available && (
-                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-                        <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded">
-                          Out of Stock
-                        </span>
-                      </div>
-                    )}
+                <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-300 hover:scale-105 mx-auto">
+                  <div className="absolute left-1/2 -translate-x-1/2">
+                    <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#FF6B35] transition-colors duration-300">
+                      {food.image ? (
+                        <img
+                          src={food.image}
+                          alt={food.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-5xl bg-gray-700">
+                          🍽️
+                        </div>
+                      )}
+                      {!food.is_available && (
+                        <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                          <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded">
+                            Out of Stock
+                          </span>
+                        </div>
+                      )}
+                    </div>
                   </div>
+                  <button
+                    className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
+                    title="View Details"
+                    onClick={() => navigate(`/food/${food.item_id}`)}
+                  >
+                    <ArrowUpRight className="w-5 h-5 text-black" />
+                  </button>
 
-                  {/* Food Info */}
-                  <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
-                    {food.name}
-                  </h3>
-                  <p className="text-gray-400 text-xs mb-2 line-clamp-2 min-h-[2.5rem]">
-                    {food.description}
-                  </p>
-                  <p className="text-gray-500 text-xs mb-3">
-                    {food.vendor_name}
-                  </p>
+                  <Button
+                    size="icon"
+                    disabled={!food.is_available}
+                    className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 transition-transform duration-300"
+                    onClick={() => addToCart(food, 1)}
+                  >
+                    <Plus size={18} />
+                  </Button>
 
-                  {/* Price and Actions */}
-                  <div className="flex items-center justify-between w-full mt-auto">
-                    <span className="text-[#FF6B35] font-bold text-xl">
+                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 flex-col">
+                    <h3 className="text-white font-semibold text-sm md:text-base line-clamp-1">
+                      {food.name}
+                    </h3>
+                    <span className="text-gray-400 text-xs line-clamp-2 max-w-[200px]">
+                      {food.description}
+                    </span>
+                    <span className="text-[#FF6B35] font-bold text-lg">
                       ₦{parseFloat(food.price).toLocaleString()}
                     </span>
-                    <div className="flex gap-2">
-                      <button
-                        className="w-8 h-8 rounded-full bg-gray-700 hover:bg-[#FF6B35] flex items-center justify-center transition-colors"
-                        title="View Details"
-                        onClick={() => navigate(`/food/${food.item_id}`)}
-                      >
-                        <ArrowUpRight className="w-4 h-4 text-white" />
-                      </button>
-                      <Button
-                        size="icon"
-                        disabled={!food.is_available}
-                        className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 disabled:opacity-50 disabled:cursor-not-allowed"
-                        onClick={() => addToCart(food, 1)}
-                      >
-                        <Plus size={16} />
-                      </Button>
-                    </div>
                   </div>
                 </div>
               </div>

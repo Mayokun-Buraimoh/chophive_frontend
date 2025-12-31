@@ -1,18 +1,33 @@
 import { useEffect, useState } from "react";
 import { fetchUserProfile } from "../../api";
 import { UserProfile } from "../lib/interface";
-import { Loader2, UserCircle } from "lucide-react";
+import { Loader2, UserCircle, Edit2 } from "lucide-react";
 import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
+import { Button } from "../components/ui/button";
+import EditProfileModal from "../components/EditProfileModal";
 
 export default function CustomerProfile() {
   const navigate = useNavigate();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showEditModal, setShowEditModal] = useState(false);
   const { userId, isAuthenticated } = useAuth();
+
+  const loadProfile = async () => {
+    try {
+      const data = await fetchUserProfile(userId);
+      setProfile(data);
+      setError("");
+    } catch (err) {
+      setError("Failed to load profile.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -22,19 +37,13 @@ export default function CustomerProfile() {
       return;
     }
 
-    const loadProfile = async () => {
-      try {
-        const data = await fetchUserProfile(userId);
-        setProfile(data);
-      } catch (err) {
-        setError("Failed to load profile.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     loadProfile();
-  }, []);
+  }, [isAuthenticated, userId, navigate]);
+
+  const handleProfileUpdate = async () => {
+    setLoading(true);
+    await loadProfile();
+  };
 
   if (loading) {
     return (
@@ -57,25 +66,34 @@ export default function CustomerProfile() {
       <Header />
       <div className="container mx-auto px-4 max-w-4xl py-10">
         {/* Header */}
-        <div className="flex items-center gap-4 mb-8">
-          {profile.image ? (
-            <img
-              src={profile.image}
-              alt={profile.username}
-              className="w-20 h-20 rounded-full object-cover"
-            />
-          ) : (
-            <UserCircle size={80} className="text-gray-500" />
-          )}
+        <div className="flex items-center justify-between mb-8">
+          <div className="flex items-center gap-4">
+            {profile.image ? (
+              <img
+                src={profile.image}
+                alt={profile.username}
+                className="w-20 h-20 rounded-full object-cover"
+              />
+            ) : (
+              <UserCircle size={80} className="text-gray-500" />
+            )}
 
-          <div>
-            <h1 className="text-2xl font-bold text-white">
-              {profile.username}
-            </h1>
-            <p className="text-gray-400 text-sm">
-              {profile.department} · Level {profile.level}
-            </p>
+            <div>
+              <h1 className="text-2xl font-bold text-white">
+                {profile.username}
+              </h1>
+              <p className="text-gray-400 text-sm">
+                {profile.department} · Level {profile.level}
+              </p>
+            </div>
           </div>
+          <Button
+            onClick={() => setShowEditModal(true)}
+            className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
+          >
+            <Edit2 className="w-4 h-4 mr-2" />
+            Edit Profile
+          </Button>
         </div>
 
         {/* Profile Card */}
@@ -96,8 +114,22 @@ export default function CustomerProfile() {
           />
           <ProfileItem label="Date of Birth" value={profile.date_of_birth} />
         </div>
-        <p>Joined on {profile.user.date_joined}</p>
+        <p className="text-gray-400 text-sm mt-4">
+          Joined on {new Date(profile.user.date_joined).toLocaleDateString()}
+        </p>
       </div>
+
+      {/* Edit Profile Modal */}
+      {profile && (
+        <EditProfileModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          profile={profile}
+          userId={userId}
+          onSuccess={handleProfileUpdate}
+        />
+      )}
+
       <Footer />
     </section>
   );

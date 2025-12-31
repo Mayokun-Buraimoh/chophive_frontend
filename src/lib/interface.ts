@@ -27,6 +27,23 @@ export interface UserProfile {
   user: User;
 }
 
+export interface UpdateUserProfilePayload {
+  username: string;
+  phone: string;
+  address: string;
+  gender: string;
+  image: string;
+  date_of_birth: string;
+  hostel: string;
+  room_number: string;
+  level: number;
+  department: string;
+  favorite_cafeteria: string;
+  dietary_preferences: string;
+  pid: string;
+  user: number;
+}
+
 export type FoodItem = {
   id: number;
   vendor: number;

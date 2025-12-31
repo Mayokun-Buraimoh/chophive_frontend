@@ -43,12 +43,12 @@ export default function Header() {
             >
               Home
             </Link>
-            <a
-              href="#menu"
+            <Link
+              to={"/food-menu"}
               className="text-white hover:text-[#1E1E1E] transition-colors"
             >
               Menu
-            </a>
+            </Link>
             <a
               href="#cafeterias"
               className="text-white hover:text-[#1E1E1E] transition-colors"
@@ -151,9 +151,9 @@ export default function Header() {
             <Link to={"/"} className="block text-white hover:text-white">
               Home
             </Link>
-            <a href="#menu" className="block text-white hover:text-white">
+            <Link to={"/food-menu"} className="block text-white hover:text-white">
               Menu
-            </a>
+            </Link>
             <a href="#cafeterias" className="block text-white hover:text-white">
               Cafeterias
             </a>

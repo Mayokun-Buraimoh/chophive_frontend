@@ -5,6 +5,7 @@ import {
   Cart,
   CartItem,
   FoodItem,
+  UpdateUserProfilePayload,
 } from "./src/lib/interface";
 // import { useAuth } from "./src/contexts/AuthContext";
 
@@ -54,6 +55,14 @@ api.interceptors.response.use(
 
 export const fetchUserProfile = async (userId: string | null) => {
   const res = await api.get(`/user/profile/${userId}/`);
+  return res.data;
+};
+
+export const updateUserProfile = async (
+  userId: string | null,
+  profileData: Partial<Omit<UpdateUserProfilePayload, "pid" | "user">>
+) => {
+  const res = await api.patch(`/user/profile/${userId}/`, profileData);
   return res.data;
 };
 

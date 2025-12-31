@@ -29,43 +29,43 @@ export default function FeaturedSalads() {
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {foods.map((food) => (
-              <div
-                key={food.id}
-                className="flex-shrink-0 w-[280px] sm:w-[300px] bg-gray-800 rounded-lg p-4 md:p-6"
-              >
-                <div className="flex flex-col items-center text-center">
-                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-700 overflow-hidden mb-4">
-                    {food.image ? (
-                      <img
-                        src={food.image}
-                        alt={food.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center text-4xl">
-                        🍽️
-                      </div>
-                    )}
+              <div key={food.id} className="flex-shrink-0 relative group">
+                <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#FF6B35]/30 transition-all duration-300 hover:scale-105">
+                  <div className="absolute left-1/2 -translate-x-1/2">
+                    <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#FF6B35] transition-colors duration-300">
+                      {food.image ? (
+                        <img
+                          src={food.image}
+                          alt={food.name}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-5xl bg-gray-700">
+                          🍽️
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  <h3 className="text-white font-semibold text-sm md:text-base mb-2">
-                    {food.name}
-                  </h3>
-                  <p className="text-gray-400 text-xs md:text-sm mb-3">
-                    {food.description} {food.vendor_name}
-                  </p>
-                  <div className="flex items-center justify-between w-full">
-                    <span className="text-white font-bold text-lg md:text-xl">
-                    ₦{food.price}
+                  <Button
+                    size="icon"
+                    className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 hover:scale-110 transition-transform duration-300"
+                    onClick={() => {
+                      addToCart(food, 1);
+                    }}
+                  >
+                    <Plus size={18} />
+                  </Button>
+
+                  <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 flex-col">
+                    <h3 className="text-white font-semibold text-sm md:text-base line-clamp-1">
+                      {food.name}
+                    </h3>
+                    <span className="text-gray-400 text-xs line-clamp-2 max-w-[200px]">
+                      {food.description}
                     </span>
-                    <Button
-                      size="icon"
-                      className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 md:h-10 md:w-10"
-                      onClick={() => {
-                        addToCart(food, 1);
-                      }}
-                    >
-                      <Plus size={16} />
-                    </Button>
+                    <span className="text-[#FF6B35] font-bold text-lg">
+                      ₦{food.price}
+                    </span>
                   </div>
                 </div>
               </div>
