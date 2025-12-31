@@ -71,6 +71,31 @@ export const getCartId = async (
   return res.data?.cart_id ?? null;
 };
 
+export const fetchCartDetails = async (
+  cartId: string | null,
+  userId: string | null
+): Promise<{ delivery_fee: string; service_fee: string; sub_total: string; total_amount: string }> => {
+  if (!cartId) {
+    return {
+      delivery_fee: "0.00",
+      service_fee: "0.00",
+      sub_total: "0.00",
+      total_amount: "0.00",
+    };
+  }
+
+  const url = userId 
+    ? `/cart-detail/${cartId}/${userId}/`
+    : `/cart-detail/${cartId}/`;
+  const res = await api.get(url);
+  return {
+    delivery_fee: res.data.delivery_fee?.toString() || "0.00",
+    service_fee: res.data.service_fee?.toString() || "0.00",
+    sub_total: res.data.sub_total?.toString() || "0.00",
+    total_amount: res.data.total_amount?.toString() || "0.00",
+  };
+};
+
 export const fetchCart = async (
   cartId: string | null,
   userId: string | null
@@ -79,11 +104,16 @@ export const fetchCart = async (
   const res = await api.get(url);
   const backendItems = res.data as BackendCartItem[];
 
+  // Fetch cart details for delivery_fee and service_fee
+  const cartDetails = await fetchCartDetails(cartId, userId);
+
   if (!backendItems.length) {
     return {
       items: [],
       item_count: 0,
       total_amount: "0.00",
+      delivery_fee: cartDetails.delivery_fee,
+      service_fee: cartDetails.service_fee,
       cart_id: cartId,
       user_id: userId,
     };
@@ -101,6 +131,8 @@ export const fetchCart = async (
     total_amount: backendItems
       .reduce((sum, i) => sum + Number(i.sub_total), 0)
       .toFixed(2),
+    delivery_fee: cartDetails.delivery_fee,
+    service_fee: cartDetails.service_fee,
     cart_id: backendItems[0].cart_id,
     user_id: userId,
   };

@@ -77,6 +77,9 @@ export default function MostPopularFood() {
                     <span className="text-white font-semibold text-sm md:text-base">
                       {food.description}
                     </span>
+                    <span className="text-white font-bold text-lg">
+                            ₦{food.price}
+                          </span>
                   </div>
                 </div>
               </div>

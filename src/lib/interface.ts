@@ -56,6 +56,8 @@ export interface Cart {
   items: CartItem[];
   item_count: number;
   total_amount: string;
+  delivery_fee?: string;
+  service_fee?: string;
   cart_id: string | null;
   user_id: string | null;
 }
@@ -110,6 +112,7 @@ export interface Checkout {
   oid: string;
   order_item: OrderItem[];
   sub_total: string;
+  delivery_fee: string;
   service_fee: string;
   total: string;
   payment_status: string;

@@ -34,8 +34,18 @@ export default function FeaturedSalads() {
                 className="flex-shrink-0 w-[280px] sm:w-[300px] bg-gray-800 rounded-lg p-4 md:p-6"
               >
                 <div className="flex flex-col items-center text-center">
-                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-700 flex items-center justify-center text-5xl md:text-6xl mb-4">
-                    {food.image}
+                  <div className="w-24 h-24 md:w-28 md:h-28 rounded-full bg-gray-700 overflow-hidden mb-4">
+                    {food.image ? (
+                      <img
+                        src={food.image}
+                        alt={food.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl">
+                        🍽️
+                      </div>
+                    )}
                   </div>
                   <h3 className="text-white font-semibold text-sm md:text-base mb-2">
                     {food.name}
@@ -45,7 +55,7 @@ export default function FeaturedSalads() {
                   </p>
                   <div className="flex items-center justify-between w-full">
                     <span className="text-white font-bold text-lg md:text-xl">
-                      {food.price}
+                    ₦{food.price}
                     </span>
                     <Button
                       size="icon"

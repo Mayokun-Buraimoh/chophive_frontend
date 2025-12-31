@@ -136,7 +136,7 @@ export default function CheckoutDetails() {
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
             className="flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft size={20} className="mr-2" />
@@ -151,7 +151,8 @@ export default function CheckoutDetails() {
                   Order #{checkout.oid}
                 </h1>
                 <p className="text-sm text-gray-400">
-                  Placed on {new Date(checkout.created_at).toLocaleDateString("en-US", {
+                  Placed on{" "}
+                  {new Date(checkout.created_at).toLocaleDateString("en-US", {
                     year: "numeric",
                     month: "long",
                     day: "numeric",
@@ -259,17 +260,30 @@ export default function CheckoutDetails() {
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-gray-400">
                 <span>Subtotal</span>
-                <span className="text-white">{formatPrice(checkout.sub_total)}</span>
+                <span className="text-white">
+                  {formatPrice(checkout.sub_total)}
+                </span>
+              </div>
+
+              <div className="flex justify-between text-gray-400">
+                <span>Delivery Fee</span>
+                <span className="text-white">
+                  {formatPrice(checkout.delivery_fee)}
+                </span>
               </div>
 
               <div className="flex justify-between text-gray-400">
                 <span>Service Fee</span>
-                <span className="text-white">{formatPrice(checkout.service_fee)}</span>
+                <span className="text-white">
+                  {formatPrice(checkout.service_fee)}
+                </span>
               </div>
 
               <div className="pt-4 border-t border-gray-700">
                 <div className="flex justify-between items-center">
-                  <span className="text-[#FF6B35] font-bold text-xl">Total</span>
+                  <span className="text-[#FF6B35] font-bold text-xl">
+                    Total
+                  </span>
                   <span className="text-[#FF6B35] font-bold text-2xl">
                     {formatPrice(checkout.total)}
                   </span>
@@ -293,4 +307,3 @@ export default function CheckoutDetails() {
     </div>
   );
 }
-
