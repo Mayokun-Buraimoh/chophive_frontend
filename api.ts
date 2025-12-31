@@ -144,14 +144,26 @@ export const createOrder = async ({
   cartId,
   deliveryAddress,
   userId,
+  customerName,
+  roomAddress,
+  deliveryTime,
+  deliveryBatch,
 }: {
   cartId: string | null;
   deliveryAddress: string;
   userId: string | null;
+  customerName?: string;
+  roomAddress?: string;
+  deliveryTime?: string;
+  deliveryBatch?: '1pm' | '6pm';
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
       delivery_address: deliveryAddress,
+      customer_name: customerName || '',
+      room_address: roomAddress || '',
+      delivery_time: deliveryTime || '',
+      delivery_batch: deliveryBatch || '',
     });
     return res.data;
   } catch (error) {
