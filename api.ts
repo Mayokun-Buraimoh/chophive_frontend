@@ -62,10 +62,14 @@ export const FetchFoodItems = async (): Promise<FoodItem[]> => {
   return res.data;
 };
 
-export const getCartId = async (userId: string | null): Promise<string | null> => {
-  const res = await api.get(`/get-cart-id/${userId}`);
-  return res.data;
-}
+export const getCartId = async (
+  userId: string | null
+): Promise<string | null> => {
+  if (!userId) return null;
+
+  const res = await api.get(`/get-cart_id/${userId}`);
+  return res.data?.cart_id ?? null;
+};
 
 export const fetchCart = async (
   cartId: string | null,
@@ -116,10 +120,7 @@ export const deleteCartItem = async ({
   cartItemId: number;
   userId?: string | null;
 }) => {
-  const url = userId
-    ? `/cart-delete/${cartId}/${cartItemId}/${userId}/`
-    : `/cart-delete/${cartId}/${cartItemId}/`;
-
+  const url = `/cart-delete/${cartId}/${cartItemId}/${userId}/`;
   return api.delete(url);
 };
 
@@ -155,11 +156,11 @@ export const getCheckout = async (orderOid: string) => {
 export const fetchCategory = async () => {
   const res = await api.get("/category/");
   return res.data;
-}
+};
 
 export const fetchVendors = async () => {
   const res = await api.get("/vendor-list/");
   return res.data;
-}
+};
 
 export default api;

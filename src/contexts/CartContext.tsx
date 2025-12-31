@@ -66,7 +66,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         }
         return;
       }
-      console.log("Fetching cart...");
+      console.log("Fetching cart...", cartId);
       const data = await fetchCart(cartId, userId);
       setCart(data);
       console.log("Cart loaded:", data);
@@ -192,17 +192,37 @@ export function CartProvider({ children }: { children: ReactNode }) {
     const item = cart.items.find((i) => i.id === cartItemId);
     if (!item) return;
 
-    if (item.quantity <= 1) {
+    const newQty = item.quantity - 1;
+
+    if (newQty <= 0) {
       await deleteCartItem({
         cartId,
         cartItemId,
         userId,
       });
-    } else {
+    } else if (newQty === 1 && item.quantity === 2) {
+      // Special case: When decreasing from 2 to 1, the backend treats qty=1 as increment
+      // Workaround: Delete and re-add with quantity 1
+      await deleteCartItem({
+        cartId,
+        cartItemId,
+        userId,
+      });
+
+      // Re-add the item with quantity 1
       const payload = {
         item_id: item.food_item.id,
         user_id: userId,
-        qty: item.quantity - 1,
+        qty: 1,
+        price: item.price,
+      };
+      await addCartItem(payload);
+    } else {
+      // For other cases, send the new quantity directly
+      const payload = {
+        item_id: item.food_item.id,
+        user_id: userId,
+        qty: newQty,
         price: item.price,
       };
 
