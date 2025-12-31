@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCheckout } from "../../api";
@@ -116,7 +117,7 @@ export default function CheckoutDetails() {
               </p>
             </div>
             <Button
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/food-menu")}
               className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
             >
               Go to Home
@@ -136,7 +137,7 @@ export default function CheckoutDetails() {
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
           <button
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/food-menu")}
             className="flex items-center text-gray-400 hover:text-white mb-6 transition-colors"
           >
             <ArrowLeft size={20} className="mr-2" />
@@ -293,7 +294,7 @@ export default function CheckoutDetails() {
 
             <div className="pt-6 border-t border-gray-700">
               <Button
-                onClick={() => navigate("/")}
+                onClick={() => navigate("/food-menu")}
                 className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 text-base font-semibold"
               >
                 Continue Shopping

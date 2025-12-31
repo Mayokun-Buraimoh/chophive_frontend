@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     createContext,
     useContext,
@@ -6,11 +7,9 @@ import {
     ReactNode,
   } from "react";
   import { jwtDecode } from "jwt-decode";
-import { getOrCreateCartId } from "../lib/cart";
   
   interface AuthContextType {
     userId: string | null;
-    cartId: string | null;
     accessToken: string | null;
     refreshToken: string | null;
     isAuthenticated: boolean;
@@ -24,7 +23,6 @@ import { getOrCreateCartId } from "../lib/cart";
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
-    const [cartId, setCartId] = useState<string | null>(null);
   
     // 🔁 Restore session on refresh
     useEffect(() => {
@@ -42,8 +40,6 @@ import { getOrCreateCartId } from "../lib/cart";
         setUserId(decoded.user_id || decoded.id);
         setAccessToken(access);
         setRefreshToken(refresh);
-        const id = getOrCreateCartId();
-        setCartId(id);
       } catch {
         logout();
       }
@@ -67,7 +63,6 @@ import { getOrCreateCartId } from "../lib/cart";
       <AuthContext.Provider
         value={{
           userId,
-          cartId,
           accessToken,
           refreshToken,
           isAuthenticated: !!accessToken,

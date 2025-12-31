@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +38,7 @@ function Signup() {
 
       login(access, refresh);
 
-      window.location.href = "/";
+      window.location.href = "/food-menu";
     } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
     }

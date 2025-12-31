@@ -2,13 +2,22 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
-import { ArrowUpRight, Loader2, Plus, SearchIcon } from "lucide-react";
+import {
+  ArrowUpRight,
+  Loader2,
+  Plus,
+  Search,
+  X,
+  SlidersHorizontal,
+} from "lucide-react";
 import { useFood } from "../contexts/FoodContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { fetchCategory, fetchVendors } from "../../api";
 import { Category, Vendor } from "../lib/interface";
+
+type PriceRange = "all" | "low" | "medium" | "high";
 
 function FoodMenu() {
   const { foods, loading } = useFood();
@@ -16,17 +25,30 @@ function FoodMenu() {
   const navigate = useNavigate();
   const [categories, setCategories] = useState<Category[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedVendor, setSelectedVendor] = useState<number | "all">("all");
+  const [selectedCategory, setSelectedCategory] = useState<number | "all">(
+    "all"
+  );
+  const [priceRange, setPriceRange] = useState<PriceRange>("all");
+  const [showFilters, setShowFilters] = useState(false);
 
   const getCategories = async () => {
-    const categoriesData = await fetchCategory();
-    console.log("Categories: ", categoriesData);
-    setCategories(categoriesData);
+    try {
+      const categoriesData = await fetchCategory();
+      setCategories(categoriesData);
+    } catch (error) {
+      console.error("Failed to fetch categories:", error);
+    }
   };
 
   const getVendors = async () => {
-    const vendorsData = await fetchVendors();
-    console.log("Vendors: ", vendorsData);
-    setVendors(vendorsData);
+    try {
+      const vendorsData = await fetchVendors();
+      setVendors(vendorsData);
+    } catch (error) {
+      console.error("Failed to fetch vendors:", error);
+    }
   };
 
   useEffect(() => {
@@ -34,89 +56,342 @@ function FoodMenu() {
     getVendors();
   }, []);
 
+  // Filter and search logic
+  const filteredFoods = useMemo(() => {
+    let filtered = [...foods];
+
+    // Search filter (by name, vendor name, or description)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter(
+        (food) =>
+          food.name.toLowerCase().includes(query) ||
+          food.vendor_name.toLowerCase().includes(query) ||
+          food.description.toLowerCase().includes(query) ||
+          (categories.find((cat) => cat.name.toLowerCase().includes(query)) &&
+            food.description
+              .toLowerCase()
+              .includes(
+                categories
+                  .find((cat) => cat.name.toLowerCase().includes(query))
+                  ?.name.toLowerCase() || ""
+              ))
+      );
+    }
+
+    // Vendor filter
+    if (selectedVendor !== "all") {
+      filtered = filtered.filter((food) => food.vendor === selectedVendor);
+    }
+
+    // Category filter (search in description since there's no direct category field)
+    if (selectedCategory !== "all") {
+      const category = categories.find((cat) => cat.id === selectedCategory);
+      if (category) {
+        filtered = filtered.filter((food) =>
+          food.description.toLowerCase().includes(category.name.toLowerCase())
+        );
+      }
+    }
+
+    // Price range filter
+    if (priceRange !== "all") {
+      filtered = filtered.filter((food) => {
+        const price = parseFloat(food.price);
+        switch (priceRange) {
+          case "low":
+            return price < 1000;
+          case "medium":
+            return price >= 1000 && price < 3000;
+          case "high":
+            return price >= 3000;
+          default:
+            return true;
+        }
+      });
+    }
+
+    return filtered;
+  }, [
+    foods,
+    searchQuery,
+    selectedVendor,
+    selectedCategory,
+    priceRange,
+    categories,
+  ]);
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedVendor("all");
+    setSelectedCategory("all");
+    setPriceRange("all");
+  };
+
+  const hasActiveFilters =
+    searchQuery.trim() ||
+    selectedVendor !== "all" ||
+    selectedCategory !== "all" ||
+    priceRange !== "all";
+
   return (
-    <div className="min-h-screen bg-[#1E1E1E] scrollbar-thin scrollbar-webkit">
+    <div className="min-h-screen bg-[#1E1E1E]">
       <Header />
-      <main>
-        <section className="bg-[#1E1E1E] py-12 md:py-20 lg:py-32 px-5 md:11 lg:px-16">
-          <div className="flex gap-2">
+      <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+        {/* Header Section */}
+        <div className="mb-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
+            Food Menu
+          </h1>
+          <p className="text-gray-400 text-lg">
+            Discover delicious meals from our vendors
+          </p>
+        </div>
+
+        {/* Search and Filters Section */}
+        <div className="mb-8 space-y-4">
+          {/* Search Bar */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <Input
               type="search"
-              title="Search your favorite food"
-              placeholder="Search your favorite food"
+              placeholder="Search by food name, vendor, or category..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-12 pr-4 h-12 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
             />
-            <Button>
-              <SearchIcon size={20} />
-            </Button>
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white"
+                title="clear search"
+              >
+                <X size={20} />
+              </button>
+            )}
           </div>
-          <div>
-            <ul>
-              {categories.map((category) => (
-                <li key={category.id}>{category.name}</li>
-              ))}
-            </ul>
-            <ul>
-              {vendors.map((vendor) => (
-                <li key={vendor.id}>{vendor.name}</li>
-              ))}
-            </ul>
-          </div>
-        </section>
-        <section className="bg-[#1E1E1E] py-12 md:py-20 lg:py-32 px-5 md:11 lg:px-16">
-          <div className="relative">
-            <div
-              className="flex gap-6 md:gap-8 overflow-x-auto scrollbar-hide pb-4"
-              style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+
+          {/* Filter Toggle Button */}
+          <div className="flex items-center justify-between">
+            <Button
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              className="border-gray-700 text-gray-300 hover:bg-gray-800 hover:text-white"
             >
-              {loading && (
-                <div className="flex items-center justify-center h-full">
-                  <Loader2 className="w-6 h-6 animate-spin text-gray-400" />
-                </div>
+              <SlidersHorizontal className="w-4 h-4 mr-2" />
+              Filters
+              {hasActiveFilters && (
+                <span className="ml-2 bg-[#FF6B35] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                  {
+                    [
+                      searchQuery.trim() && 1,
+                      selectedVendor !== "all" && 1,
+                      selectedCategory !== "all" && 1,
+                      priceRange !== "all" && 1,
+                    ].filter(Boolean).length
+                  }
+                </span>
               )}
-              {foods.map((food) => (
-                <div key={food.id} className="flex-shrink-0 relative">
-                  <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl">
-                    <div className="absolute left-1/2 -translate-x-1/2">
-                      <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden">
-                        <img
-                          src={food.image}
-                          alt={food.name}
-                          className="w-full h-full object-cover"
-                        />
+            </Button>
+
+            {hasActiveFilters && (
+              <Button
+                variant="ghost"
+                onClick={clearFilters}
+                className="text-gray-400 hover:text-white"
+              >
+                Clear all
+              </Button>
+            )}
+          </div>
+
+          {/* Filters Panel */}
+          {showFilters && (
+            <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700 space-y-4 transition-all duration-300 ease-in-out">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* Vendor Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Vendor
+                  </label>
+                  <select
+                    title="vendor list"
+                    value={selectedVendor}
+                    onChange={(e) =>
+                      setSelectedVendor(
+                        e.target.value === "all"
+                          ? "all"
+                          : Number(e.target.value)
+                      )
+                    }
+                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35]"
+                  >
+                    <option value="all">All Vendors</option>
+                    {vendors.map((vendor) => (
+                      <option key={vendor.id} value={vendor.id}>
+                        {vendor.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Category Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Category
+                  </label>
+                  <select
+                    title="category list"
+                    value={selectedCategory}
+                    onChange={(e) =>
+                      setSelectedCategory(
+                        e.target.value === "all"
+                          ? "all"
+                          : Number(e.target.value)
+                      )
+                    }
+                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35]"
+                  >
+                    <option value="all">All Categories</option>
+                    {categories.map((category) => (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Price Range Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                    Price Range
+                  </label>
+                  <select
+                    title="price range"
+                    value={priceRange}
+                    onChange={(e) =>
+                      setPriceRange(e.target.value as PriceRange)
+                    }
+                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35]"
+                  >
+                    <option value="all">All Prices</option>
+                    <option value="low">Under ₦1,000</option>
+                    <option value="medium">₦1,000 - ₦3,000</option>
+                    <option value="high">Above ₦3,000</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Results Count */}
+          <div className="text-sm text-gray-400">
+            {loading ? (
+              "Loading..."
+            ) : (
+              <>
+                Showing {filteredFoods.length} of {foods.length} items
+                {hasActiveFilters && (
+                  <span className="ml-2 text-[#FF6B35]">(filtered)</span>
+                )}
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Food Items Grid */}
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-[#FF6B35]" />
+          </div>
+        ) : filteredFoods.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-gray-400 text-lg mb-4">No items found</p>
+            <p className="text-gray-500 text-sm mb-6">
+              Try adjusting your search or filters
+            </p>
+            {hasActiveFilters && (
+              <Button
+                onClick={clearFilters}
+                className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
+              >
+                Clear Filters
+              </Button>
+            )}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {filteredFoods.map((food, index) => (
+              <div
+                key={food.id}
+                className="group bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700 hover:border-[#FF6B35] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF6B35]/20 opacity-0 animate-fade-in"
+                style={{
+                  animationDelay: `${index * 50}ms`,
+                  animationFillMode: "forwards",
+                }}
+              >
+                <div className="flex flex-col items-center text-center">
+                  {/* Image */}
+                  <div className="relative w-32 h-32 rounded-full bg-gray-700 overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300">
+                    {food.image ? (
+                      <img
+                        src={food.image}
+                        alt={food.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-5xl">
+                        🍽️
                       </div>
-                    </div>
-                    <button
-                      className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-lg hover:scale-105 transition"
-                      title="View Details"
-                      onClick={() => navigate(`/food/${food.item_id}`)}
-                    >
-                      <ArrowUpRight className="w-5 h-5 text-black" />
-                    </button>
+                    )}
+                    {!food.is_available && (
+                      <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                        <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded">
+                          Out of Stock
+                        </span>
+                      </div>
+                    )}
+                  </div>
 
-                    <Button
-                      size="icon"
-                      className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10"
-                      onClick={() => {
-                        addToCart(food, 1);
-                      }}
-                    >
-                      <Plus size={18} />
-                    </Button>
+                  {/* Food Info */}
+                  <h3 className="text-white font-semibold text-lg mb-1 line-clamp-1">
+                    {food.name}
+                  </h3>
+                  <p className="text-gray-400 text-xs mb-2 line-clamp-2 min-h-[2.5rem]">
+                    {food.description}
+                  </p>
+                  <p className="text-gray-500 text-xs mb-3">
+                    {food.vendor_name}
+                  </p>
 
-                    <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 flex-col">
-                      <h3 className="text-white font-semibold text-sm md:text-base">
-                        {food.name}
-                      </h3>
-                      <span className="text-white font-semibold text-sm md:text-base">
-                        {food.description}
-                      </span>
+                  {/* Price and Actions */}
+                  <div className="flex items-center justify-between w-full mt-auto">
+                    <span className="text-[#FF6B35] font-bold text-xl">
+                      ₦{parseFloat(food.price).toLocaleString()}
+                    </span>
+                    <div className="flex gap-2">
+                      <button
+                        className="w-8 h-8 rounded-full bg-gray-700 hover:bg-[#FF6B35] flex items-center justify-center transition-colors"
+                        title="View Details"
+                        onClick={() => navigate(`/food/${food.item_id}`)}
+                      >
+                        <ArrowUpRight className="w-4 h-4 text-white" />
+                      </button>
+                      <Button
+                        size="icon"
+                        disabled={!food.is_available}
+                        className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-8 w-8 disabled:opacity-50 disabled:cursor-not-allowed"
+                        onClick={() => addToCart(food, 1)}
+                      >
+                        <Plus size={16} />
+                      </Button>
                     </div>
                   </div>
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
           </div>
-        </section>
+        )}
       </main>
       <Footer />
     </div>
