@@ -5,7 +5,7 @@ import Home from "./pages/Landing/Home";
 import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup";
 import Contact from "./pages/Contact";
-import Checkout from "./pages/Checkout";
+import CheckoutDetails from "./pages/CheckoutDetails";
 import OrderSuccess from "./pages/OrderSuccess";
 import "./App.css";
 import { FoodProvider } from "./contexts/FoodContext";
@@ -26,12 +26,12 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/:orderOid" element={<CheckoutDetails />} />
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />
               <Route path="/food-menu" element={<FoodMenu />} />
-              <Route path="vendors/:vendorId" element={<VendorDetails/>}/>
+              <Route path="vendors/:vendorId" element={<VendorDetails />} />
             </Routes>
             <Cart />
           </BrowserRouter>

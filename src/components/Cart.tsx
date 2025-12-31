@@ -77,7 +77,7 @@
     const handleCheckout = async () => {
       try {
         const order = await createOrder({ cartId, userId, deliveryAddress: "123 Main" })
-        navigate(`/checkout/${order.oid}`)
+        navigate(`/checkout/${order.order_oid}`)
       } catch (error) {
         console.error("Checkout failed")
       }

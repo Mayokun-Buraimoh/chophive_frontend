@@ -155,15 +155,15 @@ export const createOrder = async ({
   customerName?: string;
   roomAddress?: string;
   deliveryTime?: string;
-  deliveryBatch?: '1pm' | '6pm';
+  deliveryBatch?: "1pm" | "6pm";
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
       delivery_address: deliveryAddress,
-      customer_name: customerName || '',
-      room_address: roomAddress || '',
-      delivery_time: deliveryTime || '',
-      delivery_batch: deliveryBatch || '',
+      customer_name: customerName || "",
+      room_address: roomAddress || "",
+      delivery_time: deliveryTime || "",
+      delivery_batch: deliveryBatch || "",
     });
     return res.data;
   } catch (error) {
@@ -173,11 +173,11 @@ export const createOrder = async ({
 
 export const getCheckout = async (orderOid: string) => {
   try {
-    const res = api.get(`/checkout/${orderOid}`);
-    return (await res).data;
+    const res = await api.get(`/checkout/${orderOid}/`);
+    return res.data;
   } catch (error) {
-    throw new Error("Failed to checkout");
     console.error(error);
+    throw new Error("Failed to load checkout details");
   }
 };
 
