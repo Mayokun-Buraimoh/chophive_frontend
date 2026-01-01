@@ -55,7 +55,20 @@ function Signup() {
                 <ChefHat className="w-12 h-12 text-white" />
               </div>
               <h1 className="text-4xl font-bold text-white">
-                Join <span className="text-[#FF6B35]">TastyHub</span> Today
+                Join{" "}
+                <span className="text-2xl md:text-3xl font-bold text-[#1E1E1E] relative">
+                  <span className="relative inline-block text-[#FF6B35]">
+                    <span className="relative">
+                      C
+                      <span className="absolute -top-0.5 left-0.5 text-[#FF6B35] text-sm leading-none">
+                        🌿
+                      </span>
+                    </span>
+                    hop
+                  </span>
+                  <span className="text-white">Hive</span>
+                </span>{" "}
+                Today
               </h1>
               <p className="text-gray-400 text-lg">
                 Create your account and start enjoying fresh, healthy meals

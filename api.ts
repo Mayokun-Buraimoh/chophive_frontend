@@ -6,6 +6,7 @@ import {
   CartItem,
   FoodItem,
   UpdateUserProfilePayload,
+  Order,
 } from "./src/lib/interface";
 // import { useAuth } from "./src/contexts/AuthContext";
 
@@ -227,8 +228,48 @@ export const fetchCategory = async () => {
   return res.data;
 };
 
+export const fetchCategories = async () => {
+  const res = await api.get("/category/");
+  return res.data;
+};
+
+export const fetchFoodItems = async () => {
+  const res = await api.get("/food-items/");
+  return res.data;
+};
+
 export const fetchVendors = async () => {
   const res = await api.get("/vendor-list/");
+  return res.data;
+};
+
+export const fetchCustomerOrders = async (userId: string | null): Promise<Order[]> => {
+  if (!userId) return [];
+  const res = await api.get(`/customer/orders/${userId}/`);
+  return res.data;
+};
+
+export const fetchOrderDetail = async (
+  userId: string | null,
+  orderOid: string
+): Promise<Order> => {
+  if (!userId) throw new Error("User ID is required");
+  const res = await api.get(`/customer/order/detail/${userId}/${orderOid}/`);
+  return res.data;
+};
+
+export const requestPasswordReset = async (email: string) => {
+  const res = await api.get(`/user/password-reset/${email}/`);
+  return res.data;
+};
+
+export const changePassword = async (payload: {
+  otp: string;
+  uidb64: string;
+  reset_token: string;
+  password: string;
+}) => {
+  const res = await api.post("/user/password-change/", payload);
   return res.data;
 };
 

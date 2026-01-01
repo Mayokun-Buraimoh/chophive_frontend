@@ -1,7 +1,7 @@
 import { Button } from "../../components/ui/button";
 import { ArrowRight, UtensilsCrossed, Utensils } from "lucide-react";
 
-export default function AboutFoodex() {
+export default function AboutChopHive() {
   return (
     <section className="bg-[#1E1E1E] py-12 md:py-20">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -14,6 +14,10 @@ import { AuthProvider } from "./contexts/AuthContext";
 import FoodDetails from "./pages/FoodDetails";
 import FoodMenu from "./pages/FoodMenu";
 import VendorDetails from "./pages/VendorDetails";
+import Orders from "./pages/Orders";
+import Vendors from "./pages/Vendors";
+import PasswordReset from "./pages/Authentication/PasswordReset";
+import PasswordChange from "./pages/Authentication/PasswordChange";
 
 function App() {
   return (
@@ -31,7 +35,11 @@ function App() {
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />
               <Route path="/food-menu" element={<FoodMenu />} />
-              <Route path="vendors/:vendorId" element={<VendorDetails />} />
+              <Route path="/vendors" element={<Vendors />} />
+              <Route path="/vendors/:vendorName" element={<VendorDetails />} />
+              <Route path="/orders" element={<Orders />} />
+              <Route path="/password-reset" element={<PasswordReset />} />
+              <Route path="/create-new-password" element={<PasswordChange />} />
             </Routes>
             <Cart />
           </BrowserRouter>

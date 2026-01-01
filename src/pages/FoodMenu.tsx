@@ -14,8 +14,8 @@ import { useFood } from "../contexts/FoodContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../contexts/CartContext";
 import { useEffect, useState, useMemo } from "react";
-import { fetchCategory, fetchVendors } from "../../api";
-import { Category, Vendor } from "../lib/interface";
+import { fetchVendors } from "../../api";
+import { Vendor } from "../lib/interface";
 
 type PriceRange = "all" | "low" | "medium" | "high";
 
@@ -23,24 +23,11 @@ function FoodMenu() {
   const { foods, loading } = useFood();
   const { addToCart } = useCart();
   const navigate = useNavigate();
-  const [categories, setCategories] = useState<Category[]>([]);
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedVendor, setSelectedVendor] = useState<number | "all">("all");
-  const [selectedCategory, setSelectedCategory] = useState<number | "all">(
-    "all"
-  );
   const [priceRange, setPriceRange] = useState<PriceRange>("all");
   const [showFilters, setShowFilters] = useState(false);
-
-  const getCategories = async () => {
-    try {
-      const categoriesData = await fetchCategory();
-      setCategories(categoriesData);
-    } catch (error) {
-      console.error("Failed to fetch categories:", error);
-    }
-  };
 
   const getVendors = async () => {
     try {
@@ -52,7 +39,6 @@ function FoodMenu() {
   };
 
   useEffect(() => {
-    getCategories();
     getVendors();
   }, []);
 
@@ -67,31 +53,13 @@ function FoodMenu() {
         (food) =>
           food.name.toLowerCase().includes(query) ||
           food.vendor_name.toLowerCase().includes(query) ||
-          food.description.toLowerCase().includes(query) ||
-          (categories.find((cat) => cat.name.toLowerCase().includes(query)) &&
-            food.description
-              .toLowerCase()
-              .includes(
-                categories
-                  .find((cat) => cat.name.toLowerCase().includes(query))
-                  ?.name.toLowerCase() || ""
-              ))
+          food.description.toLowerCase().includes(query)
       );
     }
 
     // Vendor filter
     if (selectedVendor !== "all") {
       filtered = filtered.filter((food) => food.vendor === selectedVendor);
-    }
-
-    // Category filter (search in description since there's no direct category field)
-    if (selectedCategory !== "all") {
-      const category = categories.find((cat) => cat.id === selectedCategory);
-      if (category) {
-        filtered = filtered.filter((food) =>
-          food.description.toLowerCase().includes(category.name.toLowerCase())
-        );
-      }
     }
 
     // Price range filter
@@ -112,27 +80,16 @@ function FoodMenu() {
     }
 
     return filtered;
-  }, [
-    foods,
-    searchQuery,
-    selectedVendor,
-    selectedCategory,
-    priceRange,
-    categories,
-  ]);
+  }, [foods, searchQuery, selectedVendor, priceRange]);
 
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedVendor("all");
-    setSelectedCategory("all");
     setPriceRange("all");
   };
 
   const hasActiveFilters =
-    searchQuery.trim() ||
-    selectedVendor !== "all" ||
-    selectedCategory !== "all" ||
-    priceRange !== "all";
+    searchQuery.trim() || selectedVendor !== "all" || priceRange !== "all";
 
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
@@ -155,7 +112,7 @@ function FoodMenu() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" />
             <Input
               type="search"
-              placeholder="Search by food name, vendor, or category..."
+              placeholder="Search by food name or vendor..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-12 pr-4 h-12 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
@@ -186,7 +143,7 @@ function FoodMenu() {
                     [
                       searchQuery.trim() && 1,
                       selectedVendor !== "all" && 1,
-                      selectedCategory !== "all" && 1,
+                      // selectedCategory !== "all" && 1,
                       priceRange !== "all" && 1,
                     ].filter(Boolean).length
                   }
@@ -208,7 +165,7 @@ function FoodMenu() {
           {/* Filters Panel */}
           {showFilters && (
             <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 border border-gray-700 space-y-4 transition-all duration-300 ease-in-out">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {/* Vendor Filter */}
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -230,32 +187,6 @@ function FoodMenu() {
                     {vendors.map((vendor) => (
                       <option key={vendor.id} value={vendor.id}>
                         {vendor.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                {/* Category Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Category
-                  </label>
-                  <select
-                    title="category list"
-                    value={selectedCategory}
-                    onChange={(e) =>
-                      setSelectedCategory(
-                        e.target.value === "all"
-                          ? "all"
-                          : Number(e.target.value)
-                      )
-                    }
-                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35]"
-                  >
-                    <option value="all">All Categories</option>
-                    {categories.map((category) => (
-                      <option key={category.id} value={category.id}>
-                        {category.name}
                       </option>
                     ))}
                   </select>

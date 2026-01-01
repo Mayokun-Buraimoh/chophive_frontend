@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
 
-
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
@@ -49,12 +48,12 @@ export default function Header() {
             >
               Menu
             </Link>
-            <a
-              href="#cafeterias"
+            <Link
+              to="/vendors"
               className="text-white hover:text-[#1E1E1E] transition-colors"
             >
               Cafeterias
-            </a>
+            </Link>
             <Link
               to="/contact"
               className="text-white hover:text-[#1E1E1E] transition-colors"
@@ -71,9 +70,9 @@ export default function Header() {
               onClick={openCart}
             >
               <ShoppingCart size={20} />
-              {cart?.item_count > 0 && (
+              {(cart?.item_count ?? 0) > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
-                  {cart?.item_count}
+                  {cart?.item_count ?? 0}
                 </span>
               )}
             </Button>
@@ -105,6 +104,14 @@ export default function Header() {
                       onClick={() => setProfileOpen(false)}
                     >
                       My Orders
+                    </Link>
+
+                    <Link
+                      to="/password-reset"
+                      className="block px-4 py-2 text-sm text-gray-200 hover:bg-gray-800"
+                      onClick={() => setProfileOpen(false)}
+                    >
+                      Reset Password
                     </Link>
 
                     <button
@@ -145,91 +152,124 @@ export default function Header() {
           </button>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 space-y-4 border-t border-gray-800 font-semibold">
-            <Link to={"/"} className="block text-white hover:text-white">
-              Home
-            </Link>
-            <Link to={"/food-menu"} className="block text-white hover:text-white">
-              Menu
-            </Link>
-            <a href="#cafeterias" className="block text-white hover:text-white">
-              Cafeterias
-            </a>
-            <Link
-              to={"/contact"}
-              className="block text-white hover:text-white"
+          <>
+            {/* Backdrop */}
+            <div
+              className="md:hidden fixed inset-0 bg-black/70 z-40 top-16"
               onClick={() => setMobileMenuOpen(false)}
-            >
-              Contact Us
-            </Link>
-            <div className="flex flex-col pt-4">
-              <Button
-                variant="outline"
-                className="w-full border-[#1E1E1E] bg-transparent text-white relative"
-                onClick={() => {
-                  openCart();
-                  setMobileMenuOpen(false);
-                }}
+            />
+            {/* Menu */}
+            <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-[#1E1E1E] z-50 shadow-2xl overflow-y-auto py-4 space-y-4 border-t border-gray-800 font-semibold">
+              <Link to={"/"} className="block text-white hover:text-white">
+                Home
+              </Link>
+              <Link
+                to={"/food-menu"}
+                className="block text-white hover:text-white"
               >
-                <ShoppingCart size={18} className="mr-2" />
-                Cart
-                {cart?.item_count > 0 && (
-                  <span className="ml-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full px-2 py-0.5">
-                    {cart?.item_count}
-                  </span>
+                Menu
+              </Link>
+              <Link
+                to="/vendors"
+                className="block text-white hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Cafeterias
+              </Link>
+              <Link
+                to={"/contact"}
+                className="block text-white hover:text-white"
+                onClick={() => setMobileMenuOpen(false)}
+              >
+                Contact Us
+              </Link>
+              <div className="flex flex-col pt-4">
+                <Button
+                  variant="outline"
+                  className="w-full border-[#1E1E1E] bg-transparent text-white relative"
+                  onClick={() => {
+                    openCart();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  <ShoppingCart size={18} className="mr-2" />
+                  Cart
+                  {(cart?.item_count ?? 0) > 0 && (
+                    <span className="ml-2 bg-[#1E1E1E] text-white text-xs font-bold rounded-full px-2 py-0.5">
+                      {cart?.item_count ?? 0}
+                    </span>
+                  )}
+                </Button>
+                {rtoken ? (
+                  <div className="flex flex-col space-y-2 pt-4">
+                    <Link
+                      to="/customer-profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-[#1E1E1E] text-white bg-transparent "
+                      >
+                        My Account
+                      </Button>
+                    </Link>
+
+                    <Link to="/orders" onClick={() => setMobileMenuOpen(false)}>
+                      <Button
+                        variant="outline"
+                        className="w-full border-[#1E1E1E] text-white bg-transparent"
+                      >
+                        My Orders
+                      </Button>
+                    </Link>
+
+                    <Link
+                      to="/password-reset"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-[#1E1E1E] text-white bg-transparent"
+                      >
+                        Reset Password
+                      </Button>
+                    </Link>
+
+                    <Button
+                      onClick={logout}
+                      className="w-full bg-red-600 hover:bg-red-700 text-white"
+                    >
+                      Logout
+                    </Button>
+                  </div>
+                ) : (
+                  <div>
+                    <Link
+                      to={"/login"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button
+                        variant="outline"
+                        className="w-full border-[#1E1E1E] bg-transparent text-white"
+                      >
+                        Login
+                      </Button>
+                    </Link>
+                    <Link
+                      to={"/signup"}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Button className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/90 text-white">
+                        Sign Up
+                      </Button>
+                    </Link>
+                  </div>
                 )}
-              </Button>
-              {rtoken ? (
-                <div className="flex flex-col space-y-2 pt-4">
-                  <Link
-                    to="/customer-profile"
-                    onClick={() => setMobileMenuOpen(false)}
-                  >
-                    <Button
-                      variant="outline"
-                      className="w-full border-[#1E1E1E] text-white bg-transparent "
-                    >
-                      My Account
-                    </Button>
-                  </Link>
-
-                  <Link to="/orders" onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="outline"
-                      className="w-full border-[#1E1E1E] text-white bg-transparent"
-                    >
-                      My Orders
-                    </Button>
-                  </Link>
-
-                  <Button
-                    onClick={logout}
-                    className="w-full bg-red-600 hover:bg-red-700 text-white"
-                  >
-                    Logout
-                  </Button>
-                </div>
-              ) : (
-                <div>
-                  <Link to={"/login"} onClick={() => setMobileMenuOpen(false)}>
-                    <Button
-                      variant="outline"
-                      className="w-full border-[#1E1E1E] bg-transparent text-white"
-                    >
-                      Login
-                    </Button>
-                  </Link>
-                  <Link to={"/signup"} onClick={() => setMobileMenuOpen(false)}>
-                    <Button className="w-full bg-[#1E1E1E] hover:bg-[#1E1E1E]/90 text-white">
-                      Sign Up
-                    </Button>
-                  </Link>
-                </div>
-              )}
+              </div>
             </div>
-          </div>
+          </>
         )}
       </div>
     </header>

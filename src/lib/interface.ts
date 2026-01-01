@@ -137,6 +137,26 @@ export interface Checkout {
   created_at: string;
 }
 
+export interface Order {
+  id: number;
+  oid: string;
+  order_item: OrderItem[];
+  sub_total: string;
+  delivery_fee: string;
+  service_fee: string;
+  total: string;
+  total_amount: string;
+  payment_status: string;
+  status: string;
+  delivery_address: string;
+  customer_name?: string;
+  room_address?: string;
+  delivery_time?: string;
+  delivery_batch?: string;
+  created_at: string;
+  updated_at: string;
+}
+
 
 
 //IndexedDB Schema

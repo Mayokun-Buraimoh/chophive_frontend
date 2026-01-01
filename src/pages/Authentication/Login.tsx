@@ -4,14 +4,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Mail, Lock, ChefHat } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+import { Mail, Lock, ChefHat, Loader2 } from "lucide-react";
 import { loginSchema, type LoginFormData } from "../../lib/validations";
 import api from "../../../api";
 import { useAuth } from "../../contexts/AuthContext";
+import { useGoogleSignIn } from "../../hooks/useGoogleSignIn";
+import { useState } from "react";
 
 function Login() {
   const { login } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -21,6 +23,47 @@ function Login() {
     defaultValues: {
       rememberMe: false,
     },
+  });
+
+  // Get Google Client ID from environment variable or use a placeholder
+  // Replace with your actual Google Client ID
+  const GOOGLE_CLIENT_ID =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
+    "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
+
+  const handleGoogleSuccess = async (credential: string) => {
+    try {
+      setGoogleLoading(true);
+      // Send the credential to your backend
+      const res = await api.post("/user/google-signin/", {
+        credential,
+      });
+
+      const { refresh, access } = res.data;
+      login(access, refresh);
+      window.location.href = "/food-menu";
+    } catch (error: any) {
+      console.error(
+        "Google Sign-In error:",
+        error.response?.data || error.message
+      );
+      alert(
+        error.response?.data?.message ||
+          "Failed to sign in with Google. Please try again."
+      );
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error: Error) => {
+    console.error("Google Sign-In initialization error:", error);
+  };
+
+  const { buttonRef } = useGoogleSignIn({
+    clientId: GOOGLE_CLIENT_ID,
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleError,
   });
 
   const onSubmit = async (data: LoginFormData) => {
@@ -46,7 +89,19 @@ function Login() {
                 <ChefHat className="w-12 h-12 text-white" />
               </div>
               <h1 className="text-4xl font-bold text-white">
-                Welcome Back to <span className="text-[#FF6B35]">TastyHub</span>
+                Welcome Back to{" "}
+                <span className="text-2xl md:text-3xl font-bold text-[#1E1E1E] relative">
+                  <span className="relative inline-block text-[#FF6B35]">
+                    <span className="relative">
+                      C
+                      <span className="absolute -top-0.5 left-0.5 text-[#FF6B35] text-sm leading-none">
+                        🌿
+                      </span>
+                    </span>
+                    hop
+                  </span>
+                  <span className="text-white">Hive</span>
+                </span>
               </h1>
               <p className="text-gray-400 text-lg">
                 Sign in to continue your culinary journey with fresh, healthy
@@ -132,7 +187,7 @@ function Login() {
                     <span className="text-sm text-gray-400">Remember me</span>
                   </label>
                   <Link
-                    to="#"
+                    to={"/password-reset"}
                     className="text-sm text-[#FF6B35] hover:text-[#FF6B35]/80 transition-colors"
                   >
                     Forgot password?
@@ -144,7 +199,14 @@ function Login() {
                   disabled={isSubmitting}
                   className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSubmitting ? "Signing in..." : "Sign In"}
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      "Signing in..."
+                    </>
+                  ) : (
+                    "Sign In"
+                  )}
                 </Button>
               </form>
 
@@ -161,13 +223,17 @@ function Login() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full bg-gray-700 border-gray-700 text-gray-300 hover:bg-[#bd5028fd] hover:text-white h-12"
-                  >
-                    <FcGoogle size={18} className="mr-1" />
-                    Google
-                  </Button>
+                  <div
+                    ref={buttonRef}
+                    className="flex justify-center"
+                    style={{ minHeight: "48px" }}
+                  />
+                  {googleLoading && (
+                    <p className="text-sm text-gray-400 text-center">
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Signing in with Google...
+                    </p>
+                  )}
                 </div>
               </div>
 
