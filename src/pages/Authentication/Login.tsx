@@ -25,12 +25,9 @@ function Login() {
     },
   });
 
-  // Get Google Client ID from environment variable or use a placeholder
-  // Replace with your actual Google Client ID
+  // Get Google Client ID from environment variable
   const GOOGLE_CLIENT_ID =
-    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-    "YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com";
-
+    import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const handleGoogleSuccess = async (credential: string) => {
     try {
       setGoogleLoading(true);

@@ -4,14 +4,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
-import { Mail, Lock, User, ChefHat } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
+import { Mail, Lock, User, ChefHat, Loader2 } from "lucide-react";
 import { signupSchema, type SignupFormData } from "../../lib/validations";
 import api from "../../../api";
 import { useAuth } from "../../contexts/AuthContext";
+import { useGoogleSignIn } from "../../hooks/useGoogleSignIn";
+import { useState } from "react";
 
 function Signup() {
   const { login } = useAuth();
+  const [googleLoading, setGoogleLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -21,6 +23,44 @@ function Signup() {
     defaultValues: {
       terms: false,
     },
+  });
+
+  // Get Google Client ID from environment variable
+  const GOOGLE_CLIENT_ID =
+    import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const handleGoogleSuccess = async (credential: string) => {
+    try {
+      setGoogleLoading(true);
+      // Send the credential to your backend
+      const res = await api.post("/user/google-signin/", {
+        credential,
+      });
+
+      const { refresh, access } = res.data;
+      login(access, refresh);
+      window.location.href = "/food-menu";
+    } catch (error: any) {
+      console.error(
+        "Google Sign-In error:",
+        error.response?.data || error.message
+      );
+      alert(
+        error.response?.data?.message ||
+          "Failed to sign in with Google. Please try again."
+      );
+    } finally {
+      setGoogleLoading(false);
+    }
+  };
+
+  const handleGoogleError = (error: Error) => {
+    console.error("Google Sign-In initialization error:", error);
+  };
+
+  const { buttonRef } = useGoogleSignIn({
+    clientId: GOOGLE_CLIENT_ID,
+    onSuccess: handleGoogleSuccess,
+    onError: handleGoogleError,
   });
 
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
@@ -262,13 +302,17 @@ function Signup() {
                 </div>
 
                 <div className="mt-6 grid grid-cols-1 gap-4">
-                  <Button
-                    variant="outline"
-                    className="w-full bg-gray-700 border-gray-700 text-gray-300 hover:bg-[#bd5028fd] hover:text-white h-12"
-                  >
-                    <FcGoogle size={18} className="mr-1" />
-                    Google
-                  </Button>
+                  <div
+                    ref={buttonRef}
+                    className="flex justify-center"
+                    style={{ minHeight: "48px" }}
+                  />
+                  {googleLoading && (
+                    <p className="text-sm text-gray-400 text-center">
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Signing up with Google...
+                    </p>
+                  )}
                 </div>
               </div>
 
