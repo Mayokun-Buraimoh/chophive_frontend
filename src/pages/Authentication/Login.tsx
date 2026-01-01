@@ -199,7 +199,7 @@ function Login() {
                   {isSubmitting ? (
                     <>
                       <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                      "Signing in..."
+                      Signing in...
                     </>
                   ) : (
                     "Sign In"

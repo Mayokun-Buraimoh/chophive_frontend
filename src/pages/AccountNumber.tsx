@@ -23,16 +23,20 @@ function AccountNumber() {
             {/* Success Message */}
             <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">
               Account Number: 4000000
-              Account Name: ChopHive
-              Bank: UBA
             </h1>
+            <h2 className="text-white text-2xl font-semibold mb-4">
+              Account Name: ChopHive
+            </h2>
+            <h3 className="text-white text-xl font-semibold mb-8">
+              Bank: UBA
+            </h3>
             <p className="text-gray-400 text-lg mb-8">
               Pay into this account to complete your order.
             </p>
 
             {/* Action Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Link to="/">
+              <Link to="/food-menu">
                 <Button
                   variant="outline"
                   className="border-2 border-[#FF6B35] text-gray-300 bg-transparent hover:text-white hover:bg-[#FF6B35]"

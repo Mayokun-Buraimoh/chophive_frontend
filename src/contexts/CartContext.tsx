@@ -52,7 +52,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
       const id = await getCartId(userId);
       setCartId(id);
       console.log("id: ", id);
-      console.log("cart_id: ", cartId);
     };
 
     loadCartId();
@@ -85,7 +84,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (isOpen) loadCart();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen]);
+
+  // Load cart on mount and when cartId changes to show count at all times
+  useEffect(() => {
+    if (cartId || !isAuthenticated) {
+      loadCart();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cartId, isAuthenticated]);
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);

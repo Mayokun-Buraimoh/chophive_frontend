@@ -1,10 +1,20 @@
-import { X, Minus, Plus, Trash2, Loader2, MapPin } from "lucide-react";
+import {
+  X,
+  Minus,
+  Plus,
+  Trash2,
+  Loader2,
+  MapPin,
+  User,
+  Home,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
-import { createOrder, fetchUserProfile } from "../../api";
+import { createOrder, fetchUserProfile, deleteCart } from "../../api";
 import { UserProfile } from "../lib/interface";
 
 export default function Cart() {
@@ -27,6 +37,11 @@ export default function Cart() {
   const [shouldRender, setShouldRender] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [customerName, setCustomerName] = useState("");
+  const [roomNumber, setRoomNumber] = useState("");
+  const [selectedBatch, setSelectedBatch] = useState<"1pm" | "6pm" | null>(
+    null
+  );
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -92,6 +107,12 @@ export default function Cart() {
         if (profile.address) {
           setDeliveryAddress(profile.address);
         }
+        if (profile.username) {
+          setCustomerName(profile.username);
+        }
+        if (profile.room_number) {
+          setRoomNumber(profile.room_number);
+        }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       } finally {
@@ -105,6 +126,18 @@ export default function Cart() {
       alert("Please enter a delivery address");
       return;
     }
+    if (!customerName.trim()) {
+      alert("Please enter your name");
+      return;
+    }
+    if (!roomNumber.trim()) {
+      alert("Please enter your room number");
+      return;
+    }
+    if (!selectedBatch) {
+      alert("Please select a delivery batch time");
+      return;
+    }
 
     setIsSubmitting(true);
     try {
@@ -112,9 +145,28 @@ export default function Cart() {
         cartId,
         userId,
         deliveryAddress: deliveryAddress.trim(),
+        customerName: customerName.trim(),
+        roomAddress: roomNumber.trim(),
+        deliveryBatch: selectedBatch,
       });
+
+      // Delete cart after successful order creation
+      if (cartId) {
+        try {
+          await deleteCart(cartId);
+        } catch (error) {
+          console.error("Failed to delete cart:", error);
+          // Don't block navigation if cart deletion fails
+        }
+      }
+
       closeCart();
       setShowAddressModal(false);
+      // Reset form fields
+      setDeliveryAddress("");
+      setCustomerName("");
+      setRoomNumber("");
+      setSelectedBatch(null);
       navigate(`/checkout/${order.order_oid}`);
     } catch (error) {
       console.error("Checkout failed:", error);
@@ -296,21 +348,24 @@ export default function Cart() {
         )}
       </div>
 
-      {/* Delivery Address Modal */}
+      {/* Checkout Information Modal */}
       {showAddressModal && (
         <div className="fixed inset-0 bg-black/70 z-[60] flex items-center justify-center p-4">
-          <div className="bg-[#1E1E1E] rounded-2xl border border-gray-700 w-full max-w-md p-6 space-y-4">
+          <div className="bg-[#1E1E1E] rounded-2xl border border-gray-700 w-full max-w-md p-6 space-y-4 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-[#FF6B35]" />
-                <h3 className="text-xl font-bold text-white">
-                  Delivery Address
-                </h3>
-              </div>
+              <h3 className="text-xl font-bold text-white">
+                Checkout Information
+              </h3>
               <button
-                onClick={() => setShowAddressModal(false)}
+                onClick={() => {
+                  setShowAddressModal(false);
+                  setDeliveryAddress("");
+                  setCustomerName("");
+                  setRoomNumber("");
+                  setSelectedBatch(null);
+                }}
                 className="text-gray-400 hover:text-white transition-colors"
-                aria-label="Close address modal"
+                aria-label="Close modal"
               >
                 <X size={24} />
               </button>
@@ -322,14 +377,53 @@ export default function Cart() {
               </div>
             ) : (
               <>
+                {/* Customer Name */}
+                <div>
+                  <label
+                    htmlFor="customer-name"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
+                  >
+                    <User className="w-4 h-4" />
+                    Customer Name
+                  </label>
+                  <Input
+                    id="customer-name"
+                    type="text"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="Enter your name"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                    autoFocus
+                  />
+                </div>
+
+                {/* Room Number */}
+                <div>
+                  <label
+                    htmlFor="room-number"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
+                  >
+                    <Home className="w-4 h-4" />
+                    Room Number
+                  </label>
+                  <Input
+                    id="room-number"
+                    type="text"
+                    value={roomNumber}
+                    onChange={(e) => setRoomNumber(e.target.value)}
+                    placeholder="Enter your room number"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                  />
+                </div>
+
+                {/* Delivery Address */}
                 <div>
                   <label
                     htmlFor="delivery-address"
-                    className="block text-sm font-medium text-gray-300 mb-2"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
                   >
-                    {deliveryAddress
-                      ? "Edit Delivery Address"
-                      : "Enter Delivery Address"}
+                    <MapPin className="w-4 h-4" />
+                    Delivery Address
                   </label>
                   <textarea
                     id="delivery-address"
@@ -338,11 +432,48 @@ export default function Cart() {
                     placeholder="Enter your delivery address..."
                     rows={4}
                     className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] resize-none"
-                    autoFocus
                   />
                   {!deliveryAddress && (
                     <p className="text-xs text-gray-500 mt-1">
                       Please provide your delivery address to continue
+                    </p>
+                  )}
+                </div>
+
+                {/* Batch Time Selection */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-3">
+                    Select Delivery Batch Time
+                  </label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <Button
+                      type="button"
+                      variant={selectedBatch === "1pm" ? "default" : "outline"}
+                      onClick={() => setSelectedBatch("1pm")}
+                      className={`h-12 ${
+                        selectedBatch === "1pm"
+                          ? "bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white border-[#FF6B35]"
+                          : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
+                      }`}
+                    >
+                      1:00 PM
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={selectedBatch === "6pm" ? "default" : "outline"}
+                      onClick={() => setSelectedBatch("6pm")}
+                      className={`h-12 ${
+                        selectedBatch === "6pm"
+                          ? "bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white border-[#FF6B35]"
+                          : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
+                      }`}
+                    >
+                      6:00 PM
+                    </Button>
+                  </div>
+                  {!selectedBatch && (
+                    <p className="text-xs text-gray-500 mt-2">
+                      Please select a delivery batch time
                     </p>
                   )}
                 </div>
@@ -353,14 +484,23 @@ export default function Cart() {
                     onClick={() => {
                       setShowAddressModal(false);
                       setDeliveryAddress("");
+                      setCustomerName("");
+                      setRoomNumber("");
+                      setSelectedBatch(null);
                     }}
-                    className="flex-1 border-gray-700 text-gray-300 hover:bg-gray-800"
+                    className="flex-1 border-gray-700 text-gray hover:text-white hover:bg-gray-800"
                   >
                     Cancel
                   </Button>
                   <Button
                     onClick={handleAddressSubmit}
-                    disabled={!deliveryAddress.trim() || isSubmitting}
+                    disabled={
+                      !deliveryAddress.trim() ||
+                      !customerName.trim() ||
+                      !roomNumber.trim() ||
+                      !selectedBatch ||
+                      isSubmitting
+                    }
                     className="flex-1 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
@@ -369,7 +509,7 @@ export default function Cart() {
                         Processing...
                       </>
                     ) : (
-                      "Continue"
+                      "Place Order"
                     )}
                   </Button>
                 </div>

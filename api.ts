@@ -3,7 +3,6 @@ import {
   AddToCartPayload,
   BackendCartItem,
   Cart,
-  CartItem,
   FoodItem,
   UpdateUserProfilePayload,
   Order,
@@ -84,7 +83,12 @@ export const getCartId = async (
 export const fetchCartDetails = async (
   cartId: string | null,
   userId: string | null
-): Promise<{ delivery_fee: string; service_fee: string; sub_total: string; total_amount: string }> => {
+): Promise<{
+  delivery_fee: string;
+  service_fee: string;
+  sub_total: string;
+  total_amount: string;
+}> => {
   if (!cartId) {
     return {
       delivery_fee: "0.00",
@@ -94,7 +98,7 @@ export const fetchCartDetails = async (
     };
   }
 
-  const url = userId 
+  const url = userId
     ? `/cart-detail/${cartId}/${userId}/`
     : `/cart-detail/${cartId}/`;
   const res = await api.get(url);
@@ -194,10 +198,10 @@ export const createOrder = async ({
   cartId: string | null;
   deliveryAddress: string;
   userId: string | null;
-  customerName?: string;
-  roomAddress?: string;
+  customerName: string;
+  roomAddress: string;
   deliveryTime?: string;
-  deliveryBatch?: "1pm" | "6pm";
+  deliveryBatch: "1pm" | "6pm";
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
@@ -210,6 +214,18 @@ export const createOrder = async ({
     return res.data;
   } catch (error) {
     throw new Error("Failed to create order");
+  }
+};
+
+export const deleteCart = async (cartId: string | null) => {
+  if (!cartId) {
+    throw new Error("Cart ID is required");
+  }
+  try {
+    const res = await api.delete(`/cart/delete/${cartId}/`);
+    return res.data;
+  } catch (error) {
+    throw new Error("Failed to delete cart");
   }
 };
 
@@ -243,7 +259,9 @@ export const fetchVendors = async () => {
   return res.data;
 };
 
-export const fetchCustomerOrders = async (userId: string | null): Promise<Order[]> => {
+export const fetchCustomerOrders = async (
+  userId: string | null
+): Promise<Order[]> => {
   if (!userId) return [];
   const res = await api.get(`/customer/orders/${userId}/`);
   return res.data;
