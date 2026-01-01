@@ -18,6 +18,7 @@ import Orders from "./pages/Orders";
 import Vendors from "./pages/Vendors";
 import PasswordReset from "./pages/Authentication/PasswordReset";
 import PasswordChange from "./pages/Authentication/PasswordChange";
+import AccountNumber from "./pages/AccountNumber";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/checkout/:orderOid" element={<CheckoutDetails />} />
+              <Route path="/payment-account" element={<AccountNumber />} />
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />

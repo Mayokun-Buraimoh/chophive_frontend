@@ -294,10 +294,10 @@ export default function CheckoutDetails() {
 
             <div className="pt-6 border-t border-gray-700">
               <Button
-                onClick={() => navigate("/food-menu")}
+                onClick={() => navigate("/payment-account")}
                 className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 text-base font-semibold"
               >
-                Continue Shopping
+                Pay Now
               </Button>
             </div>
           </div>

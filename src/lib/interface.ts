@@ -155,6 +155,7 @@ export interface Order {
   delivery_batch?: string;
   created_at: string;
   updated_at: string;
+  order_pin: number;
 }
 
 

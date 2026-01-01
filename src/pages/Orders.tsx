@@ -153,6 +153,9 @@ export default function Orders() {
                       <p className="text-[#FF6B35] font-bold text-lg md:text-xl">
                         {formatPrice(order.total)}
                       </p>
+                      <p className="text-[#FF6B35] font-bold text-lg md:text-xl">
+                        Order Pin: <span className="text-white font-normal text-sm md:text-base">{order.order_pin || "N/A"}</span>
+                      </p>
                     </div>
                     <Button
                       onClick={() => {
