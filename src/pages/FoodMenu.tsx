@@ -21,7 +21,7 @@ type PriceRange = "all" | "low" | "medium" | "high";
 
 function FoodMenu() {
   const { foods, loading } = useFood();
-  const { addToCart } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
   const navigate = useNavigate();
   const [vendors, setVendors] = useState<Vendor[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
@@ -115,7 +115,7 @@ function FoodMenu() {
               placeholder="Search by food name or vendor..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-12 pr-4 h-12 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
+              className="pl-12 pr-4 h-12 bg-gray-800/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
             />
             {searchQuery && (
               <button
@@ -138,7 +138,7 @@ function FoodMenu() {
               <SlidersHorizontal className="w-4 h-4 mr-2" />
               Filters
               {hasActiveFilters && (
-                <span className="ml-2 bg-[#FF4500] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+                <span className="ml-2 bg-[#A32110] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
                   {
                     [
                       searchQuery.trim() && 1,
@@ -181,7 +181,7 @@ function FoodMenu() {
                           : Number(e.target.value)
                       )
                     }
-                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500]"
+                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
                   >
                     <option value="all">All Vendors</option>
                     {vendors.map((vendor) => (
@@ -203,7 +203,7 @@ function FoodMenu() {
                     onChange={(e) =>
                       setPriceRange(e.target.value as PriceRange)
                     }
-                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500]"
+                    className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
                   >
                     <option value="all">All Prices</option>
                     <option value="low">Under ₦1,000</option>
@@ -223,7 +223,7 @@ function FoodMenu() {
               <>
                 Showing {filteredFoods.length} of {foods.length} items
                 {hasActiveFilters && (
-                  <span className="ml-2 text-[#FF4500]">(filtered)</span>
+                  <span className="ml-2 text-[#A32110]">(filtered)</span>
                 )}
               </>
             )}
@@ -233,7 +233,7 @@ function FoodMenu() {
         {/* Food Items Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
           </div>
         ) : filteredFoods.length === 0 ? (
           <div className="text-center py-20">
@@ -244,7 +244,7 @@ function FoodMenu() {
             {hasActiveFilters && (
               <Button
                 onClick={clearFilters}
-                className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
+                className="bg-[#A32110] hover:bg-[#A32110]/90 text-white"
               >
                 Clear Filters
               </Button>
@@ -261,9 +261,9 @@ function FoodMenu() {
                   animationFillMode: "forwards",
                 }}
               >
-                <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#FF4500]/30 transition-all duration-300 hover:scale-105 mx-auto">
+                <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#A32110]/30 transition-all duration-300 hover:scale-105 mx-auto">
                   <div className="absolute left-1/2 -translate-x-1/2">
-                    <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#FF4500] transition-colors duration-300">
+                    <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#A32110] transition-colors duration-300">
                       {food.image ? (
                         <img
                           src={food.image}
@@ -285,17 +285,25 @@ function FoodMenu() {
                     </div>
                   </div>
                   <button
-                    className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF4500] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
+                    className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#A32110] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
                     title="View Details"
                     onClick={() => navigate(`/food/${food.item_id}`)}
                   >
                     <ArrowUpRight className="w-5 h-5 text-black" />
                   </button>
 
+                  {getItemQuantity(food.id) > 0 && (
+                    <div className="absolute top-3 left-3 w-12 h-12 rounded-full bg-[#A32110] flex items-center justify-center shadow-lg z-10">
+                      <span className="text-black font-bold text-sm">
+                        {getItemQuantity(food.id)}
+                      </span>
+                    </div>
+                  )}
+
                   <Button
                     size="icon"
                     disabled={!food.is_available}
-                    className="absolute bottom-3 right-3 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 transition-transform duration-300"
+                    className="absolute bottom-3 right-3 bg-[#A32110] hover:bg-[#A32110]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 transition-transform duration-300"
                     onClick={() => addToCart(food, 1)}
                   >
                     <Plus size={18} />
@@ -308,7 +316,7 @@ function FoodMenu() {
                     <span className="text-gray-400 text-xs line-clamp-2 max-w-[200px]">
                       {food.description}
                     </span>
-                    <span className="text-[#FF4500] font-bold text-lg">
+                    <span className="text-[#A32110] font-bold text-lg">
                       ₦{parseFloat(food.price).toLocaleString()}
                     </span>
                   </div>
@@ -324,5 +332,6 @@ function FoodMenu() {
 }
 
 export default FoodMenu;
+
 
 

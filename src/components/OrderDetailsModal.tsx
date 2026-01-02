@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo } from "react";
 import { X, Package, MapPin, Calendar, CheckCircle, Clock } from "lucide-react";
 import { Order, OrderItem } from "../lib/interface";
@@ -130,14 +131,14 @@ export default function OrderDetailsModal({
         <div className="p-4 md:p-6 space-y-4 md:space-y-6">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
+              <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
             </div>
           ) : (
             <>
               {/* Order Info */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
                 <div className="flex items-start gap-3">
-                  <Calendar className="w-5 h-5 text-[#FF4500] mt-1 flex-shrink-0" />
+                  <Calendar className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-400 mb-1">Order Date</p>
                     <p className="text-white text-sm md:text-base">
@@ -147,7 +148,7 @@ export default function OrderDetailsModal({
                 </div>
 
                 <div className="flex items-start gap-3">
-                  <MapPin className="w-5 h-5 text-[#FF4500] mt-1 flex-shrink-0" />
+                  <MapPin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                   <div>
                     <p className="text-sm text-gray-400 mb-1">Delivery Address</p>
                     <p className="text-white text-sm md:text-base">
@@ -163,7 +164,7 @@ export default function OrderDetailsModal({
 
                 {orderDetails?.delivery_batch && (
                   <div className="flex items-start gap-3">
-                    <Package className="w-5 h-5 text-[#FF4500] mt-1 flex-shrink-0" />
+                    <Package className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-sm text-gray-400 mb-1">Delivery Batch</p>
                       <p className="text-white text-sm md:text-base">
@@ -175,7 +176,7 @@ export default function OrderDetailsModal({
 
                 {orderDetails?.customer_name && (
                   <div className="flex items-start gap-3">
-                    <Package className="w-5 h-5 text-[#FF4500] mt-1 flex-shrink-0" />
+                    <Package className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                     <div>
                       <p className="text-sm text-gray-400 mb-1">Customer Name</p>
                       <p className="text-white text-sm md:text-base">
@@ -194,7 +195,7 @@ export default function OrderDetailsModal({
                     className="bg-gray-800/50 backdrop-blur-sm rounded-lg md:rounded-xl p-4 md:p-6 border border-gray-700"
                   >
                     <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-700">
-                      <Package className="w-5 h-5 text-[#FF4500]" />
+                      <Package className="w-5 h-5 text-[#A32110]" />
                       <h3 className="text-lg md:text-xl font-bold text-white">
                         {group.vendor.name || group.vendor.username}
                       </h3>
@@ -231,7 +232,7 @@ export default function OrderDetailsModal({
                             </div>
                           </div>
                           <div className="text-right flex-shrink-0">
-                            <p className="text-[#FF4500] font-semibold text-sm md:text-base">
+                            <p className="text-[#A32110] font-semibold text-sm md:text-base">
                               {formatPrice(item.total)}
                             </p>
                             {item.quantity > 1 && (
@@ -290,10 +291,10 @@ export default function OrderDetailsModal({
 
                   <div className="pt-3 md:pt-4 border-t border-gray-700">
                     <div className="flex justify-between items-center">
-                      <span className="text-[#FF4500] font-bold text-lg md:text-xl">
+                      <span className="text-[#A32110] font-bold text-lg md:text-xl">
                         Total
                       </span>
-                      <span className="text-[#FF4500] font-bold text-xl md:text-2xl">
+                      <span className="text-[#A32110] font-bold text-xl md:text-2xl">
                         {formatPrice(orderDetails?.total || order.total)}
                       </span>
                     </div>
@@ -307,6 +308,7 @@ export default function OrderDetailsModal({
     </div>
   );
 }
+
 
 
 

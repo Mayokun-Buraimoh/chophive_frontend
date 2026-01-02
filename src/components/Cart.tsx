@@ -29,6 +29,7 @@ export default function Cart() {
     loading,
     increaseQuantity,
     decreaseQuantity,
+    refreshCartId,
   } = useCart();
 
   const { userId, isAuthenticated } = useAuth();
@@ -154,6 +155,8 @@ export default function Cart() {
       if (cartId) {
         try {
           await deleteCart(cartId);
+          // Refresh cartId after deletion so a new cart can be created
+          await refreshCartId();
         } catch (error) {
           console.error("Failed to delete cart:", error);
           // Don't block navigation if cart deletion fails
@@ -193,7 +196,7 @@ export default function Cart() {
         }`}
       >
         {/* Orange accent line */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF4500]" />
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#A32110]" />
 
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-800">
@@ -307,29 +310,15 @@ export default function Cart() {
         {cart?.items && cart?.items.length > 0 && (
           <div className="border-t border-gray-800 p-6 space-y-4">
             <div className="space-y-3">
-              <div className="flex justify-between text-gray-400 text-sm">
-                <span>Subtotal</span>
-                <span>{formatPrice(cart?.total_amount || "0.00")}</span>
-              </div>
-              <div className="flex justify-between text-gray-400 text-sm">
-                <span>Delivery Fee</span>
-                <span>{formatPrice(cart?.delivery_fee || "0.00")}</span>
-              </div>
-              <div className="flex justify-between text-gray-400 text-sm">
-                <span>Service Fee</span>
-                <span>{formatPrice(cart?.service_fee || "0.00")}</span>
-              </div>
-              <div className="border-t border-gray-700 pt-3">
+              <div className="">
                 <div className="flex justify-between">
-                  <span className="text-[#FF4500] font-bold text-lg">
+                  <span className="text-[#A32110] font-bold text-lg">
                     Total
                   </span>
-                  <span className="text-[#FF4500] font-bold text-lg">
+                  <span className="text-[#A32110] font-bold text-lg">
                     {formatPrice(
                       (
-                        Number(cart?.total_amount || 0) +
-                        Number(cart?.delivery_fee || 0) +
-                        Number(cart?.service_fee || 0)
+                        Number(cart?.total_amount || 0)
                       ).toFixed(2)
                     )}
                   </span>
@@ -339,7 +328,7 @@ export default function Cart() {
 
             {/* Checkout Button */}
             <Button
-              className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 text-base font-semibold"
+              className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white h-12 text-base font-semibold"
               onClick={handleCheckoutClick}
             >
               Checkout
@@ -373,7 +362,7 @@ export default function Cart() {
 
             {loadingProfile ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-[#FF4500]" />
+                <Loader2 className="w-6 h-6 animate-spin text-[#A32110]" />
               </div>
             ) : (
               <>
@@ -392,7 +381,7 @@ export default function Cart() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
                     autoFocus
                   />
                 </div>
@@ -412,7 +401,7 @@ export default function Cart() {
                     value={roomNumber}
                     onChange={(e) => setRoomNumber(e.target.value)}
                     placeholder="Enter your room number"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
                   />
                 </div>
 
@@ -431,7 +420,7 @@ export default function Cart() {
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="Enter your delivery address..."
                     rows={4}
-                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500] resize-none"
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] resize-none"
                   />
                   {!deliveryAddress && (
                     <p className="text-xs text-gray-500 mt-1">
@@ -452,7 +441,7 @@ export default function Cart() {
                       onClick={() => setSelectedBatch("1pm")}
                       className={`h-12 ${
                         selectedBatch === "1pm"
-                          ? "bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-[#FF4500]"
+                          ? "bg-[#A32110] hover:bg-[#A32110]/90 text-white border-[#A32110]"
                           : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
                       }`}
                     >
@@ -464,7 +453,7 @@ export default function Cart() {
                       onClick={() => setSelectedBatch("6pm")}
                       className={`h-12 ${
                         selectedBatch === "6pm"
-                          ? "bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-[#FF4500]"
+                          ? "bg-[#A32110] hover:bg-[#A32110]/90 text-white border-[#A32110]"
                           : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
                       }`}
                     >
@@ -501,7 +490,7 @@ export default function Cart() {
                       !selectedBatch ||
                       isSubmitting
                     }
-                    className="flex-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-[#A32110] hover:bg-[#A32110]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
@@ -521,5 +510,3 @@ export default function Cart() {
     </>
   );
 }
-
-

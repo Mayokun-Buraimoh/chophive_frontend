@@ -13,11 +13,11 @@ export default function Footer() {
           {/* Logo and Slogan */}
           <div className="lg:col-span-2">
             <div className="flex items-center mb-4">
-              <span className="text-2xl md:text-3xl font-bold text-[#FF4500] relative">
+              <span className="text-2xl md:text-3xl font-bold text-[#A32110] relative">
                 <span className="relative inline-block">
                   <span className="relative">
                     C
-                    <span className="absolute -top-0.5 left-0.5 text-[#FF4500] text-sm leading-none">
+                    <span className="absolute -top-0.5 left-0.5 text-[#A32110] text-sm leading-none">
                       🌿
                     </span>
                   </span>
@@ -36,7 +36,7 @@ export default function Footer() {
                 placeholder="Enter Your Email"
                 className="bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 flex-1"
               />
-              <Button className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white whitespace-nowrap">
+              <Button className="bg-[#A32110] hover:bg-[#A32110]/90 text-white whitespace-nowrap">
                 Subscribe
               </Button>
             </div>
@@ -170,28 +170,28 @@ export default function Footer() {
             <div className="flex items-center gap-4">
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#FF4500] transition-colors"
+                className="text-gray-400 hover:text-[#A32110] transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#FF4500] transition-colors"
+                className="text-gray-400 hover:text-[#A32110] transition-colors"
                 aria-label="Facebook"
               >
                 <Facebook size={20} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#FF4500] transition-colors"
+                className="text-gray-400 hover:text-[#A32110] transition-colors"
                 aria-label="LinkedIn"
               >
                 <Linkedin size={20} />
               </a>
               <a
                 href="#"
-                className="text-gray-400 hover:text-[#FF4500] transition-colors"
+                className="text-gray-400 hover:text-[#A32110] transition-colors"
                 aria-label="YouTube"
               >
                 <Youtube size={20} />
@@ -206,5 +206,6 @@ export default function Footer() {
     </footer>
   );
 }
+
 
 

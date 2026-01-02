@@ -33,13 +33,13 @@ function OrderSuccess() {
             {/* Order Info Card */}
             <div className="bg-gray-900/50 rounded-lg p-6 mb-8 border border-gray-700">
               <div className="flex items-center justify-center mb-4">
-                <Package className="w-6 h-6 text-[#FF4500] mr-2" />
+                <Package className="w-6 h-6 text-[#A32110] mr-2" />
                 <span className="text-white font-semibold">Order Details</span>
               </div>
               <div className="space-y-2 text-left">
                 <div className="flex justify-between text-gray-300">
                   <span>Order Number:</span>
-                  <span className="text-[#FF4500] font-mono">
+                  <span className="text-[#A32110] font-mono">
                     #{Math.random().toString(36).substring(2, 10).toUpperCase()}
                   </span>
                 </div>
@@ -55,13 +55,13 @@ function OrderSuccess() {
             </div>
 
             {/* What's Next */}
-            <div className="bg-gradient-to-br from-[#FF4500]/10 to-transparent rounded-lg p-6 mb-8 border border-[#FF4500]/20">
+            <div className="bg-gradient-to-br from-[#A32110]/10 to-transparent rounded-lg p-6 mb-8 border border-[#A32110]/20">
               <h2 className="text-xl font-bold text-white mb-4">
                 What's Next?
               </h2>
               <div className="space-y-3 text-left">
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-[#FF4500] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
+                  <div className="w-6 h-6 bg-[#A32110] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
                     <span className="text-white text-xs font-bold">1</span>
                   </div>
                   <p className="text-gray-300 text-sm">
@@ -69,7 +69,7 @@ function OrderSuccess() {
                   </p>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-[#FF4500] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
+                  <div className="w-6 h-6 bg-[#A32110] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
                     <span className="text-white text-xs font-bold">2</span>
                   </div>
                   <p className="text-gray-300 text-sm">
@@ -77,7 +77,7 @@ function OrderSuccess() {
                   </p>
                 </div>
                 <div className="flex items-start">
-                  <div className="w-6 h-6 bg-[#FF4500] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
+                  <div className="w-6 h-6 bg-[#A32110] rounded-full flex items-center justify-center flex-shrink-0 mr-3 mt-0.5">
                     <span className="text-white text-xs font-bold">3</span>
                   </div>
                   <p className="text-gray-300 text-sm">
@@ -91,7 +91,7 @@ function OrderSuccess() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
                 onClick={() => navigate("/")}
-                className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
+                className="bg-[#A32110] hover:bg-[#A32110]/90 text-white"
               >
                 <Home className="w-4 h-4 mr-2" />
                 Back to Home
@@ -99,7 +99,7 @@ function OrderSuccess() {
               <Link to="/">
                 <Button
                   variant="outline"
-                  className="border-2 border-[#FF4500] text-gray-300 bg-transparent hover:text-white hover:bg-[#FF4500]"
+                  className="border-2 border-[#A32110] text-gray-300 bg-transparent hover:text-white hover:bg-[#A32110]"
                 >
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Continue Shopping
@@ -113,7 +113,7 @@ function OrderSuccess() {
                 Need help?{" "}
                 <Link
                   to="/contact"
-                  className="text-[#FF4500] hover:text-[#FF4500]/80 transition-colors"
+                  className="text-[#A32110] hover:text-[#A32110]/80 transition-colors"
                 >
                   Contact our support team
                 </Link>
@@ -129,6 +129,7 @@ function OrderSuccess() {
 }
 
 export default OrderSuccess;
+
 
 
 

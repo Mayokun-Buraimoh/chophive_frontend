@@ -22,14 +22,14 @@ function Contact() {
       <Header />
 
       {/* Hero Section */}
-      <section className="bg-gradient-to-br from-[#FF4500]/10 to-transparent py-16 md:py-24">
+      <section className="bg-gradient-to-br from-[#A32110]/10 to-transparent py-16 md:py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center max-w-3xl mx-auto">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-[#FF4500] rounded-full mb-6">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-[#A32110] rounded-full mb-6">
               <MessageSquare className="w-10 h-10 text-white" />
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4">
-              Get in <span className="text-[#FF4500]">Touch</span>
+              Get in <span className="text-[#A32110]">Touch</span>
             </h1>
             <p className="text-gray-400 text-lg md:text-xl">
               Have a question or feedback? We'd love to hear from you. Send us a
@@ -62,7 +62,7 @@ function Contact() {
                       id="name"
                       name="name"
                       placeholder="John Doe"
-                      className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500] h-12"
+                      className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12"
                       required
                     />
                   </div>
@@ -78,7 +78,7 @@ function Contact() {
                       id="email"
                       name="email"
                       placeholder="john@example.com"
-                      className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500] h-12"
+                      className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12"
                       required
                     />
                   </div>
@@ -96,7 +96,7 @@ function Contact() {
                     id="subject"
                     name="subject"
                     placeholder="What's this about?"
-                    className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500] h-12"
+                    className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12"
                     required
                   />
                 </div>
@@ -113,14 +113,14 @@ function Contact() {
                     name="message"
                     rows={6}
                     placeholder="Tell us more about your inquiry..."
-                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500] resize-none"
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] resize-none"
                     required
                   />
                 </div>
 
                 <Button
                   type="submit"
-                  className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 text-base font-semibold"
+                  className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white h-12 text-base font-semibold"
                 >
                   <Send className="w-5 h-5 mr-2" />
                   Send Message
@@ -137,8 +137,8 @@ function Contact() {
                 </h2>
                 <div className="space-y-6">
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500]/20 rounded-lg flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-[#FF4500]" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#A32110]/20 rounded-lg flex items-center justify-center">
+                      <Mail className="w-6 h-6 text-[#A32110]" />
                     </div>
                     <div>
                       <h3 className="text-white font-semibold mb-1">Email</h3>
@@ -150,8 +150,8 @@ function Contact() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500]/20 rounded-lg flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-[#FF4500]" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#A32110]/20 rounded-lg flex items-center justify-center">
+                      <Phone className="w-6 h-6 text-[#A32110]" />
                     </div>
                     <div>
                       <h3 className="text-white font-semibold mb-1">Phone</h3>
@@ -161,8 +161,8 @@ function Contact() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500]/20 rounded-lg flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-[#FF4500]" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#A32110]/20 rounded-lg flex items-center justify-center">
+                      <MapPin className="w-6 h-6 text-[#A32110]" />
                     </div>
                     <div>
                       <h3 className="text-white font-semibold mb-1">Address</h3>
@@ -176,8 +176,8 @@ function Contact() {
                   </div>
 
                   <div className="flex items-start space-x-4">
-                    <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500]/20 rounded-lg flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-[#FF4500]" />
+                    <div className="flex-shrink-0 w-12 h-12 bg-[#A32110]/20 rounded-lg flex items-center justify-center">
+                      <Clock className="w-6 h-6 text-[#A32110]" />
                     </div>
                     <div>
                       <h3 className="text-white font-semibold mb-1">
@@ -204,28 +204,28 @@ function Contact() {
                 <div className="flex items-center gap-4">
                   <a
                     href="#"
-                    className="w-12 h-12 bg-gray-700 hover:bg-[#FF4500] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                    className="w-12 h-12 bg-gray-700 hover:bg-[#A32110] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     aria-label="Instagram"
                   >
                     <Instagram size={20} />
                   </a>
                   <a
                     href="#"
-                    className="w-12 h-12 bg-gray-700 hover:bg-[#FF4500] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                    className="w-12 h-12 bg-gray-700 hover:bg-[#A32110] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     aria-label="Facebook"
                   >
                     <Facebook size={20} />
                   </a>
                   <a
                     href="#"
-                    className="w-12 h-12 bg-gray-700 hover:bg-[#FF4500] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                    className="w-12 h-12 bg-gray-700 hover:bg-[#A32110] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     aria-label="LinkedIn"
                   >
                     <Linkedin size={20} />
                   </a>
                   <a
                     href="#"
-                    className="w-12 h-12 bg-gray-700 hover:bg-[#FF4500] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
+                    className="w-12 h-12 bg-gray-700 hover:bg-[#A32110] rounded-lg flex items-center justify-center text-gray-400 hover:text-white transition-colors"
                     aria-label="YouTube"
                   >
                     <Youtube size={20} />
@@ -242,7 +242,7 @@ function Contact() {
             </h2>
             <div className="w-full h-64 md:h-96 bg-gray-900 rounded-lg flex items-center justify-center border border-gray-700">
               <div className="text-center">
-                <MapPin className="w-16 h-16 text-[#FF4500] mx-auto mb-4" />
+                <MapPin className="w-16 h-16 text-[#A32110] mx-auto mb-4" />
                 <p className="text-gray-400">
                   Interactive map would be integrated here
                 </p>
@@ -261,5 +261,6 @@ function Contact() {
 }
 
 export default Contact;
+
 
 

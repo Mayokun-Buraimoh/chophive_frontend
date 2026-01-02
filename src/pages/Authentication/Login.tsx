@@ -38,7 +38,7 @@ function Login() {
 
       const { refresh, access } = res.data;
       login(access, refresh);
-      window.location.href = "/food-menu";
+      window.location.href = "/vendors";
     } catch (error: any) {
       console.error(
         "Google Sign-In error:",
@@ -69,7 +69,7 @@ function Login() {
 
       const { refresh, access } = res.data;
       login(access, refresh);
-      window.location.href = "/food-menu";
+      window.location.href = "/vendors";
     } catch (error: any) {
       console.error("Login error:", error.response?.data || error.message);
     }
@@ -80,18 +80,18 @@ function Login() {
       <div className="w-full max-w-5xl">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left Side - Decorative */}
-          <div className="hidden md:flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#FF4500]/20 to-[#FF4500]/5 rounded-2xl border border-gray-800 h-full min-h-[500px]">
+          <div className="hidden md:flex flex-col items-center justify-center p-8 bg-gradient-to-br from-[#A32110]/20 to-[#A32110]/5 rounded-2xl border border-gray-800 h-full min-h-[500px]">
             <div className="text-center space-y-6">
-              <div className="inline-flex items-center justify-center w-24 h-24 bg-[#FF4500] rounded-full mb-6">
+              <div className="inline-flex items-center justify-center w-24 h-24 bg-[#A32110] rounded-full mb-6">
                 <ChefHat className="w-12 h-12 text-white" />
               </div>
               <h1 className="text-4xl font-bold text-white">
                 Welcome Back to{" "}
                 <span className="text-2xl md:text-3xl font-bold text-[#1E1E1E] relative">
-                  <span className="relative inline-block text-[#FF4500]">
+                  <span className="relative inline-block text-[#A32110]">
                     <span className="relative">
                       C
-                      <span className="absolute -top-0.5 left-0.5 text-[#FF4500] text-sm leading-none">
+                      <span className="absolute -top-0.5 left-0.5 text-[#A32110] text-sm leading-none">
                         🌿
                       </span>
                     </span>
@@ -131,7 +131,7 @@ function Login() {
                       type="email"
                       id="email"
                       placeholder="you@example.com"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500] h-12 ${
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
                         errors.email
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
@@ -159,7 +159,7 @@ function Login() {
                       type="password"
                       id="password"
                       placeholder="Enter your password"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500] h-12 ${
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
                         errors.password
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
@@ -178,14 +178,14 @@ function Login() {
                   <label className="flex items-center space-x-2 cursor-pointer">
                     <input
                       type="checkbox"
-                      className="w-4 h-4 rounded border-gray-600 bg-gray-900 text-[#FF4500] focus:ring-[#FF4500] focus:ring-offset-gray-900"
+                      className="w-4 h-4 rounded border-gray-600 bg-gray-900 text-[#A32110] focus:ring-[#A32110] focus:ring-offset-gray-900"
                       {...register("rememberMe")}
                     />
                     <span className="text-sm text-gray-400">Remember me</span>
                   </label>
                   <Link
                     to={"/password-reset"}
-                    className="text-sm text-[#FF4500] hover:text-[#FF4500]/80 transition-colors"
+                    className="text-sm text-[#A32110] hover:text-[#A32110]/80 transition-colors"
                   >
                     Forgot password?
                   </Link>
@@ -194,7 +194,7 @@ function Login() {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white h-12 text-base font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? (
                     <>
@@ -238,7 +238,7 @@ function Login() {
                 Don't have an account?{" "}
                 <Link
                   to="/signup"
-                  className="text-[#FF4500] hover:text-[#FF4500]/80 font-semibold transition-colors"
+                  className="text-[#A32110] hover:text-[#A32110]/80 font-semibold transition-colors"
                 >
                   Sign up
                 </Link>
@@ -252,5 +252,6 @@ function Login() {
 }
 
 export default Login;
+
 
 

@@ -2,20 +2,20 @@ import { useEffect, useState } from "react";
 import { Vendor, FoodItem } from "../lib/interface";
 import api, { fetchFoodItems } from "../../api";
 import Header from "../components/Header";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-import { Loader2, Store, MapPin } from "lucide-react";
+import { Loader2, Store, MapPin, ArrowUpRight } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { Button } from "../components/ui/button";
-import { ShoppingCart, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 function VendorDetails() {
   const { vendorName } = useParams<{ vendorName: string }>();
+  const navigate = useNavigate();
   const [vendor, setVendor] = useState<Vendor | null>(null);
   const [foodItems, setFoodItems] = useState<FoodItem[]>([]);
   const [loading, setLoading] = useState(true);
-  const [addedItems, setAddedItems] = useState<Set<number>>(new Set());
-  const { addToCart } = useCart();
+  const { addToCart, getItemQuantity } = useCart();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -59,28 +59,12 @@ function VendorDetails() {
     return `₦${numPrice.toFixed(2)}`;
   };
 
-  const handleAddToCart = async (item: FoodItem) => {
-    try {
-      await addToCart(item, 1);
-      setAddedItems((prev) => new Set(prev).add(item.id));
-      setTimeout(() => {
-        setAddedItems((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(item.id);
-          return newSet;
-        });
-      }, 3000);
-    } catch (error) {
-      console.error("Failed to add to cart:", error);
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
         <Header />
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
         </div>
         <Footer />
       </div>
@@ -156,57 +140,75 @@ function VendorDetails() {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
-                {foodItems.map((item) => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {foodItems.map((item, index) => (
                   <div
                     key={item.id}
-                    className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF4500] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF4500]/20 group"
+                    className="flex-shrink-0 relative opacity-0 animate-fade-in group"
+                    style={{
+                      animationDelay: `${index * 50}ms`,
+                      animationFillMode: "forwards",
+                    }}
                   >
-                    <div className="flex flex-col items-center text-center">
-                      {/* Image */}
-                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gray-700 overflow-hidden mb-3 md:mb-4 group-hover:scale-105 transition-transform duration-300">
-                        {item.image ? (
-                          <img
-                            src={item.image}
-                            alt={item.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-3xl md:text-4xl">
-                            🍽️
-                          </div>
-                        )}
+                    <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#A32110]/30 transition-all duration-300 hover:scale-105 mx-auto">
+                      <div className="absolute left-1/2 -translate-x-1/2">
+                        <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#A32110] transition-colors duration-300">
+                          {item.image ? (
+                            <img
+                              src={item.image}
+                              alt={item.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-5xl bg-gray-700">
+                              🍽️
+                            </div>
+                          )}
+                          {!item.is_available && (
+                            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                              <span className="text-white text-xs font-semibold bg-red-500 px-2 py-1 rounded">
+                                Out of Stock
+                              </span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-
-                      {/* Info */}
-                      <h3 className="text-white font-semibold text-sm md:text-base mb-1 md:mb-2 line-clamp-1">
-                        {item.name}
-                      </h3>
-                      <p className="text-gray-400 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 min-h-[2.5rem]">
-                        {item.description}
-                      </p>
-                      <p className="text-[#FF4500] font-bold text-base md:text-lg mb-3 md:mb-4">
-                        {formatPrice(item.price)}
-                      </p>
-
-                      {/* Add to Cart Button */}
-                      <Button
-                        onClick={() => handleAddToCart(item)}
-                        className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white text-xs md:text-sm"
-                        disabled={!item.is_available}
+                      <button
+                        className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#A32110] flex items-center justify-center shadow-lg hover:scale-110 transition-transform duration-300"
+                        title="View Details"
+                        onClick={() => navigate(`/food/${item.item_id}`)}
                       >
-                        {addedItems.has(item.id) ? (
-                          <>
-                            <Plus className="w-3 h-3 md:w-4 md:h-4 mr-2" />
-                            Add Another
-                          </>
-                        ) : (
-                          <>
-                            <ShoppingCart className="w-3 h-3 md:w-4 md:h-4 mr-2" />
-                            {item.is_available ? "Add to Cart" : "Unavailable"}
-                          </>
-                        )}
+                        <ArrowUpRight className="w-5 h-5 text-black" />
+                      </button>
+
+                      {getItemQuantity(item.id) > 0 && (
+                        <div className="absolute top-3 left-3 w-12 h-12 rounded-full bg-[#A32110] flex items-center justify-center shadow-lg z-10">
+                          <span className="text-black font-bold text-sm">
+                            {getItemQuantity(item.id)}
+                          </span>
+                        </div>
+                      )}
+
+                      <Button
+                        size="icon"
+                        disabled={!item.is_available}
+                        className="absolute bottom-3 right-3 bg-[#A32110] hover:bg-[#A32110]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-110 transition-transform duration-300"
+                        onClick={() => addToCart(item, 1)}
+                      >
+                        <Plus size={18} />
                       </Button>
+
+                      <div className="absolute bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-1 z-10 flex-col">
+                        <h3 className="text-white font-semibold text-sm md:text-base line-clamp-1">
+                          {item.name}
+                        </h3>
+                        <span className="text-gray-400 text-xs line-clamp-2 max-w-[200px]">
+                          {item.description}
+                        </span>
+                        <span className="text-[#A32110] font-bold text-lg">
+                          ₦{parseFloat(item.price).toLocaleString()}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -221,5 +223,6 @@ function VendorDetails() {
 }
 
 export default VendorDetails;
+
 
 

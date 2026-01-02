@@ -15,7 +15,7 @@ function AccountNumber() {
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 md:p-12 border border-gray-700 shadow-2xl text-center">
             {/* Success Icon */}
             <div className="flex justify-center mb-6">
-                <div className="w-20 h-20 bg-[#FF4500] rounded-full flex items-center justify-center">
+                <div className="w-20 h-20 bg-[#A32110] rounded-full flex items-center justify-center">
                 <BsBank className="w-12 h-12 text-white text-2xl" />
               </div>
             </div>
@@ -39,7 +39,7 @@ function AccountNumber() {
               <Link to="/food-menu">
                 <Button
                   variant="outline"
-                  className="border-2 border-[#FF4500] text-gray-300 bg-transparent hover:text-white hover:bg-[#FF4500]"
+                  className="border-2 border-[#A32110] text-gray-300 bg-transparent hover:text-white hover:bg-[#A32110]"
                 >
                   <ShoppingBag className="w-4 h-4 mr-2" />
                   Continue Shopping
@@ -53,7 +53,7 @@ function AccountNumber() {
                 Need help?{" "}
                 <Link
                   to="/contact"
-                  className="text-[#FF4500] hover:text-[#FF4500]/80 transition-colors"
+                  className="text-[#A32110] hover:text-[#A32110]/80 transition-colors"
                 >
                   Contact our support team
                 </Link>
@@ -69,6 +69,7 @@ function AccountNumber() {
 }
 
 export default AccountNumber;
+
 
 
 

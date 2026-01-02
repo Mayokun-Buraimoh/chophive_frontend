@@ -32,6 +32,8 @@ interface CartContextType {
   decreaseQuantity: (cartItemId: number) => Promise<void>;
   deleteItem: (cartItemId: number) => Promise<void>;
   refreshCart: () => Promise<void>;
+  refreshCartId: () => Promise<void>;
+  getItemQuantity: (foodItemId: number) => number;
 }
 
 const CartContext = createContext<CartContextType>({} as CartContextType);
@@ -43,17 +45,17 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(false);
   const { userId, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const loadCartId = async () => {
-      if (!isAuthenticated) {
-        setCartId(null);
-        return;
-      }
-      const id = await getCartId(userId);
-      setCartId(id);
-      console.log("id: ", id);
-    };
+  const loadCartId = async () => {
+    if (!isAuthenticated) {
+      setCartId(null);
+      return;
+    }
+    const id = await getCartId(userId);
+    setCartId(id);
+    console.log("id: ", id);
+  };
 
+  useEffect(() => {
     loadCartId();
   }, [isAuthenticated, userId]);
 
@@ -106,9 +108,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
         console.warn("No user_id found. User not authenticated.");
       }
 
-      if (!cartId) {
-        console.warn("Cart not initialized yet");
-      }
       if (!isAuthenticated) {
         const cartId = getGuestCartId();
         const now = new Date().toISOString();
@@ -126,7 +125,15 @@ export function CartProvider({ children }: { children: ReactNode }) {
           created_at: now,
           updated_at: now,
         });
+        await loadCart();
         return;
+      }
+
+      // If cartId is null, refresh it first (handles case after cart deletion)
+      let currentCartId = cartId;
+      if (!currentCartId) {
+        await loadCartId();
+        currentCartId = await getCartId(userId);
       }
 
       const payload = {
@@ -138,8 +145,27 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
       console.log(payload);
 
-      await addCartItem(payload);
-      await loadCart();
+      try {
+        await addCartItem(payload);
+        await loadCart();
+      } catch (error) {
+        // If cart not found error, refresh cartId and retry
+        const axiosError = error as { response?: { status?: number } };
+        if (
+          axiosError.response?.status === 404 ||
+          axiosError.response?.status === 400
+        ) {
+          console.log("Cart not found, refreshing cartId and retrying...");
+          await loadCartId();
+          const newCartId = await getCartId(userId);
+          if (newCartId) {
+            await addCartItem(payload);
+            await loadCart();
+          }
+        } else {
+          throw error;
+        }
+      }
     } catch (error) {
       console.error("Add to cart failed:", error);
     }
@@ -269,6 +295,16 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
+  const refreshCartId = async () => {
+    await loadCartId();
+  };
+
+  const getItemQuantity = (foodItemId: number): number => {
+    if (!cart || !cart.items) return 0;
+    const item = cart.items.find((i) => i.food_item.id === foodItemId);
+    return item ? item.quantity : 0;
+  };
+
   return (
     <CartContext.Provider
       value={{
@@ -283,6 +319,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
         decreaseQuantity,
         deleteItem,
         refreshCart: loadCart,
+        refreshCartId,
+        getItemQuantity,
       }}
     >
       {children}
@@ -297,5 +335,3 @@ export function useCart() {
   }
   return context;
 }
-
-

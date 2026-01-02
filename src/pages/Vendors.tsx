@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { fetchVendors } from "../../api";
 import { Vendor } from "../lib/interface";
 import Header from "../components/Header";
@@ -37,7 +37,7 @@ export default function Vendors() {
         <Header />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="flex items-center justify-center min-h-[400px]">
-            <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
           </div>
         </div>
         <Footer />
@@ -69,7 +69,9 @@ export default function Vendors() {
           {vendors.length === 0 && !loading && (
             <div className="text-center py-12 md:py-20">
               <Store className="w-16 h-16 md:w-20 md:h-20 text-gray-600 mx-auto mb-4" />
-              <p className="text-gray-400 text-lg md:text-xl mb-2">No vendors found</p>
+              <p className="text-gray-400 text-lg md:text-xl mb-2">
+                No vendors found
+              </p>
             </div>
           )}
 
@@ -79,49 +81,46 @@ export default function Vendors() {
               {vendors
                 .filter((vendor) => vendor.is_active)
                 .map((vendor) => (
-                  <div
-                    key={vendor.id}
-                    className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF4500] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF4500]/20 group"
-                  >
-                    <div className="flex flex-col items-center text-center">
-                      {/* Logo */}
-                      <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gray-700 overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300">
-                        {vendor.logo ? (
-                          <img
-                            src={vendor.logo}
-                            alt={vendor.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-4xl">
-                            🏪
-                          </div>
-                        )}
-                      </div>
-
-                      {/* Vendor Info */}
-                      <h3 className="text-white font-semibold text-base md:text-lg mb-2 line-clamp-1">
-                        {vendor.name}
-                      </h3>
-                      <p className="text-gray-400 text-xs md:text-sm mb-3 line-clamp-2 min-h-[2.5rem]">
-                        {vendor.description}
-                      </p>
-                      {vendor.address && (
-                        <p className="text-gray-500 text-xs mb-4 line-clamp-1">
-                          {vendor.address}
+                  <Link to={`/vendors/${vendor.slug}`} key={vendor.id}>
+                    <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#A32110] transition-all duration-300 hover:shadow-xl hover:shadow-[#A32110]/20 group">
+                      <div className="flex flex-col items-center text-center">
+                        {/* Logo */}
+                        <div className="w-20 h-20 md:w-24 md:h-24 rounded-full bg-gray-700 overflow-hidden mb-4 group-hover:scale-105 transition-transform duration-300">
+                          {vendor.logo ? (
+                            <img
+                              src={vendor.logo}
+                              alt={vendor.name}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-4xl">
+                              🏪
+                            </div>
+                          )}
+                        </div>
+                        {/* Vendor Info */}
+                        <h3 className="text-white font-semibold text-base md:text-lg mb-2 line-clamp-1">
+                          {vendor.name}
+                        </h3>
+                        <p className="text-gray-400 text-xs md:text-sm mb-3 line-clamp-2 min-h-[2.5rem]">
+                          {vendor.description}
                         </p>
-                      )}
-
-                      {/* View Details Button */}
-                      <Button
-                        onClick={() => navigate(`/vendors/${vendor.slug}`)}
-                        className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
-                      >
-                        View Details
-                        <ArrowRight className="w-4 h-4 ml-2" />
-                      </Button>
+                        {vendor.address && (
+                          <p className="text-gray-500 text-xs mb-4 line-clamp-1">
+                            {vendor.address}
+                          </p>
+                        )}
+                        {/* View Details Button */}
+                        <Button
+                          onClick={() => navigate(`/vendors/${vendor.slug}`)}
+                          className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white"
+                        >
+                          View Details
+                          <ArrowRight className="w-4 h-4 ml-2" />
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 ))}
             </div>
           )}
@@ -131,6 +130,3 @@ export default function Vendors() {
     </div>
   );
 }
-
-
-

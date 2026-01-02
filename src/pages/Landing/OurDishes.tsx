@@ -53,7 +53,7 @@ export default function OurDishes() {
                 <TabsTrigger
                   key={vendor.vendor_slug}
                   value={vendor.vendor_slug}
-                  className="data-[state=active]:bg-[#FF4500] data-[state=active]:text-white bg-gray-800 text-gray-300 border border-gray-700 px-4 py-2 rounded-md text-sm capitalize"
+                  className="data-[state=active]:bg-[#A32110] data-[state=active]:text-white bg-gray-800 text-gray-300 border border-gray-700 px-4 py-2 rounded-md text-sm capitalize"
                 >
                   {vendor.vendor_name}
                 </TabsTrigger>
@@ -69,9 +69,9 @@ export default function OurDishes() {
                   .filter((food) => food.vendor_slug === vendor.vendor_slug)
                   .map((food) => (
                     <div key={food.id} className="flex-shrink-0 relative group">
-                      <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#FF4500]/30 transition-all duration-300 hover:scale-105 mx-auto">
+                      <div className="relative w-[240px] h-[400px] rounded-t-full rounded-b-full bg-[#121212] border-none shadow-xl hover:shadow-2xl hover:shadow-[#A32110]/30 transition-all duration-300 hover:scale-105 mx-auto">
                         <div className="absolute left-1/2 -translate-x-1/2">
-                          <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#FF4500] transition-colors duration-300">
+                          <div className="w-56 h-56 rounded-full border-[6px] border-[#2a2a2a] overflow-hidden group-hover:border-[#A32110] transition-colors duration-300">
                             {food.image ? (
                               <img
                                 src={food.image}
@@ -88,7 +88,7 @@ export default function OurDishes() {
 
                         <Button
                           size="icon"
-                          className="absolute bottom-3 right-3 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 hover:scale-110 transition-transform duration-300"
+                          className="absolute bottom-3 right-3 bg-[#A32110] hover:bg-[#A32110]/90 text-white rounded-full h-10 w-10 shadow-lg z-10 hover:scale-110 transition-transform duration-300"
                           onClick={() => addToCart(food, 1)}
                         >
                           <Plus size={18} />
@@ -103,14 +103,14 @@ export default function OurDishes() {
                               <Star
                                 key={i}
                                 size={12}
-                                className="text-[#FF4500] fill-[#FF4500]"
+                                className="text-[#A32110] fill-[#A32110]"
                               />
                             ))}
                           </div>
                           <span className="text-gray-400 text-xs line-clamp-2 max-w-[200px]">
                             {food.description}
                           </span>
-                          <span className="text-[#FF4500] font-bold text-lg">
+                          <span className="text-[#A32110] font-bold text-lg">
                             ₦{food.price}
                           </span>
                         </div>
@@ -125,5 +125,6 @@ export default function OurDishes() {
     </section>
   );
 }
+
 
 

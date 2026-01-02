@@ -13,7 +13,7 @@ export default function Header() {
   const rtoken = localStorage.getItem("refresh_token");
 
   return (
-    <header className="bg-[#FF4500] border-b border-gray-800 sticky top-0 z-50">
+    <header className="bg-[#A32110] border-b border-gray-800 sticky top-0 z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -23,7 +23,7 @@ export default function Header() {
                 <span className="relative inline-block">
                   <span className="relative">
                     C
-                    <span className="absolute -top-0.5 left-0.5 text-[#FF4500] text-sm leading-none">
+                    <span className="absolute -top-0.5 left-0.5 text-[#A32110] text-sm leading-none">
                       🌿
                     </span>
                   </span>
@@ -134,7 +134,7 @@ export default function Header() {
                   </Button>
                 </Link>
                 <Link to="/signup">
-                  <Button className="bg-[#1E1E1E] hover:bg-transparent hover:border-[#1E1E1E] border-2 border-[#FF4500] text-white">
+                  <Button className="bg-[#1E1E1E] hover:bg-transparent hover:border-[#1E1E1E] border-2 border-[#A32110] text-white">
                     Sign Up
                   </Button>
                 </Link>
@@ -275,5 +275,6 @@ export default function Header() {
     </header>
   );
 }
+
 
 

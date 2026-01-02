@@ -13,6 +13,7 @@ import {
     accessToken: string | null;
     refreshToken: string | null;
     isAuthenticated: boolean;
+    isLoading: boolean;
     login: (access: string, refresh: string) => void;
     logout: () => void;
   }
@@ -23,6 +24,7 @@ import {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
   
     // 🔁 Restore session on refresh
     useEffect(() => {
@@ -32,6 +34,7 @@ import {
       if (access && refresh) {
         hydrateAuth(access, refresh);
       }
+      setIsLoading(false);
     }, []);
   
     const hydrateAuth = (access: string, refresh: string) => {
@@ -66,6 +69,7 @@ import {
           accessToken,
           refreshToken,
           isAuthenticated: !!accessToken,
+          isLoading,
           login,
           logout,
         }}
@@ -76,5 +80,6 @@ import {
   };
   
   export const useAuth = () => useContext(AuthContext);
+
 
 

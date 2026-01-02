@@ -47,7 +47,7 @@ export default function Testimonials() {
   };
 
   return (
-    <section className="bg-[#FF4500] py-12 md:py-20 relative overflow-hidden">
+    <section className="bg-[#A32110] py-12 md:py-20 relative overflow-hidden">
       {/* Polka dots background */}
       <div className="absolute inset-0 opacity-20">
         <div
@@ -118,5 +118,6 @@ export default function Testimonials() {
     </section>
   );
 }
+
 
 

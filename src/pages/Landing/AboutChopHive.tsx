@@ -12,7 +12,7 @@ export default function AboutChopHive() {
               {/* Irregular orange blob with polka dots */}
               <div className="relative w-full max-w-md mx-auto md:mx-0">
                 <div
-                  className="bg-[#FF4500] relative"
+                  className="bg-[#A32110] relative"
                   style={{
                     width: "120%",
                     paddingBottom: "120%",
@@ -54,11 +54,11 @@ export default function AboutChopHive() {
           <div className="text-center md:text-left">
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-white mb-4 md:mb-6">
               About{" "}
-              <span className="text-2xl md:text-3xl font-bold text-[#FF4500] relative">
+              <span className="text-2xl md:text-3xl font-bold text-[#A32110] relative">
                 <span className="relative inline-block">
                   <span className="relative">
                     C
-                    <span className="absolute -top-0.5 left-0.5 text-[#FF4500] text-sm leading-none">
+                    <span className="absolute -top-0.5 left-0.5 text-[#A32110] text-sm leading-none">
                       🌿
                     </span>
                   </span>
@@ -76,7 +76,7 @@ export default function AboutChopHive() {
 
             <div className="space-y-4 md:space-y-6 mb-6 md:mb-8">
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500] rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#A32110] rounded-full flex items-center justify-center">
                   <UtensilsCrossed className="text-white" size={24} />
                 </div>
                 <div>
@@ -90,7 +90,7 @@ export default function AboutChopHive() {
               </div>
 
               <div className="flex items-start gap-4">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#FF4500] rounded-full flex items-center justify-center">
+                <div className="flex-shrink-0 w-12 h-12 bg-[#A32110] rounded-full flex items-center justify-center">
                   <Utensils className="text-white" size={24} />
                 </div>
                 <div>
@@ -104,7 +104,7 @@ export default function AboutChopHive() {
               </div>
             </div>
 
-            <Button className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white">
+            <Button className="bg-[#A32110] hover:bg-[#A32110]/90 text-white">
               See More <ArrowRight className="ml-2" size={16} />
             </Button>
           </div>
@@ -113,6 +113,7 @@ export default function AboutChopHive() {
     </section>
   );
 }
+
 
 
 

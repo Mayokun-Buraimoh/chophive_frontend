@@ -15,7 +15,7 @@ export default function CustomerProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showEditModal, setShowEditModal] = useState(false);
-  const { userId, isAuthenticated } = useAuth();
+  const { userId, isAuthenticated, isLoading } = useAuth();
 
   const loadProfile = async () => {
     try {
@@ -30,6 +30,9 @@ export default function CustomerProfile() {
   };
 
   useEffect(() => {
+    // Wait for auth to finish loading before checking authentication
+    if (isLoading) return;
+
     if (!isAuthenticated) {
       setError("You are not logged in.");
       setLoading(false);
@@ -38,7 +41,8 @@ export default function CustomerProfile() {
     }
 
     loadProfile();
-  }, [isAuthenticated, userId, navigate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isAuthenticated, isLoading, userId, navigate]);
 
   const handleProfileUpdate = async () => {
     setLoading(true);
@@ -74,11 +78,14 @@ export default function CustomerProfile() {
                   <img
                     src={profile.image}
                     alt={profile.username}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#FF4500]"
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#A32110]"
                   />
                 ) : (
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-700 flex items-center justify-center border-2 border-[#FF4500]">
-                    <UserCircle size={40} className="text-gray-500 md:w-10 md:h-10" />
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-700 flex items-center justify-center border-2 border-[#A32110]">
+                    <UserCircle
+                      size={40}
+                      className="text-gray-500 md:w-10 md:h-10"
+                    />
                   </div>
                 )}
 
@@ -93,7 +100,7 @@ export default function CustomerProfile() {
               </div>
               <Button
                 onClick={() => setShowEditModal(true)}
-                className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white w-full sm:w-auto"
+                className="bg-[#A32110] hover:bg-[#A32110]/90 text-white w-full sm:w-auto"
               >
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit Profile
@@ -121,12 +128,16 @@ export default function CustomerProfile() {
                 label="Dietary Preferences"
                 value={profile.dietary_preferences}
               />
-              <ProfileItem label="Date of Birth" value={profile.date_of_birth} />
+              <ProfileItem
+                label="Date of Birth"
+                value={profile.date_of_birth}
+              />
             </div>
           </div>
 
           <p className="text-gray-400 text-xs sm:text-sm md:text-base">
-            Joined on {new Date(profile.user.date_joined).toLocaleDateString("en-US", {
+            Joined on{" "}
+            {new Date(profile.user.date_joined).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
@@ -167,5 +178,3 @@ function ProfileItem({
     </div>
   );
 }
-
-
