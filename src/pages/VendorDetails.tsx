@@ -80,7 +80,7 @@ function VendorDetails() {
       <div className="min-h-screen bg-[#1E1E1E]">
         <Header />
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#FF6B35]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
         </div>
         <Footer />
       </div>
@@ -160,7 +160,7 @@ function VendorDetails() {
                 {foodItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF6B35] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF6B35]/20 group"
+                    className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF4500] transition-all duration-300 hover:shadow-xl hover:shadow-[#FF4500]/20 group"
                   >
                     <div className="flex flex-col items-center text-center">
                       {/* Image */}
@@ -185,14 +185,14 @@ function VendorDetails() {
                       <p className="text-gray-400 text-xs md:text-sm mb-2 md:mb-3 line-clamp-2 min-h-[2.5rem]">
                         {item.description}
                       </p>
-                      <p className="text-[#FF6B35] font-bold text-base md:text-lg mb-3 md:mb-4">
+                      <p className="text-[#FF4500] font-bold text-base md:text-lg mb-3 md:mb-4">
                         {formatPrice(item.price)}
                       </p>
 
                       {/* Add to Cart Button */}
                       <Button
                         onClick={() => handleAddToCart(item)}
-                        className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white text-xs md:text-sm"
+                        className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white text-xs md:text-sm"
                         disabled={!item.is_available}
                       >
                         {addedItems.has(item.id) ? (
@@ -221,3 +221,5 @@ function VendorDetails() {
 }
 
 export default VendorDetails;
+
+

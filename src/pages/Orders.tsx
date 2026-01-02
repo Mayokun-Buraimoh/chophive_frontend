@@ -77,7 +77,7 @@ export default function Orders() {
         <Header />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="flex items-center justify-center min-h-[400px]">
-            <Loader2 className="w-8 h-8 animate-spin text-[#FF6B35]" />
+            <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
           </div>
         </div>
         <Footer />
@@ -115,7 +115,7 @@ export default function Orders() {
               </p>
               <Button
                 onClick={() => navigate("/food-menu")}
-                className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
+                className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
               >
                 Browse Menu
               </Button>
@@ -128,7 +128,7 @@ export default function Orders() {
               {orders.map((order) => (
                 <div
                   key={order.id}
-                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF6B35] transition-all duration-300"
+                  className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-gray-700 hover:border-[#FF4500] transition-all duration-300"
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex-1">
@@ -150,10 +150,10 @@ export default function Orders() {
                       <p className="text-gray-400 text-xs md:text-sm mb-2">
                         {order.order_item?.length || 0} item(s)
                       </p>
-                      <p className="text-[#FF6B35] font-bold text-lg md:text-xl">
+                      <p className="text-[#FF4500] font-bold text-lg md:text-xl">
                         {formatPrice(order.total)}
                       </p>
-                      <p className="text-[#FF6B35] font-bold text-lg md:text-xl">
+                      <p className="text-[#FF4500] font-bold text-lg md:text-xl">
                         Order Pin: <span className="text-white font-normal text-sm md:text-base">{order.order_pin || "N/A"}</span>
                       </p>
                     </div>
@@ -162,7 +162,7 @@ export default function Orders() {
                         setSelectedOrder(order);
                         setShowDetailsModal(true);
                       }}
-                      className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white w-full sm:w-auto"
+                      className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white w-full sm:w-auto"
                     >
                       View Details
                       <ArrowRight className="w-4 h-4 ml-2" />
@@ -192,4 +192,6 @@ export default function Orders() {
     </div>
   );
 }
+
+
 

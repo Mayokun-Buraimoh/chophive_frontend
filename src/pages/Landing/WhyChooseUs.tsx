@@ -8,20 +8,20 @@ interface Feature {
 
 const features: Feature[] = [
   {
-    icon: <Package className="text-[#FF6B35]" size={48} />,
+    icon: <Package className="text-[#FF4500]" size={48} />,
     title: "Best Quality",
     description:
       "We source only the finest ingredients and maintain the highest standards in food preparation.",
   },
   {
-    icon: <Truck className="text-[#FF6B35]" size={48} />,
+    icon: <Truck className="text-[#FF4500]" size={48} />,
     title: "Fastest Delivery",
     description:
       "Get your food delivered hot and fresh in record time, right to your doorstep.",
   },
   {
     icon: (
-      <div className="w-12 h-12 bg-[#FF6B35] rounded flex items-center justify-center">
+      <div className="w-12 h-12 bg-[#FF4500] rounded flex items-center justify-center">
         <span className="text-white font-bold text-sm">FREE</span>
       </div>
     ),
@@ -30,7 +30,7 @@ const features: Feature[] = [
       "Enjoy free delivery on orders above a certain amount. No hidden charges.",
   },
   {
-    icon: <Zap className="text-[#FF6B35]" size={48} />,
+    icon: <Zap className="text-[#FF4500]" size={48} />,
     title: "Ultra-Fast Shipping",
     description:
       "Lightning-fast shipping ensures your food arrives fresh and on time, every time.",
@@ -71,3 +71,5 @@ export default function WhyChooseUs() {
     </section>
   );
 }
+
+

@@ -143,7 +143,7 @@ export default function EditProfileModal({
                 name="username"
                 value={formData.username}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -157,7 +157,7 @@ export default function EditProfileModal({
                 type="tel"
                 value={formData.phone}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -171,7 +171,7 @@ export default function EditProfileModal({
                 value={formData.address}
                 onChange={handleChange}
                 rows={3}
-                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] resize-none"
+                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500] resize-none"
               />
             </div>
 
@@ -184,7 +184,7 @@ export default function EditProfileModal({
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
-                className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35]"
+                className="w-full h-10 rounded-md border border-gray-700 bg-gray-900/50 px-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500]"
               >
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
@@ -203,7 +203,7 @@ export default function EditProfileModal({
                 type="date"
                 value={formData.date_of_birth}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -216,7 +216,7 @@ export default function EditProfileModal({
                 name="hostel"
                 value={formData.hostel}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -229,7 +229,7 @@ export default function EditProfileModal({
                 name="room_number"
                 value={formData.room_number}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -244,7 +244,7 @@ export default function EditProfileModal({
                 value={formData.level}
                 onChange={handleChange}
                 min="1"
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -257,7 +257,7 @@ export default function EditProfileModal({
                 name="department"
                 value={formData.department}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -270,7 +270,7 @@ export default function EditProfileModal({
                 name="favorite_cafeteria"
                 value={formData.favorite_cafeteria}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -285,7 +285,7 @@ export default function EditProfileModal({
                 value={formData.image}
                 onChange={handleChange}
                 placeholder="https://example.com/image.jpg"
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
               />
             </div>
 
@@ -300,7 +300,7 @@ export default function EditProfileModal({
                 onChange={handleChange}
                 rows={3}
                 placeholder="e.g., Vegetarian, Vegan, Gluten-free..."
-                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] resize-none"
+                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500] resize-none"
               />
             </div>
           </div>
@@ -319,7 +319,7 @@ export default function EditProfileModal({
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="flex-1 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+              className="flex-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isSubmitting ? (
                 <>
@@ -336,4 +336,6 @@ export default function EditProfileModal({
     </div>
   );
 }
+
+
 

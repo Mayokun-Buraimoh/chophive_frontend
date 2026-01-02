@@ -10,13 +10,13 @@
 
 /* handle */
 ::-webkit-scrollbar-thumb {
-  background: #ff6b35;
+  background: #FF4500;
   border-radius: 8px;
 }
 
 /* handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff6b35;
+  background: #FF4500;
 }
 
 /* Fade in animation for food menu items */
@@ -34,3 +34,5 @@
 .animate-fade-in {
   animation: fade-in 0.4s ease-out;
 }
+
+

@@ -112,7 +112,7 @@ export default function PasswordChange() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="pl-10 pr-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                        className="pl-10 pr-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
                       />
                       <button
                         type="button"
@@ -145,7 +145,7 @@ export default function PasswordChange() {
                         value={confirmPassword}
                         onChange={(e) => setConfirmPassword(e.target.value)}
                         required
-                        className="pl-10 pr-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                        className="pl-10 pr-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
                       />
                       <button
                         type="button"
@@ -166,7 +166,7 @@ export default function PasswordChange() {
 
                   <Button
                     type="submit"
-                    className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-11 md:h-12 text-base font-semibold"
+                    className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-11 md:h-12 text-base font-semibold"
                     disabled={loading || !otp || !uidb64 || !resetToken}
                   >
                     {loading ? (
@@ -198,4 +198,6 @@ export default function PasswordChange() {
     </div>
   );
 }
+
+
 

@@ -74,10 +74,10 @@ export default function CustomerProfile() {
                   <img
                     src={profile.image}
                     alt={profile.username}
-                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#FF6B35]"
+                    className="w-16 h-16 md:w-20 md:h-20 rounded-full object-cover border-2 border-[#FF4500]"
                   />
                 ) : (
-                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-700 flex items-center justify-center border-2 border-[#FF6B35]">
+                  <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gray-700 flex items-center justify-center border-2 border-[#FF4500]">
                     <UserCircle size={40} className="text-gray-500 md:w-10 md:h-10" />
                   </div>
                 )}
@@ -93,7 +93,7 @@ export default function CustomerProfile() {
               </div>
               <Button
                 onClick={() => setShowEditModal(true)}
-                className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white w-full sm:w-auto"
+                className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white w-full sm:w-auto"
               >
                 <Edit2 className="w-4 h-4 mr-2" />
                 Edit Profile
@@ -167,3 +167,5 @@ function ProfileItem({
     </div>
   );
 }
+
+

@@ -193,7 +193,7 @@ export default function Cart() {
         }`}
       >
         {/* Orange accent line */}
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF6B35]" />
+        <div className="absolute left-0 top-0 bottom-0 w-1 bg-[#FF4500]" />
 
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-800">
@@ -321,10 +321,10 @@ export default function Cart() {
               </div>
               <div className="border-t border-gray-700 pt-3">
                 <div className="flex justify-between">
-                  <span className="text-[#FF6B35] font-bold text-lg">
+                  <span className="text-[#FF4500] font-bold text-lg">
                     Total
                   </span>
-                  <span className="text-[#FF6B35] font-bold text-lg">
+                  <span className="text-[#FF4500] font-bold text-lg">
                     {formatPrice(
                       (
                         Number(cart?.total_amount || 0) +
@@ -339,7 +339,7 @@ export default function Cart() {
 
             {/* Checkout Button */}
             <Button
-              className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 text-base font-semibold"
+              className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 text-base font-semibold"
               onClick={handleCheckoutClick}
             >
               Checkout
@@ -373,7 +373,7 @@ export default function Cart() {
 
             {loadingProfile ? (
               <div className="flex items-center justify-center py-8">
-                <Loader2 className="w-6 h-6 animate-spin text-[#FF6B35]" />
+                <Loader2 className="w-6 h-6 animate-spin text-[#FF4500]" />
               </div>
             ) : (
               <>
@@ -392,7 +392,7 @@ export default function Cart() {
                     value={customerName}
                     onChange={(e) => setCustomerName(e.target.value)}
                     placeholder="Enter your name"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
                     autoFocus
                   />
                 </div>
@@ -412,7 +412,7 @@ export default function Cart() {
                     value={roomNumber}
                     onChange={(e) => setRoomNumber(e.target.value)}
                     placeholder="Enter your room number"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
                   />
                 </div>
 
@@ -431,7 +431,7 @@ export default function Cart() {
                     onChange={(e) => setDeliveryAddress(e.target.value)}
                     placeholder="Enter your delivery address..."
                     rows={4}
-                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF6B35] focus:border-[#FF6B35] resize-none"
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-[#FF4500] resize-none"
                   />
                   {!deliveryAddress && (
                     <p className="text-xs text-gray-500 mt-1">
@@ -452,7 +452,7 @@ export default function Cart() {
                       onClick={() => setSelectedBatch("1pm")}
                       className={`h-12 ${
                         selectedBatch === "1pm"
-                          ? "bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white border-[#FF6B35]"
+                          ? "bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-[#FF4500]"
                           : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
                       }`}
                     >
@@ -464,7 +464,7 @@ export default function Cart() {
                       onClick={() => setSelectedBatch("6pm")}
                       className={`h-12 ${
                         selectedBatch === "6pm"
-                          ? "bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white border-[#FF6B35]"
+                          ? "bg-[#FF4500] hover:bg-[#FF4500]/90 text-white border-[#FF4500]"
                           : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
                       }`}
                     >
@@ -501,7 +501,7 @@ export default function Cart() {
                       !selectedBatch ||
                       isSubmitting
                     }
-                    className="flex-1 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isSubmitting ? (
                       <>
@@ -521,3 +521,5 @@ export default function Cart() {
     </>
   );
 }
+
+

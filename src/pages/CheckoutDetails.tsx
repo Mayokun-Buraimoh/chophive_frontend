@@ -93,7 +93,7 @@ export default function CheckoutDetails() {
         <Header />
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF6B35] mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#FF4500] mx-auto mb-4"></div>
             <p className="text-gray-400">Loading order details...</p>
           </div>
         </div>
@@ -118,7 +118,7 @@ export default function CheckoutDetails() {
             </div>
             <Button
               onClick={() => navigate("/food-menu")}
-              className="bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
+              className="bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
             >
               Go to Home
             </Button>
@@ -176,7 +176,7 @@ export default function CheckoutDetails() {
 
             {/* Delivery Address */}
             <div className="flex items-start gap-3 pt-4 border-t border-gray-700">
-              <MapPin className="w-5 h-5 text-[#FF6B35] mt-1 flex-shrink-0" />
+              <MapPin className="w-5 h-5 text-[#FF4500] mt-1 flex-shrink-0" />
               <div>
                 <p className="text-sm text-gray-400 mb-1">Delivery Address</p>
                 <p className="text-white">{checkout.delivery_address}</p>
@@ -192,7 +192,7 @@ export default function CheckoutDetails() {
                 className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 border border-gray-700"
               >
                 <div className="flex items-center gap-3 mb-4 pb-4 border-b border-gray-700">
-                  <Package className="w-5 h-5 text-[#FF6B35]" />
+                  <Package className="w-5 h-5 text-[#FF4500]" />
                   <h2 className="text-xl font-bold text-white">
                     {group.vendor.name || group.vendor.username}
                   </h2>
@@ -229,7 +229,7 @@ export default function CheckoutDetails() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <p className="text-[#FF6B35] font-semibold">
+                        <p className="text-[#FF4500] font-semibold">
                           {formatPrice(item.total)}
                         </p>
                         {item.quantity > 1 && (
@@ -282,10 +282,10 @@ export default function CheckoutDetails() {
 
               <div className="pt-4 border-t border-gray-700">
                 <div className="flex justify-between items-center">
-                  <span className="text-[#FF6B35] font-bold text-xl">
+                  <span className="text-[#FF4500] font-bold text-xl">
                     Total
                   </span>
-                  <span className="text-[#FF6B35] font-bold text-2xl">
+                  <span className="text-[#FF4500] font-bold text-2xl">
                     {formatPrice(checkout.total)}
                   </span>
                 </div>
@@ -295,7 +295,7 @@ export default function CheckoutDetails() {
             <div className="pt-6 border-t border-gray-700">
               <Button
                 onClick={() => navigate("/payment-account")}
-                className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 text-base font-semibold"
+                className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 text-base font-semibold"
               >
                 Pay Now
               </Button>
@@ -308,3 +308,5 @@ export default function CheckoutDetails() {
     </div>
   );
 }
+
+

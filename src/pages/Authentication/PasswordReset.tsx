@@ -74,14 +74,14 @@ export default function PasswordReset() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
-                        className="pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF6B35] focus:ring-[#FF6B35]"
+                        className="pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#FF4500] focus:ring-[#FF4500]"
                       />
                     </div>
                   </div>
 
                   <Button
                     type="submit"
-                    className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-11 md:h-12 text-base font-semibold"
+                    className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-11 md:h-12 text-base font-semibold"
                     disabled={loading}
                   >
                     {loading ? (
@@ -100,7 +100,7 @@ export default function PasswordReset() {
                     Remember your password?{" "}
                     <Link
                       to="/login"
-                      className="text-[#FF6B35] hover:text-[#FF6B35]/80 font-medium"
+                      className="text-[#FF4500] hover:text-[#FF4500]/80 font-medium"
                     >
                       Sign in
                     </Link>
@@ -118,7 +118,7 @@ export default function PasswordReset() {
                   <span className="text-white font-medium">{email}</span>
                 </p>
                 <Link to="/login">
-                  <Button className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white">
+                  <Button className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white">
                     Back to Login
                   </Button>
                 </Link>
@@ -131,4 +131,6 @@ export default function PasswordReset() {
     </div>
   );
 }
+
+
 

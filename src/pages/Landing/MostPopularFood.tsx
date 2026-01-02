@@ -53,7 +53,7 @@ export default function MostPopularFood() {
                     </div>
                   </div>
                   <button
-                    className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF6B35] flex items-center justify-center shadow-lg hover:scale-105 transition"
+                    className="absolute top-3 right-3 w-12 h-12 rounded-full bg-[#FF4500] flex items-center justify-center shadow-lg hover:scale-105 transition"
                     title="View Details"
                     onClick={() => navigate(`/food/${food.item_id}`)}
                   >
@@ -62,7 +62,7 @@ export default function MostPopularFood() {
 
                   <Button
                     size="icon"
-                    className="absolute bottom-3 right-3 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full h-10 w-10 shadow-lg z-10"
+                    className="absolute bottom-3 right-3 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white rounded-full h-10 w-10 shadow-lg z-10"
                     onClick={() => {
                       addToCart(food, 1);
                     }}
@@ -87,7 +87,7 @@ export default function MostPopularFood() {
           </div>
           <button
             onClick={() => scroll("right")}
-            className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white rounded-full p-2 z-10"
+            className="hidden md:block absolute right-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white rounded-full p-2 z-10"
             aria-label="Scroll right"
           >
             <ChevronRight size={24} />
@@ -97,3 +97,5 @@ export default function MostPopularFood() {
     </section>
   );
 }
+
+

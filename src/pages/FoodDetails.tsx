@@ -54,7 +54,7 @@ export default function FoodDetails() {
       <div className="min-h-screen bg-[#1E1E1E]">
         <Header />
         <div className="flex items-center justify-center min-h-[400px]">
-          <Loader2 className="w-8 h-8 animate-spin text-[#FF6B35]" />
+          <Loader2 className="w-8 h-8 animate-spin text-[#FF4500]" />
         </div>
         <Footer />
       </div>
@@ -72,7 +72,7 @@ export default function FoodDetails() {
             </p>
             <Button
               onClick={() => navigate("/food-menu")}
-              className="mt-4 bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white"
+              className="mt-4 bg-[#FF4500] hover:bg-[#FF4500]/90 text-white"
             >
               Back to Menu
             </Button>
@@ -130,14 +130,14 @@ export default function FoodDetails() {
                 <span>Vendor:</span>
                 <button
                   onClick={() => navigate(`/vendors/${food.vendor_slug}`)}
-                  className="text-[#FF6B35] hover:text-[#FF6B35]/80 font-semibold transition-colors"
+                  className="text-[#FF4500] hover:text-[#FF4500]/80 font-semibold transition-colors"
                 >
                   {food.vendor_name}
                 </button>
               </div>
 
               <div className="pt-4 border-t border-gray-700">
-                <p className="text-3xl md:text-4xl font-bold text-[#FF6B35] mb-4">
+                <p className="text-3xl md:text-4xl font-bold text-[#FF4500] mb-4">
                   {formatPrice(food.price)}
                 </p>
 
@@ -160,7 +160,7 @@ export default function FoodDetails() {
 
                 <Button
                   disabled={!food.is_available}
-                  className="w-full bg-[#FF6B35] hover:bg-[#FF6B35]/90 text-white h-12 md:h-14 text-base md:text-lg font-semibold"
+                  className="w-full bg-[#FF4500] hover:bg-[#FF4500]/90 text-white h-12 md:h-14 text-base md:text-lg font-semibold"
                   onClick={handleAddToCart}
                 >
                   {addedToCart ? (
@@ -184,3 +184,5 @@ export default function FoodDetails() {
     </section>
   );
 }
+
+

@@ -96,7 +96,7 @@ src/
 
 The main color scheme is defined in `src/index.css`:
 
-- Primary orange: `#FF6B35`
+- Primary orange: `#FF4500`
 - Dark background: `#1E1E1E`
 - Gray accents: Various shades of gray
 
