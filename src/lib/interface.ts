@@ -135,6 +135,8 @@ export interface Checkout {
   payment_status: string;
   hostel: string;
   created_at: string;
+  room_address: string;
+  delivery_batch: string
 }
 
 export interface Order {

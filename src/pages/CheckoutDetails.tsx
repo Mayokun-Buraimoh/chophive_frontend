@@ -25,6 +25,8 @@ export default function CheckoutDetails() {
     getCheckout(orderOid)
       .then((data) => {
         setCheckout(data);
+        console.log("checkout data: ", data);
+
         setError(null);
       })
       .catch((err) => {
@@ -67,7 +69,7 @@ export default function CheckoutDetails() {
     switch (status.toLowerCase()) {
       case "paid":
         return "text-green-400";
-      case "pending":
+      case "processing":
         return "text-yellow-400";
       case "failed":
         return "text-red-400";
@@ -80,7 +82,7 @@ export default function CheckoutDetails() {
     switch (status.toLowerCase()) {
       case "paid":
         return <CheckCircle className="w-5 h-5 text-green-400" />;
-      case "pending":
+      case "processing":
         return <Clock className="w-5 h-5 text-yellow-400" />;
       default:
         return <Clock className="w-5 h-5 text-gray-400" />;
@@ -117,7 +119,7 @@ export default function CheckoutDetails() {
               </p>
             </div>
             <Button
-              onClick={() => navigate("/food-menu")}
+              onClick={() => navigate("/vendors")}
               className="bg-[#A32110] hover:bg-[#A32110]/90 text-white"
             >
               Go to Home
@@ -174,12 +176,33 @@ export default function CheckoutDetails() {
               </div>
             </div>
 
-            {/* Hostel */}
-            <div className="flex items-start gap-3 pt-4 border-t border-gray-700">
-              <MapPin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
-              <div>
-                <p className="text-sm text-gray-400 mb-1">Hostel</p>
-                <p className="text-white">{checkout.hostel}</p>
+            {/* Delivery Info */}
+            <div className="flex justify-between pt-4 border-t border-gray-700">
+              <div className="flex items-start gap-3">
+                <MapPin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">
+                    Delivery Location
+                  </p>
+                  <p className="text-white">
+                    Hostel:{" "}
+                    <span className="text-white text-sm md:text-base font-light">
+                      {checkout.hostel}
+                    </span>{" "}
+                    <span className="text-gray-400 font-bold text-lg">|</span>{" "}
+                    Room Number:{" "}
+                    <span className="text-white text-sm md:text-base font-light">
+                      {checkout.room_address}
+                    </span>
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-start gap-3">
+                <Clock className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
+                <div>
+                  <p className="text-sm text-gray-400 mb-1">Delivery Batch</p>
+                  <p className="text-white">{checkout.delivery_batch}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -256,7 +279,9 @@ export default function CheckoutDetails() {
 
           {/* Payment Summary */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700">
-            <h2 className="text-xl font-bold text-white mb-6">Payment Summary</h2>
+            <h2 className="text-xl font-bold text-white mb-6">
+              Payment Summary
+            </h2>
 
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-gray-400">
@@ -294,7 +319,16 @@ export default function CheckoutDetails() {
 
             <div className="pt-6 border-t border-gray-700">
               <Button
-                onClick={() => navigate("/payment-account")}
+                onClick={() =>
+                  navigate("/payment-account", {
+                    state: {
+                      orderOid: checkout.oid,
+                      total: checkout.total,
+                      roomNumber: checkout.room_address,
+                      hostel: checkout.hostel,
+                    },
+                  })
+                }
                 className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white h-12 text-base font-semibold"
               >
                 Pay Now
@@ -308,6 +342,3 @@ export default function CheckoutDetails() {
     </div>
   );
 }
-
-
-

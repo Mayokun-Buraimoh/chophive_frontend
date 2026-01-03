@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useMemo } from "react";
-import { X, Package, MapPin, Calendar, CheckCircle, Clock } from "lucide-react";
+import { X, Package, MapPin, Calendar, CheckCircle, Clock, Pin, User } from "lucide-react";
 import { Order, OrderItem } from "../lib/interface";
 import { fetchOrderDetail } from "../../api";
 import { Loader2 } from "lucide-react";
@@ -76,7 +76,7 @@ export default function OrderDetailsModal({
     switch (status.toLowerCase()) {
       case "delivered":
         return "text-green-400";
-      case "processing":
+      case "pending":
         return "text-yellow-400";
       case "cancelled":
         return "text-red-400";
@@ -89,7 +89,7 @@ export default function OrderDetailsModal({
     switch (status.toLowerCase()) {
       case "delivered":
         return <CheckCircle className="w-5 h-5 text-green-400" />;
-      case "processing":
+      case "pending":
         return <Clock className="w-5 h-5 text-yellow-400" />;
       default:
         return <Clock className="w-5 h-5 text-gray-400" />;
@@ -105,7 +105,7 @@ export default function OrderDetailsModal({
         <div className="sticky top-0 bg-[#1E1E1E] border-b border-gray-700 p-4 md:p-6 flex items-center justify-between z-10">
           <div>
             <h2 className="text-xl md:text-2xl font-bold text-white">
-              Order #{orderDetails?.oid || order.oid}
+              Order <span className="text-white text-lg font-semibold">#{orderDetails?.oid || order.oid}</span>
             </h2>
             <div className="flex items-center gap-2 mt-1">
               {getStatusIcon(orderDetails?.status || order.status)}
@@ -164,7 +164,7 @@ export default function OrderDetailsModal({
 
                 {orderDetails?.delivery_batch && (
                   <div className="flex items-start gap-3">
-                    <Package className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
+                      <Clock className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0"/>
                     <div>
                       <p className="text-sm text-gray-400 mb-1">Delivery Batch</p>
                       <p className="text-white text-sm md:text-base">
@@ -176,7 +176,7 @@ export default function OrderDetailsModal({
 
                 {orderDetails?.customer_name && (
                   <div className="flex items-start gap-3">
-                    <Package className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
+                      <User className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0"/>
                     <div>
                       <p className="text-sm text-gray-400 mb-1">Customer Name</p>
                       <p className="text-white text-sm md:text-base">
@@ -184,7 +184,17 @@ export default function OrderDetailsModal({
                       </p>
                     </div>
                   </div>
-                )}
+                  )}
+                  {orderDetails?.order_pin  && (
+                  <div className="flex items-start gap-3">
+                      <Pin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0"/>
+                    <div>
+                      <p className="text-sm text-gray-400 mb-1">Order Pin</p>
+                      <p className="text-white text-sm md:text-base font-bold">
+                        {orderDetails.order_pin} <span className="text-gray-400 text-sm md:text-base font-normal">(Show this pin to the delivery rider to claim your order)</span>
+                      </p>
+                    </div>
+                  </div>)}
               </div>
 
               {/* Order Items by Vendor */}
@@ -257,10 +267,10 @@ export default function OrderDetailsModal({
                 ))}
               </div>
 
-              {/* Order Summary */}
+              {/* Payment Summary */}
               <div className="bg-gray-800/50 backdrop-blur-sm rounded-lg md:rounded-xl p-4 md:p-6 border border-gray-700">
                 <h3 className="text-lg md:text-xl font-bold text-white mb-4 md:mb-6">
-                  Order Summary
+                  Payment Summary
                 </h3>
 
                 <div className="space-y-2 md:space-y-3 mb-4 md:mb-6">

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { fetchCustomerOrders } from "../../api";
 import { Order } from "../lib/interface";
 import Header from "../components/Header";
@@ -12,6 +12,7 @@ import OrderDetailsModal from "../components/OrderDetailsModal";
 
 export default function Orders() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { userId, isAuthenticated, isLoading } = useAuth();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,6 +34,15 @@ export default function Orders() {
         const data = await fetchCustomerOrders(userId);
         setOrders(data);
         setError(null);
+         // Check if we need to open a specific order
+         const openOrderOid = (location.state as { openOrderOid?: string })?.openOrderOid;
+         if (openOrderOid) {
+           const orderToOpen = data.find((order) => order.oid === openOrderOid);
+           if (orderToOpen) {
+             setSelectedOrder(orderToOpen);
+             setShowDetailsModal(true);
+           }
+         }
       } catch (err: any) {
         console.error("Failed to load orders:", err);
         setError("Failed to load orders. Please try again.");
@@ -44,7 +54,7 @@ export default function Orders() {
     if (userId) {
       loadOrders();
     }
-  }, [userId, isAuthenticated, isLoading, navigate]);
+  }, [userId, isAuthenticated, isLoading, navigate, location.state]);
 
   const formatPrice = (price: string | number) => {
     const numPrice = typeof price === "string" ? parseFloat(price) : price;
