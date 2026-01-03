@@ -133,7 +133,7 @@ export interface Checkout {
   service_fee: string;
   total: string;
   payment_status: string;
-  delivery_address: string;
+  hostel: string;
   created_at: string;
 }
 
@@ -148,7 +148,7 @@ export interface Order {
   total_amount: string;
   payment_status: string;
   status: string;
-  delivery_address: string;
+  hostel: string;
   customer_name?: string;
   room_address?: string;
   delivery_time?: string;

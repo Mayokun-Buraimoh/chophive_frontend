@@ -37,7 +37,7 @@ export default function Cart() {
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [deliveryAddress, setDeliveryAddress] = useState("");
+  const [hostel, setDeliveryAddress] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [hostel, setHostel] = useState("");
@@ -127,7 +127,7 @@ export default function Cart() {
   };
 
   const handleAddressSubmit = async () => {
-    if (!deliveryAddress.trim()) {
+    if (!hostel.trim()) {
       alert("Please enter a delivery address");
       return;
     }
@@ -153,7 +153,7 @@ export default function Cart() {
       const order = await createOrder({
         cartId,
         userId,
-        deliveryAddress: deliveryAddress.trim(),
+        hostel: hostel.trim(),
         customerName: customerName.trim(),
         roomAddress: roomNumber.trim(),
         hostel: hostel.trim(),
@@ -435,29 +435,56 @@ export default function Cart() {
                   />
                 </div>
 
-                {/* Delivery Address */}
+                {/* Delivery Address (Hostel Dropdown) */}
                 <div>
                   <label
                     htmlFor="delivery-address"
                     className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
                   >
                     <MapPin className="w-4 h-4" />
-                    Delivery Address
+                    Hostel
                   </label>
-                  <textarea
+                  <select
                     id="delivery-address"
-                    value={deliveryAddress}
+                    value={hostel}
                     onChange={(e) => setDeliveryAddress(e.target.value)}
-                    placeholder="Enter your delivery address..."
-                    rows={4}
-                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] resize-none"
-                  />
-                  {!deliveryAddress && (
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
+                  >
+                    <option value="">Select your hostel</option>
+                    {/* Replace this array with API response if you fetch dynamically */}
+                    {[
+                      "Matthew",
+                      "Mark",
+                      "Luke",
+                      "John",
+                      "NH",
+                      "Extension",
+                      "NH Girls A",
+                      "NH Girls B",
+                      "NH Girls C",
+                      "288",
+                      "Saddler",
+                      "Storey Building",
+                      "UPE 1",
+                      "UPE 2",
+                      "UPE 3",
+                      "300 Bedspace",
+                      "VC's Lodge",
+                      "Block Hostel"].map(
+                     (hostelOption) => (
+                        <option key={hostelOption} value={hostelOption} className="bg-gray-900">
+                          {hostelOption}
+                        </option>
+                      )
+                    )}
+                  </select>
+                  {!hostel && (
                     <p className="text-xs text-gray-500 mt-1">
-                      Please provide your delivery address to continue
+                      Please select your hostel to continue
                     </p>
                   )}
                 </div>
+
 
                 {/* Batch Time Selection */}
                 <div>
@@ -515,7 +542,7 @@ export default function Cart() {
                   <Button
                     onClick={handleAddressSubmit}
                     disabled={
-                      !deliveryAddress.trim() ||
+                      !hostel.trim() ||
                       !customerName.trim() ||
                       !roomNumber.trim() ||
                       !selectedBatch ||

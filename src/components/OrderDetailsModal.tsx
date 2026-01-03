@@ -150,9 +150,9 @@ export default function OrderDetailsModal({
                 <div className="flex items-start gap-3">
                   <MapPin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                   <div>
-                    <p className="text-sm text-gray-400 mb-1">Delivery Address</p>
+                    <p className="text-sm text-gray-400 mb-1">Hostel</p>
                     <p className="text-white text-sm md:text-base">
-                      {orderDetails?.delivery_address || order.delivery_address}
+                      {orderDetails?.hostel || order.hostel}
                     </p>
                     {orderDetails?.room_address && (
                       <p className="text-gray-400 text-xs md:text-sm mt-1">
