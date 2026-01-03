@@ -1,8 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
-import { X, Loader2 } from "lucide-react";
+import { X, Loader2, MapPin } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { UserProfile, UpdateUserProfilePayload } from "../lib/interface";
+import { UserProfile } from "../lib/interface";
 import { updateUserProfile } from "../../api";
 
 interface EditProfileModalProps {
@@ -59,7 +60,9 @@ export default function EditProfileModal({
   }, [isOpen, profile]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -82,16 +85,21 @@ export default function EditProfileModal({
       if (formData.phone.trim()) payload.phone = formData.phone.trim();
       if (formData.address.trim()) payload.address = formData.address.trim();
       if (formData.gender.trim()) payload.gender = formData.gender.trim();
-      if (formData.date_of_birth.trim()) payload.date_of_birth = formData.date_of_birth.trim();
+      if (formData.date_of_birth.trim())
+        payload.date_of_birth = formData.date_of_birth.trim();
       if (formData.hostel.trim()) payload.hostel = formData.hostel.trim();
-      if (formData.room_number.trim()) payload.room_number = formData.room_number.trim();
+      if (formData.room_number.trim())
+        payload.room_number = formData.room_number.trim();
       if (formData.level.trim()) {
         const levelNum = parseInt(formData.level);
         if (!isNaN(levelNum)) payload.level = levelNum;
       }
-      if (formData.department.trim()) payload.department = formData.department.trim();
-      if (formData.favorite_cafeteria.trim()) payload.favorite_cafeteria = formData.favorite_cafeteria.trim();
-      if (formData.dietary_preferences.trim()) payload.dietary_preferences = formData.dietary_preferences.trim();
+      if (formData.department.trim())
+        payload.department = formData.department.trim();
+      if (formData.favorite_cafeteria.trim())
+        payload.favorite_cafeteria = formData.favorite_cafeteria.trim();
+      if (formData.dietary_preferences.trim())
+        payload.dietary_preferences = formData.dietary_preferences.trim();
 
       await updateUserProfile(userId, payload);
       onSuccess();
@@ -100,8 +108,8 @@ export default function EditProfileModal({
       console.error("Failed to update profile:", err);
       setError(
         err.response?.data?.message ||
-        err.response?.data?.error ||
-        "Failed to update profile. Please try again."
+          err.response?.data?.error ||
+          "Failed to update profile. Please try again."
       );
     } finally {
       setIsSubmitting(false);
@@ -167,6 +175,7 @@ export default function EditProfileModal({
                 Address
               </label>
               <textarea
+                title="Address"
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
@@ -181,6 +190,7 @@ export default function EditProfileModal({
                 Gender
               </label>
               <select
+                title="select gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleChange}
@@ -189,7 +199,6 @@ export default function EditProfileModal({
                 <option value="">Select Gender</option>
                 <option value="Male">Male</option>
                 <option value="Female">Female</option>
-                <option value="Other">Other</option>
               </select>
             </div>
 
@@ -207,17 +216,52 @@ export default function EditProfileModal({
               />
             </div>
 
-            {/* Hostel */}
+            {/*Hostel Dropdown*/}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label
+                className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
+              >
+                <MapPin className="w-4 h-4" />
                 Hostel
               </label>
-              <Input
+              <select
                 name="hostel"
+                title="Select Hostel"
                 value={formData.hostel}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
-              />
+                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
+              >
+                <option value="">Select your hostel</option>
+                {/* Replace this array with API response if you fetch dynamically */}
+                {[
+                  "Matthew",
+                  "Mark",
+                  "Luke",
+                  "John",
+                  "NH",
+                  "Extension",
+                  "NH Girls A",
+                  "NH Girls B",
+                  "NH Girls C",
+                  "288",
+                  "Saddler",
+                  "Storey Building",
+                  "UPE 1",
+                  "UPE 2",
+                  "UPE 3",
+                  "300 Bedspace",
+                  "VC's Lodge",
+                  "Block Hostel",
+                ].map((hostelOption) => (
+                  <option
+                    key={hostelOption}
+                    value={hostelOption}
+                    className="bg-gray-900"
+                  >
+                    {hostelOption}
+                  </option>
+                ))}
+              </select>
             </div>
 
             {/* Room Number */}
@@ -336,7 +380,3 @@ export default function EditProfileModal({
     </div>
   );
 }
-
-
-
-

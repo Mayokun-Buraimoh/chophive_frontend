@@ -188,31 +188,23 @@ export const deleteCartItem = async ({
 
 export const createOrder = async ({
   cartId,
-  hostel,
   userId,
   customerName,
   roomAddress,
-  deliveryTime,
   deliveryBatch,
   hostel,
 }: {
   cartId: string | null;
-  hostel: string;
   userId: string | null;
   customerName: string;
-<<<<<<< HEAD
-    roomAddress: string;
   hostel: string;
   deliveryTime?: string;
-=======
   roomAddress: string;
   
->>>>>>> f029f086d61daf275e93d8c3799b6e6d401fcb8c
   deliveryBatch: "1pm" | "6pm";
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
-      hostel: hostel,
       customer_name: customerName || "",
       room_address: roomAddress || "",
       delivery_batch: deliveryBatch || "",

@@ -37,7 +37,7 @@ export default function Cart() {
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
-  const [hostel, setDeliveryAddress] = useState("");
+  // const [deliveryAddress, setDeliveryAddress] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [hostel, setHostel] = useState("");
@@ -106,9 +106,9 @@ export default function Cart() {
       setLoadingProfile(true);
       try {
         const profile: UserProfile = await fetchUserProfile(userId);
-        if (profile.address) {
-          setDeliveryAddress(profile.address);
-        }
+        // if (profile.address) {
+        //   setDeliveryAddress(profile.address);
+        // }
         if (profile.username) {
           setCustomerName(profile.username);
         }
@@ -127,10 +127,10 @@ export default function Cart() {
   };
 
   const handleAddressSubmit = async () => {
-    if (!hostel.trim()) {
-      alert("Please enter a delivery address");
-      return;
-    }
+    // if (!deliveryAddress.trim()) {
+    //   alert("Please enter a delivery address");
+    //   return;
+    // }
     if (!customerName.trim()) {
       alert("Please enter your name");
       return;
@@ -156,7 +156,7 @@ export default function Cart() {
         hostel: hostel.trim(),
         customerName: customerName.trim(),
         roomAddress: roomNumber.trim(),
-        hostel: hostel.trim(),
+        // hostel: hostel.trim(),
         deliveryBatch: selectedBatch,
       });
 
@@ -175,7 +175,7 @@ export default function Cart() {
       closeCart();
       setShowAddressModal(false);
       // Reset form fields
-      setDeliveryAddress("");
+      // setDeliveryAddress("");
       setCustomerName("");
       setRoomNumber("");
       setHostel("");
@@ -358,7 +358,7 @@ export default function Cart() {
               <button
                 onClick={() => {
                   setShowAddressModal(false);
-                  setDeliveryAddress("");
+                  // setDeliveryAddress("");
                   setCustomerName("");
                   setRoomNumber("");
                   setHostel("");
@@ -397,25 +397,6 @@ export default function Cart() {
                   />
                 </div>
 
-                {/* Hostel */}
-                <div>
-                  <label
-                    htmlFor="hostel"
-                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
-                  >
-                    <Home className="w-4 h-4" />
-                    Hostel
-                  </label>
-                  <Input
-                    id="hostel"
-                    type="text"
-                    value={hostel}
-                    onChange={(e) => setHostel(e.target.value)}
-                    placeholder="Enter your hostel"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
-                  />
-                </div>
-
                 {/* Room Number */}
                 <div>
                   <label
@@ -435,19 +416,20 @@ export default function Cart() {
                   />
                 </div>
 
-                {/* Delivery Address (Hostel Dropdown) */}
+                {/*Hostel Dropdown*/}
                 <div>
                   <label
-                    htmlFor="delivery-address"
+                    htmlFor="hostel"
                     className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
                   >
                     <MapPin className="w-4 h-4" />
                     Hostel
                   </label>
                   <select
-                    id="delivery-address"
+                      id="hostel"
+                      title="Select Hostel"
                     value={hostel}
-                    onChange={(e) => setDeliveryAddress(e.target.value)}
+                    onChange={(e) => setHostel(e.target.value)}
                     className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
                   >
                     <option value="">Select your hostel</option>
@@ -529,7 +511,6 @@ export default function Cart() {
                     variant="outline"
                     onClick={() => {
                       setShowAddressModal(false);
-                      setDeliveryAddress("");
                       setCustomerName("");
                       setRoomNumber("");
                       setHostel("");
