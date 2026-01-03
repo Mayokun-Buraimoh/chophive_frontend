@@ -200,7 +200,7 @@ export const createOrder = async ({
   hostel: string;
   deliveryTime?: string;
   roomAddress: string;
-  
+
   deliveryBatch: "1pm" | "6pm";
 }) => {
   try {
@@ -290,17 +290,25 @@ export const changePassword = async (payload: {
   return res.data;
 };
 
-export const syncCartOnSignup = async (cartItems: Array<{
-  food_item_id: number;
-  quantity: number;
-  price: string;
-}>) => {
+export const syncCartOnSignup = async (
+  cartItems: Array<{
+    food_item_id: number;
+    quantity: number;
+    price: string;
+  }>
+) => {
   const res = await api.post("/cart/sync-on-signup/", {
     cart_items: cartItems,
   });
   return res.data;
 };
 
+export const obtainToken = async (email: string, password: string) => {
+  const res = await api.post("/user/token/", {
+    email,
+    password,
+  });
+  return res.data; // {access, refresh}
+};
+
 export default api;
-
-

@@ -2,7 +2,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import { Check, Copy, ShoppingBag, X } from "lucide-react";
+import { Check, Copy, X } from "lucide-react";
 import { BsBank } from "react-icons/bs";
 import { useState } from "react";
 

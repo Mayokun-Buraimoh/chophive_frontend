@@ -4,6 +4,7 @@ import Cart from "./components/Cart";
 import Home from "./pages/Landing/Home";
 import Login from "./pages/Authentication/Login";
 import Signup from "./pages/Authentication/Signup";
+import VerifyEmail from "./pages/Authentication/VerifyEmail";
 import Contact from "./pages/Contact";
 import CheckoutDetails from "./pages/CheckoutDetails";
 import OrderSuccess from "./pages/OrderSuccess";
@@ -42,6 +43,7 @@ function App() {
               <Route path="/orders" element={<Orders />} />
               <Route path="/password-reset" element={<PasswordReset />} />
               <Route path="/create-new-password" element={<PasswordChange />} />
+              <Route path="/verify-email" element={<VerifyEmail />} />
             </Routes>
             <Cart />
           </BrowserRouter>
@@ -52,6 +54,3 @@ function App() {
 }
 
 export default App;
-
-
-

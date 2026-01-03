@@ -28,23 +28,22 @@ function Signup() {
   });
 
   // Get Google Client ID from environment variable
-  const GOOGLE_CLIENT_ID =
-    import.meta.env.VITE_GOOGLE_CLIENT_ID;
+  const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
   const handleGoogleSuccess = async (credential: string) => {
     try {
       setGoogleLoading(true);
-      
+
       // Get guest cart before Google sign-in (if exists)
       const guestCartId = getGuestCartId();
       const guestCartItems = await getGuestCart(guestCartId);
-      
+
       // Send the credential to your backend
       const res = await api.post("/user/google-signin/", {
         credential,
       });
 
       const { refresh, access } = res.data;
-      
+
       // Login user first to get authentication token
       login(access, refresh);
 
@@ -65,7 +64,10 @@ function Signup() {
           await clearGuestCart(guestCartId);
           console.log("Guest cart synced and cleared successfully");
         } catch (syncError: any) {
-          console.error("Cart sync error:", syncError.response?.data || syncError.message);
+          console.error(
+            "Cart sync error:",
+            syncError.response?.data || syncError.message
+          );
           // Don't block sign-up if cart sync fails
         }
       }
@@ -98,50 +100,64 @@ function Signup() {
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
       // Get guest cart before registration (if exists)
-      const guestCartId = getGuestCartId();
-      const guestCartItems = await getGuestCart(guestCartId);
+      // const guestCartId = getGuestCartId();
+      // const guestCartItems = await getGuestCart(guestCartId);
 
       //Register
       await api.post("/user/register/", data);
 
       //Auto Login
-      const autoLogin = await api.post("/user/token/", {
-        email: data.email,
-        password: data.password,
-      });
+      // const autoLogin = await api.post("/user/token/", {
+      //   email: data.email,
+      //   password: data.password,
+      // });
 
-      const { refresh, access } = autoLogin.data;
+      // const { refresh, access } = autoLogin.data;
 
       // Login user first to get authentication token
-      login(access, refresh);
+      // login(access, refresh);
 
       // Sync guest cart to user account (SIGN-UP ONLY)
-      if (guestCartItems && guestCartItems.length > 0) {
-        try {
-          // Prepare cart items for sync
-          const cartItemsToSync = guestCartItems.map((item) => ({
-            food_item_id: item.food_item_id,
-            quantity: item.qty,
-            price: item.price,
-          }));
+      // if (guestCartItems && guestCartItems.length > 0) {
+      //   try {
+      //     // Prepare cart items for sync
+      //     const cartItemsToSync = guestCartItems.map((item) => ({
+      //       food_item_id: item.food_item_id,
+      //       quantity: item.qty,
+      //       price: item.price,
+      //     }));
 
-          // Sync cart to backend
-          await syncCartOnSignup(cartItemsToSync);
+      //     // Sync cart to backend
+      //     await syncCartOnSignup(cartItemsToSync);
 
-          // Clear guest cart from IndexedDB after successful sync
-          await clearGuestCart(guestCartId);
-          console.log("Guest cart synced and cleared successfully");
-        } catch (syncError: any) {
-          console.error("Cart sync error:", syncError.response?.data || syncError.message);
-          // Don't block sign-up if cart sync fails
-        }
-      }
+      //     // Clear guest cart from IndexedDB after successful sync
+      //     await clearGuestCart(guestCartId);
+      //     console.log("Guest cart synced and cleared successfully");
+      //   } catch (syncError: any) {
+      //     console.error(
+      //       "Cart sync error:",
+      //       syncError.response?.data || syncError.message
+      //     );
+      //     // Don't block sign-up if cart sync fails
+      //   }
+      // }
 
-      window.location.href = "/vendors";
+      // Save email and password in localStorage for auto-login after verify
+      localStorage.setItem("pending_email", data.email);
+      localStorage.setItem("pending_password", data.password);
+      window.location.href =
+        "/signup?verify=1&email=" + encodeURIComponent(data.email);
     } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
     }
   };
+
+  // Show email verification notice if just registered
+  const [searchParams] =
+    typeof window !== "undefined"
+      ? [new URLSearchParams(window.location.search)]
+      : [new URLSearchParams()];
+  const showVerifyNotice = searchParams.get("verify") === "1";
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] flex items-center justify-center px-4 py-12">
@@ -187,6 +203,20 @@ function Signup() {
                   Enter your details to get started
                 </p>
               </div>
+
+              {showVerifyNotice && (
+                <div className="bg-green-900/80 border border-green-900 rounded-lg p-4 my-4 text-center">
+                  <h3 className="text-lg font-semibold text-green-300 mb-1">
+                    Verify Your Email
+                  </h3>
+                  <p className="text-green-100">
+                    Thanks for signing up! Please check your email and click the
+                    verification link to activate your account.
+                    <br />
+                    Once verified, you can log in.
+                  </p>
+                </div>
+              )}
 
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <div className="space-y-2">
@@ -341,7 +371,7 @@ function Signup() {
 
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || showVerifyNotice}
                   className="w-full bg-[#A32110] hover:bg-[#A32110]/90 text-white h-12 text-base font-semibold mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isSubmitting ? "Creating Account..." : "Create Account"}
@@ -393,6 +423,3 @@ function Signup() {
 }
 
 export default Signup;
-
-
-
