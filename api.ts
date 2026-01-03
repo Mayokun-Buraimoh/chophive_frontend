@@ -188,7 +188,7 @@ export const deleteCartItem = async ({
 
 export const createOrder = async ({
   cartId,
-  deliveryAddress,
+  hostel,
   userId,
   customerName,
   roomAddress,
@@ -196,19 +196,18 @@ export const createOrder = async ({
   deliveryBatch,
 }: {
   cartId: string | null;
-  deliveryAddress: string;
+  hostel: string;
   userId: string | null;
   customerName: string;
   roomAddress: string;
-  deliveryTime?: string;
+  
   deliveryBatch: "1pm" | "6pm";
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
-      delivery_address: deliveryAddress,
+      hostel: hostel,
       customer_name: customerName || "",
       room_address: roomAddress || "",
-      delivery_time: deliveryTime || "",
       delivery_batch: deliveryBatch || "",
     });
     return res.data;
@@ -288,6 +287,17 @@ export const changePassword = async (payload: {
   password: string;
 }) => {
   const res = await api.post("/user/password-change/", payload);
+  return res.data;
+};
+
+export const syncCartOnSignup = async (cartItems: Array<{
+  food_item_id: number;
+  quantity: number;
+  price: string;
+}>) => {
+  const res = await api.post("/cart/sync-on-signup/", {
+    cart_items: cartItems,
+  });
   return res.data;
 };
 

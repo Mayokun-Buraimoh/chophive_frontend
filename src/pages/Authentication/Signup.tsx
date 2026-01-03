@@ -6,10 +6,12 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Mail, Lock, User, ChefHat, Loader2 } from "lucide-react";
 import { signupSchema, type SignupFormData } from "../../lib/validations";
-import api from "../../../api";
+import api, { syncCartOnSignup } from "../../../api";
 import { useAuth } from "../../contexts/AuthContext";
 import { useGoogleSignIn } from "../../hooks/useGoogleSignIn";
 import { useState } from "react";
+import { getGuestCart, clearGuestCart } from "../../lib/indexedDB";
+import { getGuestCartId } from "../../lib/cart";
 
 function Signup() {
   const { login } = useAuth();
@@ -31,13 +33,43 @@ function Signup() {
   const handleGoogleSuccess = async (credential: string) => {
     try {
       setGoogleLoading(true);
+      
+      // Get guest cart before Google sign-in (if exists)
+      const guestCartId = getGuestCartId();
+      const guestCartItems = await getGuestCart(guestCartId);
+      
       // Send the credential to your backend
       const res = await api.post("/user/google-signin/", {
         credential,
       });
 
       const { refresh, access } = res.data;
+      
+      // Login user first to get authentication token
       login(access, refresh);
+
+      // Sync guest cart to user account (SIGN-UP ONLY - Google creates account if new)
+      if (guestCartItems && guestCartItems.length > 0) {
+        try {
+          // Prepare cart items for sync
+          const cartItemsToSync = guestCartItems.map((item) => ({
+            food_item_id: item.food_item_id,
+            quantity: item.qty,
+            price: item.price,
+          }));
+
+          // Sync cart to backend
+          await syncCartOnSignup(cartItemsToSync);
+
+          // Clear guest cart from IndexedDB after successful sync
+          await clearGuestCart(guestCartId);
+          console.log("Guest cart synced and cleared successfully");
+        } catch (syncError: any) {
+          console.error("Cart sync error:", syncError.response?.data || syncError.message);
+          // Don't block sign-up if cart sync fails
+        }
+      }
+
       window.location.href = "/vendors";
     } catch (error: any) {
       console.error(
@@ -65,6 +97,10 @@ function Signup() {
 
   const onSubmit: SubmitHandler<SignupFormData> = async (data) => {
     try {
+      // Get guest cart before registration (if exists)
+      const guestCartId = getGuestCartId();
+      const guestCartItems = await getGuestCart(guestCartId);
+
       //Register
       await api.post("/user/register/", data);
 
@@ -76,7 +112,30 @@ function Signup() {
 
       const { refresh, access } = autoLogin.data;
 
+      // Login user first to get authentication token
       login(access, refresh);
+
+      // Sync guest cart to user account (SIGN-UP ONLY)
+      if (guestCartItems && guestCartItems.length > 0) {
+        try {
+          // Prepare cart items for sync
+          const cartItemsToSync = guestCartItems.map((item) => ({
+            food_item_id: item.food_item_id,
+            quantity: item.qty,
+            price: item.price,
+          }));
+
+          // Sync cart to backend
+          await syncCartOnSignup(cartItemsToSync);
+
+          // Clear guest cart from IndexedDB after successful sync
+          await clearGuestCart(guestCartId);
+          console.log("Guest cart synced and cleared successfully");
+        } catch (syncError: any) {
+          console.error("Cart sync error:", syncError.response?.data || syncError.message);
+          // Don't block sign-up if cart sync fails
+        }
+      }
 
       window.location.href = "/vendors";
     } catch (error: any) {

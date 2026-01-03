@@ -174,12 +174,12 @@ export default function CheckoutDetails() {
               </div>
             </div>
 
-            {/* Delivery Address */}
+            {/* Hostel */}
             <div className="flex items-start gap-3 pt-4 border-t border-gray-700">
               <MapPin className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
               <div>
-                <p className="text-sm text-gray-400 mb-1">Delivery Address</p>
-                <p className="text-white">{checkout.delivery_address}</p>
+                <p className="text-sm text-gray-400 mb-1">Hostel</p>
+                <p className="text-white">{checkout.hostel}</p>
               </div>
             </div>
           </div>
