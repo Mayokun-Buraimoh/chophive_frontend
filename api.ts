@@ -194,12 +194,14 @@ export const createOrder = async ({
   roomAddress,
   deliveryTime,
   deliveryBatch,
+  hostel,
 }: {
   cartId: string | null;
   deliveryAddress: string;
   userId: string | null;
   customerName: string;
-  roomAddress: string;
+    roomAddress: string;
+  hostel: string;
   deliveryTime?: string;
   deliveryBatch: "1pm" | "6pm";
 }) => {
@@ -210,6 +212,7 @@ export const createOrder = async ({
       room_address: roomAddress || "",
       delivery_time: deliveryTime || "",
       delivery_batch: deliveryBatch || "",
+      hostel: hostel || "",
     });
     return res.data;
   } catch (error) {

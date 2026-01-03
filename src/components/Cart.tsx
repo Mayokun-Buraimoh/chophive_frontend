@@ -40,6 +40,7 @@ export default function Cart() {
   const [deliveryAddress, setDeliveryAddress] = useState("");
   const [customerName, setCustomerName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
+  const [hostel, setHostel] = useState("");
   const [selectedBatch, setSelectedBatch] = useState<"1pm" | "6pm" | null>(
     null
   );
@@ -114,6 +115,9 @@ export default function Cart() {
         if (profile.room_number) {
           setRoomNumber(profile.room_number);
         }
+        if (profile.hostel) {
+          setHostel(profile.hostel);
+        }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
       } finally {
@@ -135,6 +139,10 @@ export default function Cart() {
       alert("Please enter your room number");
       return;
     }
+    if (!hostel.trim()) {
+      alert("Please enter your hostel");
+      return;
+    }
     if (!selectedBatch) {
       alert("Please select a delivery batch time");
       return;
@@ -148,6 +156,7 @@ export default function Cart() {
         deliveryAddress: deliveryAddress.trim(),
         customerName: customerName.trim(),
         roomAddress: roomNumber.trim(),
+        hostel: hostel.trim(),
         deliveryBatch: selectedBatch,
       });
 
@@ -169,6 +178,7 @@ export default function Cart() {
       setDeliveryAddress("");
       setCustomerName("");
       setRoomNumber("");
+      setHostel("");
       setSelectedBatch(null);
       navigate(`/checkout/${order.order_oid}`);
     } catch (error) {
@@ -351,6 +361,7 @@ export default function Cart() {
                   setDeliveryAddress("");
                   setCustomerName("");
                   setRoomNumber("");
+                  setHostel("");
                   setSelectedBatch(null);
                 }}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -383,6 +394,25 @@ export default function Cart() {
                     placeholder="Enter your name"
                     className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
                     autoFocus
+                  />
+                </div>
+
+                {/* Hostel */}
+                <div>
+                  <label
+                    htmlFor="hostel"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
+                  >
+                    <Home className="w-4 h-4" />
+                    Hostel
+                  </label>
+                  <Input
+                    id="hostel"
+                    type="text"
+                    value={hostel}
+                    onChange={(e) => setHostel(e.target.value)}
+                    placeholder="Enter your hostel"
+                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
                   />
                 </div>
 
@@ -475,6 +505,7 @@ export default function Cart() {
                       setDeliveryAddress("");
                       setCustomerName("");
                       setRoomNumber("");
+                      setHostel("");
                       setSelectedBatch(null);
                     }}
                     className="flex-1 border-gray-700 text-gray hover:text-white hover:bg-gray-800"
@@ -488,6 +519,7 @@ export default function Cart() {
                       !customerName.trim() ||
                       !roomNumber.trim() ||
                       !selectedBatch ||
+                      !hostel.trim() ||
                       isSubmitting
                     }
                     className="flex-1 bg-[#A32110] hover:bg-[#A32110]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"

@@ -65,7 +65,7 @@ export default function Orders() {
     switch (status.toLowerCase()) {
       case "delivered":
         return "text-green-400 bg-green-400/10";
-      case "processing":
+      case "pending":
         return "text-yellow-400 bg-yellow-400/10";
       case "cancelled":
         return "text-red-400 bg-red-400/10";

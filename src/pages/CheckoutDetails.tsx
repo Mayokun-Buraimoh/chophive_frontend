@@ -254,9 +254,9 @@ export default function CheckoutDetails() {
             ))}
           </div>
 
-          {/* Order Summary */}
+          {/* Payment Summary */}
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-2xl p-6 md:p-8 border border-gray-700">
-            <h2 className="text-xl font-bold text-white mb-6">Order Summary</h2>
+            <h2 className="text-xl font-bold text-white mb-6">Payment Summary</h2>
 
             <div className="space-y-3 mb-6">
               <div className="flex justify-between text-gray-400">
