@@ -137,14 +137,22 @@ export interface Checkout {
   created_at: string;
   delivery_batch: DeliveryBatch;
   room_address: string;
+  total_pack_fee: string;
 }
 
 export interface Hostel{
   id: number;
   name: string;
   slug: string;
-  rooms: number;
+  rooms: Room[];
   description: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface Room{
+  id: number;
+  number: string;
   created_at: string;
   updated_at: string;
 }

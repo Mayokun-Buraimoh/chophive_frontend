@@ -14,8 +14,14 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
-import { createOrder, fetchUserProfile, deleteCart, fetchDeliveryBatches } from "../../api";
-import { DeliveryBatch, UserProfile } from "../lib/interface";
+import {
+  createOrder,
+  fetchUserProfile,
+  deleteCart,
+  fetchDeliveryBatches,
+  fetchHostels,
+} from "../../api";
+import { DeliveryBatch, Hostel, UserProfile } from "../lib/interface";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -37,13 +43,12 @@ export default function Cart() {
   const [isVisible, setIsVisible] = useState(false);
   const [shouldRender, setShouldRender] = useState(false);
   const [showAddressModal, setShowAddressModal] = useState(false);
-  // const [deliveryAddress, setDeliveryAddress] = useState("");
   const [customerName, setCustomerName] = useState("");
-  const [roomNumber, setRoomNumber] = useState("");
-  const [hostel, setHostel] = useState("");
-  const [selectedBatch, setSelectedBatch] = useState<string | null>(
-    null
-  );
+  const [, setRoomNumber] = useState("");
+  const [hostels, setHostels] = useState<Hostel[]>([]);
+  const [selectedHostel, setSelectedHostel] = useState<Hostel | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<string | null>(null);
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(null);
   const [deliveryBatches, setDeliveryBatches] = useState<DeliveryBatch[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -108,7 +113,9 @@ export default function Cart() {
       try {
         const profile: UserProfile = await fetchUserProfile(userId);
         const batches: DeliveryBatch[] = await fetchDeliveryBatches();
+        const hostels: Hostel[] = await fetchHostels();
         setDeliveryBatches(batches);
+        setHostels(hostels);
         if (profile.username) {
           setCustomerName(profile.username);
         }
@@ -116,7 +123,9 @@ export default function Cart() {
           setRoomNumber(profile.room_number);
         }
         if (profile.hostel) {
-          setHostel(profile.hostel);
+          setSelectedHostel(
+            hostels.find((h) => h.name === profile.hostel) || null
+          );
         }
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
@@ -127,19 +136,15 @@ export default function Cart() {
   };
 
   const handleAddressSubmit = async () => {
-    // if (!deliveryAddress.trim()) {
-    //   alert("Please enter a delivery address");
-    //   return;
-    // }
     if (!customerName.trim()) {
       alert("Please enter your name");
       return;
     }
-    if (!roomNumber.trim()) {
+    if (!selectedRoom) {
       alert("Please enter your room number");
       return;
     }
-    if (!hostel.trim()) {
+    if (!selectedHostel) {
       alert("Please enter your hostel");
       return;
     }
@@ -153,9 +158,9 @@ export default function Cart() {
       const order = await createOrder({
         cartId,
         userId,
-        hostel: hostel.trim(),
+        hostel: selectedHostel.name,
         customerName: customerName.trim(),
-        roomAddress: roomNumber.trim(),
+        roomNumber: Number(selectedRoom),
         deliveryBatch: selectedBatch,
       });
 
@@ -174,10 +179,9 @@ export default function Cart() {
       closeCart();
       setShowAddressModal(false);
       // Reset form fields
-      // setDeliveryAddress("");
       setCustomerName("");
-      setRoomNumber("");
-      setHostel("");
+      setSelectedRoom(null);
+      setSelectedHostel(null);
       setSelectedBatch(null);
       navigate(`/checkout/${order.order_oid}`);
     } catch (error) {
@@ -325,11 +329,7 @@ export default function Cart() {
                     Total
                   </span>
                   <span className="text-[#A32110] font-bold text-lg">
-                    {formatPrice(
-                      (
-                        Number(cart?.total_amount || 0)
-                      ).toFixed(2)
-                    )}
+                    {formatPrice(Number(cart?.total_amount || 0).toFixed(2))}
                   </span>
                 </div>
               </div>
@@ -359,7 +359,7 @@ export default function Cart() {
                   setShowAddressModal(false);
                   setCustomerName("");
                   setRoomNumber("");
-                  setHostel("");
+                  setSelectedHostel(null);
                   setSelectedBatch(null);
                 }}
                 className="text-gray-400 hover:text-white transition-colors"
@@ -395,25 +395,6 @@ export default function Cart() {
                   />
                 </div>
 
-                {/* Room Number */}
-                <div>
-                  <label
-                    htmlFor="room-number"
-                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
-                  >
-                    <Home className="w-4 h-4" />
-                    Room Number
-                  </label>
-                  <Input
-                    id="room-number"
-                    type="text"
-                    value={roomNumber}
-                    onChange={(e) => setRoomNumber(e.target.value)}
-                    placeholder="Enter your room number"
-                    className="w-full bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
-                  />
-                </div>
-
                 {/*Hostel Dropdown*/}
                 <div>
                   <label
@@ -424,47 +405,60 @@ export default function Cart() {
                     Hostel
                   </label>
                   <select
-                      id="hostel"
-                      title="Select Hostel"
-                    value={hostel}
-                    onChange={(e) => setHostel(e.target.value)}
-                    className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
+                    id="hostel"
+                    title="Select Hostel"
+                    value={selectedHostel?.name || ""}
+                    onChange={(e) =>
+                      setSelectedHostel(
+                        hostels.find((h) => h.name === e.target.value) || null
+                      )
+                    }
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/80 px-3 py-2 text-sm text-white shadow-sm transition-colors duration-150 focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] hover:border-[#A32110] placeholder-gray-500 appearance-none outline-none"
                   >
                     <option value="">Select your hostel</option>
-                    {/* Replace this array with API response if you fetch dynamically */}
-                    {[
-                      "Matthew",
-                      "Mark",
-                      "Luke",
-                      "John",
-                      "NH",
-                      "Extension",
-                      "NH Girls A",
-                      "NH Girls B",
-                      "NH Girls C",
-                      "288",
-                      "Saddler",
-                      "Storey Building",
-                      "UPE 1",
-                      "UPE 2",
-                      "UPE 3",
-                      "300 Bedspace",
-                      "VC's Lodge",
-                      "Block Hostel"].map(
-                     (hostelOption) => (
-                        <option key={hostelOption} value={hostelOption} className="bg-gray-900">
-                          {hostelOption}
-                        </option>
-                      )
-                    )}
+                    {hostels.map((hostel) => (
+                      <option
+                        key={hostel.name}
+                        value={hostel.name}
+                        className="bg-gray-900"
+                      >
+                        {hostel.name}
+                      </option>
+                    ))}
                   </select>
-                  {!hostel && (
-                    <p className="text-xs text-gray-500 mt-1">
-                      Please select your hostel to continue
-                    </p>
-                  )}
                 </div>
 
+                {/* Room Number Dropdown */}
+                <div>
+                  <label
+                    htmlFor="room-number"
+                    className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
+                  >
+                    <Home className="w-4 h-4" />
+                    Room Number
+                  </label>
+                  <select
+                    name="room_number"
+                    id="room_number"
+                    title="Select Room Number"
+                    className="w-full rounded-md border border-gray-700 bg-gray-900/80 px-3 py-2 text-sm text-white shadow-sm transition-colors duration-150 focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] hover:border-[#A32110] placeholder-gray-500 appearance-none outline-none"
+                    required
+                    value={selectedRoom || ""}
+                    onChange={(e) => setSelectedRoom(e.target.value)}
+                  >
+                    <option value="">Select your room number</option>
+                    {selectedHostel?.rooms.length === 0 && (
+                      <option value="" disabled className="bg-gray-900">
+                        No rooms available for this hostel
+                      </option>
+                    )}
+                    {selectedHostel?.rooms.map((room) => (
+                      <option key={room.id} value={room.number} className="bg-gray-900">
+                        {room.number}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
                 {/* Batch Time Selection */}
                 <div>
@@ -476,7 +470,9 @@ export default function Cart() {
                       <Button
                         key={batch.id}
                         type="button"
-                        variant={selectedBatch === batch.name ? "default" : "outline"}
+                        variant={
+                          selectedBatch === batch.name ? "default" : "outline"
+                        }
                         onClick={() => setSelectedBatch(batch.name)}
                         className={`h-12 ${
                           selectedBatch === batch.name
@@ -501,8 +497,8 @@ export default function Cart() {
                     onClick={() => {
                       setShowAddressModal(false);
                       setCustomerName("");
-                      setRoomNumber("");
-                      setHostel("");
+                      setSelectedRoom(null);
+                      setSelectedHostel(null);
                       setSelectedBatch(null);
                     }}
                     className="flex-1 border-gray-700 text-gray hover:text-white hover:bg-gray-800"
@@ -512,11 +508,10 @@ export default function Cart() {
                   <Button
                     onClick={handleAddressSubmit}
                     disabled={
-                      !hostel.trim() ||
+                      !selectedHostel ||
                       !customerName.trim() ||
-                      !roomNumber.trim() ||
+                      !selectedRoom ||
                       !selectedBatch ||
-                      !hostel.trim() ||
                       isSubmitting
                     }
                     className="flex-1 bg-[#A32110] hover:bg-[#A32110]/90 text-white disabled:opacity-50 disabled:cursor-not-allowed"

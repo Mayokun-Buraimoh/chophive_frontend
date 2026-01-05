@@ -7,6 +7,7 @@ import {
   UpdateUserProfilePayload,
   Order,
   DeliveryBatch,
+  Hostel,
 } from "./src/lib/interface";
 // import { useAuth } from "./src/contexts/AuthContext";
 
@@ -191,7 +192,7 @@ export const createOrder = async ({
   cartId,
   userId,
   customerName,
-  roomAddress,
+  roomNumber,
   deliveryBatch,
   hostel,
 }: {
@@ -200,14 +201,13 @@ export const createOrder = async ({
   customerName: string;
   hostel: string;
   deliveryTime?: string;
-  roomAddress: string;
-
+  roomNumber: number;
   deliveryBatch: string;
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
       customer_name: customerName || "",
-      room_address: roomAddress || "",
+      room_number: roomNumber || 0,
       delivery_batch: deliveryBatch || "",
       hostel: hostel || "",
     });
@@ -314,6 +314,11 @@ export const obtainToken = async (email: string, password: string) => {
 
 export const fetchDeliveryBatches = async (): Promise<DeliveryBatch[]> => {
   const res = await api.get("/delivery-batches/");
+  return res.data;
+};
+
+export const fetchHostels = async (): Promise<Hostel[]> => {
+  const res = await api.get("/hostels/");
   return res.data;
 };
 

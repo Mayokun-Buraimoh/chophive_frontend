@@ -305,6 +305,13 @@ export default function CheckoutDetails() {
                 </span>
               </div>
 
+              <div className="flex justify-between text-gray-400">
+                <span>Pack Fee</span>
+                <span className="text-white">
+                  {formatPrice(checkout.total_pack_fee)}
+                </span>
+              </div>
+
               <div className="pt-4 border-t border-gray-700">
                 <div className="flex justify-between items-center">
                   <span className="text-[#A32110] font-bold text-xl">
