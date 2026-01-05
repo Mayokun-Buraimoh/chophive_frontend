@@ -14,8 +14,8 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { useCart } from "../contexts/CartContext";
 import { useAuth } from "../contexts/AuthContext";
-import { createOrder, fetchUserProfile, deleteCart } from "../../api";
-import { UserProfile } from "../lib/interface";
+import { createOrder, fetchUserProfile, deleteCart, fetchDeliveryBatches } from "../../api";
+import { DeliveryBatch, UserProfile } from "../lib/interface";
 
 export default function Cart() {
   const navigate = useNavigate();
@@ -41,9 +41,10 @@ export default function Cart() {
   const [customerName, setCustomerName] = useState("");
   const [roomNumber, setRoomNumber] = useState("");
   const [hostel, setHostel] = useState("");
-  const [selectedBatch, setSelectedBatch] = useState<"1pm" | "6pm" | null>(
+  const [selectedBatch, setSelectedBatch] = useState<string | null>(
     null
   );
+  const [deliveryBatches, setDeliveryBatches] = useState<DeliveryBatch[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -106,9 +107,8 @@ export default function Cart() {
       setLoadingProfile(true);
       try {
         const profile: UserProfile = await fetchUserProfile(userId);
-        // if (profile.address) {
-        //   setDeliveryAddress(profile.address);
-        // }
+        const batches: DeliveryBatch[] = await fetchDeliveryBatches();
+        setDeliveryBatches(batches);
         if (profile.username) {
           setCustomerName(profile.username);
         }
@@ -156,7 +156,6 @@ export default function Cart() {
         hostel: hostel.trim(),
         customerName: customerName.trim(),
         roomAddress: roomNumber.trim(),
-        // hostel: hostel.trim(),
         deliveryBatch: selectedBatch,
       });
 
@@ -358,7 +357,6 @@ export default function Cart() {
               <button
                 onClick={() => {
                   setShowAddressModal(false);
-                  // setDeliveryAddress("");
                   setCustomerName("");
                   setRoomNumber("");
                   setHostel("");
@@ -474,30 +472,21 @@ export default function Cart() {
                     Select Delivery Batch Time
                   </label>
                   <div className="grid grid-cols-2 gap-3">
-                    <Button
-                      type="button"
-                      variant={selectedBatch === "1pm" ? "default" : "outline"}
-                      onClick={() => setSelectedBatch("1pm")}
-                      className={`h-12 ${
-                        selectedBatch === "1pm"
-                          ? "bg-[#A32110] hover:bg-[#A32110]/90 text-white border-[#A32110]"
-                          : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
-                      }`}
-                    >
-                      1:00 PM
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={selectedBatch === "6pm" ? "default" : "outline"}
-                      onClick={() => setSelectedBatch("6pm")}
-                      className={`h-12 ${
-                        selectedBatch === "6pm"
-                          ? "bg-[#A32110] hover:bg-[#A32110]/90 text-white border-[#A32110]"
-                          : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
-                      }`}
-                    >
-                      6:00 PM
-                    </Button>
+                    {deliveryBatches.map((batch) => (
+                      <Button
+                        key={batch.id}
+                        type="button"
+                        variant={selectedBatch === batch.name ? "default" : "outline"}
+                        onClick={() => setSelectedBatch(batch.name)}
+                        className={`h-12 ${
+                          selectedBatch === batch.name
+                            ? "bg-[#A32110] hover:bg-[#A32110]/90 text-white border-[#A32110]"
+                            : "border-gray-700 text-gray hover:text-white hover:bg-gray-800"
+                        }`}
+                      >
+                        {batch.name}
+                      </Button>
+                    ))}
                   </div>
                   {!selectedBatch && (
                     <p className="text-xs text-gray-500 mt-2">

@@ -187,7 +187,7 @@ export default function CheckoutDetails() {
                   <p className="text-white">
                     Hostel:{" "}
                     <span className="text-white text-sm md:text-base font-light">
-                      {checkout.hostel}
+                      {checkout.hostel.name}
                     </span>{" "}
                     <span className="text-gray-400 font-bold text-lg">|</span>{" "}
                     Room Number:{" "}
@@ -201,7 +201,7 @@ export default function CheckoutDetails() {
                 <Clock className="w-5 h-5 text-[#A32110] mt-1 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-400 mb-1">Delivery Batch</p>
-                  <p className="text-white">{checkout.delivery_batch}</p>
+                  <p className="text-white">{checkout.delivery_batch.name}</p>
                 </div>
               </div>
             </div>

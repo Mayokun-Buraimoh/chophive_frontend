@@ -6,6 +6,7 @@ import {
   FoodItem,
   UpdateUserProfilePayload,
   Order,
+  DeliveryBatch,
 } from "./src/lib/interface";
 // import { useAuth } from "./src/contexts/AuthContext";
 
@@ -201,7 +202,7 @@ export const createOrder = async ({
   deliveryTime?: string;
   roomAddress: string;
 
-  deliveryBatch: "1pm" | "6pm";
+  deliveryBatch: string;
 }) => {
   try {
     const res = await api.post(`/create-order/${cartId}/${userId}/`, {
@@ -309,6 +310,11 @@ export const obtainToken = async (email: string, password: string) => {
     password,
   });
   return res.data; // {access, refresh}
+};
+
+export const fetchDeliveryBatches = async (): Promise<DeliveryBatch[]> => {
+  const res = await api.get("/delivery-batches/");
+  return res.data;
 };
 
 export default api;

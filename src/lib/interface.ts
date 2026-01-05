@@ -133,10 +133,20 @@ export interface Checkout {
   service_fee: string;
   total: string;
   payment_status: string;
-  hostel: string;
+  hostel: Hostel;
   created_at: string;
+  delivery_batch: DeliveryBatch;
   room_address: string;
-  delivery_batch: string
+}
+
+export interface Hostel{
+  id: number;
+  name: string;
+  slug: string;
+  rooms: number;
+  description: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface Order {
@@ -160,7 +170,12 @@ export interface Order {
   order_pin: number;
 }
 
-
+export interface DeliveryBatch {
+  id: number;
+  name: string;
+  cutoff_time: string;
+  is_active: boolean;
+}
 
 //IndexedDB Schema
 export interface GuestCartItem {
