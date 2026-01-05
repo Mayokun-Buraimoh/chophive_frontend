@@ -164,15 +164,16 @@ export interface Order {
   sub_total: string;
   delivery_fee: string;
   service_fee: string;
+  total_pack_fee: string;
   total: string;
   total_amount: string;
   payment_status: string;
   status: string;
-  hostel: string;
+  hostel: Hostel;
   customer_name?: string;
   room_address?: string;
   delivery_time?: string;
-  delivery_batch?: string;
+  delivery_batch?: DeliveryBatch;
   created_at: string;
   updated_at: string;
   order_pin: number;

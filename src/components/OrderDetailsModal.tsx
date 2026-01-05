@@ -152,7 +152,7 @@ export default function OrderDetailsModal({
                   <div>
                     <p className="text-sm text-gray-400 mb-1">Hostel</p>
                     <p className="text-white text-sm md:text-base">
-                      {orderDetails?.hostel || order.hostel}
+                      {orderDetails?.hostel.name || order.hostel.name}
                     </p>
                     {orderDetails?.room_address && (
                       <p className="text-gray-400 text-xs md:text-sm mt-1">
@@ -168,7 +168,7 @@ export default function OrderDetailsModal({
                     <div>
                       <p className="text-sm text-gray-400 mb-1">Delivery Batch</p>
                       <p className="text-white text-sm md:text-base">
-                        {orderDetails.delivery_batch}
+                        {orderDetails.delivery_batch.name}
                       </p>
                     </div>
                   </div>
@@ -295,6 +295,15 @@ export default function OrderDetailsModal({
                     <span className="text-white">
                       {formatPrice(
                         orderDetails?.service_fee || order.service_fee || "0.00"
+                      )}
+                    </span>
+                    </div>
+                    
+                    <div className="flex justify-between text-gray-400 text-sm md:text-base">
+                    <span>Pack Fee</span>
+                    <span className="text-white">
+                      {formatPrice(
+                        orderDetails?.total_pack_fee || order.total_pack_fee || "0.00"
                       )}
                     </span>
                   </div>
