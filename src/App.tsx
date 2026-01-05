@@ -37,7 +37,6 @@ function App() {
               <Route path="/order-success" element={<OrderSuccess />} />
               <Route path="/customer-profile" element={<CustomerProfile />} />
               <Route path="/food/:itemId" element={<FoodDetails />} />
-              <Route path="/food-menu" element={<FoodMenu />} />
               <Route path="/vendors" element={<Vendors />} />
               <Route path="/vendors/:vendorName" element={<VendorDetails />} />
               <Route path="/orders" element={<Orders />} />

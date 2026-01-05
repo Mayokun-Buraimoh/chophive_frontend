@@ -43,12 +43,6 @@ export default function Header() {
               Home
             </Link>
             <Link
-              to={"/food-menu"}
-              className="text-white hover:text-[#1E1E1E] transition-colors"
-            >
-              Menu
-            </Link>
-            <Link
               to="/vendors"
               className="text-white hover:text-[#1E1E1E] transition-colors"
             >
@@ -164,12 +158,6 @@ export default function Header() {
             <div className="md:hidden fixed inset-x-0 top-16 bottom-0 bg-[#1E1E1E] z-50 shadow-2xl overflow-y-auto py-4 space-y-4 border-t border-gray-800 font-semibold">
               <Link to={"/"} className="block text-white hover:text-white">
                 Home
-              </Link>
-              <Link
-                to={"/food-menu"}
-                className="block text-white hover:text-white"
-              >
-                Menu
               </Link>
               <Link
                 to="/vendors"
