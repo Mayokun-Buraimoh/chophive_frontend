@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "compatible": true,
+    "composite": true,
     "skipLibCheck": true,
     "module": "ESNext",
     "moduleResolution": "bundler",
