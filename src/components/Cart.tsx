@@ -186,7 +186,7 @@ export default function Cart() {
       navigate(`/checkout/${order.order_oid}`);
     } catch (error) {
       console.error("Checkout failed:", error);
-      alert("Failed to create order. Please try again.");
+      alert("Failed to create order. Please another delivery batch or try again.");
     } finally {
       setIsSubmitting(false);
     }

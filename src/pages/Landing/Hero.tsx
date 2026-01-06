@@ -1,6 +1,8 @@
+import { useNavigate } from "react-router-dom";
 import { Button } from "../../components/ui/button";
 
 export default function Hero() {
+  const navigate = useNavigate();
   return (
     <section id="home" className="bg-[#1E1E1E] py-12 md:py-20 lg:py-32">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,7 +21,7 @@ export default function Hero() {
           <Button
             size="lg"
             className="bg-[#A32110] hover:bg-[#A32110]/90 text-white text-base md:text-lg px-8 md:px-12 py-6 md:py-7"
-          >
+            onClick={() => navigate("/vendors")}>
             Order Now
           </Button>
         </div>
