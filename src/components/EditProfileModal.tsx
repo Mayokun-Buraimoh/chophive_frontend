@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect } from "react";
-import { X, Loader2, MapPin } from "lucide-react";
+import { X, Loader2, MapPin, Home } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { UserProfile } from "../lib/interface";
-import { updateUserProfile } from "../../api";
+import { UserProfile, Hostel } from "../lib/interface";
+import { updateUserProfile, fetchHostels } from "../../api";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -21,6 +21,12 @@ export default function EditProfileModal({
   userId,
   onSuccess,
 }: EditProfileModalProps) {
+  // Hostels state for dropdowns (new)
+  const [hostels, setHostels] = useState<Hostel[]>([]);
+  const [selectedHostel, setSelectedHostel] = useState<Hostel | null>(null);
+  const [selectedRoom, setSelectedRoom] = useState<string>("");
+
+  // Classic form state (the values we will save)
   const [formData, setFormData] = useState({
     username: profile.username || "",
     phone: profile.phone || "",
@@ -39,6 +45,33 @@ export default function EditProfileModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch hostels once, and set defaults if available
+  useEffect(() => {
+    if (isOpen) {
+      fetchHostels().then((data) => {
+        setHostels(data || []);
+        // Preselect hostel by name if it's present in profile!
+        if (profile.hostel) {
+          const h = data?.find((h: Hostel) => h.name === profile.hostel);
+          setSelectedHostel(h || null);
+        }
+      });
+    }
+  }, [isOpen, profile.hostel]);
+
+  useEffect(() => {
+    // When hostel is changed fresh (dropdown), set form value and reset room
+    if (selectedHostel) {
+      setFormData((prev) => ({ ...prev, hostel: selectedHostel.name }));
+      setSelectedRoom("");
+    }
+  }, [selectedHostel]);
+
+  useEffect(() => {
+    // When room is changed, update in formData.
+    setFormData((prev) => ({ ...prev, room_number: selectedRoom }));
+  }, [selectedRoom]);
+
   useEffect(() => {
     if (isOpen && profile) {
       setFormData({
@@ -56,8 +89,14 @@ export default function EditProfileModal({
         dietary_preferences: profile.dietary_preferences || "",
       });
       setError(null);
+      // Preselect correct hostel and room for dropdowns
+      if (hostels.length && profile.hostel) {
+        const foundHostel = hostels.find((h) => h.name === profile.hostel);
+        setSelectedHostel(foundHostel || null);
+        setSelectedRoom(profile.room_number || "");
+      }
     }
-  }, [isOpen, profile]);
+  }, [isOpen, profile, hostels]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -69,26 +108,32 @@ export default function EditProfileModal({
       ...prev,
       [name]: value,
     }));
+    // If user changes hostel directly (not via select), update dropdown
+    if (name === "hostel") {
+      const h = hostels.find((h) => h.name === value) || null;
+      setSelectedHostel(h);
+    }
+    if (name === "room_number") {
+      setSelectedRoom(value);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setIsSubmitting(true);
-
     try {
       const payload: any = {};
-
-      // Only include fields that have values (not empty strings)
-      // Skip image field - backend expects file upload, not URL string
       if (formData.username.trim()) payload.username = formData.username.trim();
       if (formData.phone.trim()) payload.phone = formData.phone.trim();
       if (formData.address.trim()) payload.address = formData.address.trim();
       if (formData.gender.trim()) payload.gender = formData.gender.trim();
       if (formData.date_of_birth.trim())
         payload.date_of_birth = formData.date_of_birth.trim();
-      if (formData.hostel.trim()) payload.hostel = formData.hostel.trim();
-      if (formData.room_number.trim())
+      if (selectedHostel) payload.hostel = selectedHostel.name;
+      else if (formData.hostel.trim()) payload.hostel = formData.hostel.trim();
+      if (selectedRoom) payload.room_number = selectedRoom;
+      else if (formData.room_number.trim())
         payload.room_number = formData.room_number.trim();
       if (formData.level.trim()) {
         const levelNum = parseInt(formData.level);
@@ -100,7 +145,6 @@ export default function EditProfileModal({
         payload.favorite_cafeteria = formData.favorite_cafeteria.trim();
       if (formData.dietary_preferences.trim())
         payload.dietary_preferences = formData.dietary_preferences.trim();
-
       await updateUserProfile(userId, payload);
       onSuccess();
       onClose();
@@ -154,7 +198,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Phone */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -168,7 +211,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Address */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -183,7 +225,6 @@ export default function EditProfileModal({
                 className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110] resize-none"
               />
             </div>
-
             {/* Gender */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -201,7 +242,6 @@ export default function EditProfileModal({
                 <option value="Female">Female</option>
               </select>
             </div>
-
             {/* Date of Birth */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -215,68 +255,61 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/*Hostel Dropdown*/}
             <div>
-              <label
-                className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2"
-              >
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
                 <MapPin className="w-4 h-4" />
                 Hostel
               </label>
               <select
                 name="hostel"
                 title="Select Hostel"
-                value={formData.hostel}
+                value={selectedHostel?.name || ""}
                 onChange={handleChange}
                 className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
               >
                 <option value="">Select your hostel</option>
-                {/* Replace this array with API response if you fetch dynamically */}
-                {[
-                  "Matthew",
-                  "Mark",
-                  "Luke",
-                  "John",
-                  "NH",
-                  "Extension",
-                  "NH Girls A",
-                  "NH Girls B",
-                  "NH Girls C",
-                  "288",
-                  "Saddler",
-                  "Storey Building",
-                  "UPE 1",
-                  "UPE 2",
-                  "UPE 3",
-                  "300 Bedspace",
-                  "VC's Lodge",
-                  "Block Hostel",
-                ].map((hostelOption) => (
+                {hostels.map((hostel) => (
                   <option
-                    key={hostelOption}
-                    value={hostelOption}
+                    key={hostel.id}
+                    value={hostel.name}
                     className="bg-gray-900"
                   >
-                    {hostelOption}
+                    {hostel.name}
                   </option>
                 ))}
               </select>
             </div>
-
-            {/* Room Number */}
+            {/* Room Number Dropdown */}
             <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
+              <label className="flex items-center gap-2 text-sm font-medium text-gray-300 mb-2">
+                <Home className="w-4 h-4" />
                 Room Number
               </label>
-              <Input
+              <select
                 name="room_number"
-                value={formData.room_number}
+                title="Select Room Number"
+                value={selectedRoom || ""}
                 onChange={handleChange}
-                className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
-              />
+                className="w-full rounded-md border border-gray-700 bg-gray-900/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#A32110] focus:border-[#A32110]"
+              >
+                <option value="">Select your room number</option>
+                {selectedHostel?.rooms.length === 0 && (
+                  <option value="" disabled className="bg-gray-900">
+                    No rooms available for this hostel
+                  </option>
+                )}
+                {selectedHostel?.rooms.map((room) => (
+                  <option
+                    key={room.id}
+                    value={room.number}
+                    className="bg-gray-900"
+                  >
+                    {room.number}
+                  </option>
+                ))}
+              </select>
             </div>
-
             {/* Level */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -291,7 +324,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Department */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -304,7 +336,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Favorite Cafeteria */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -317,7 +348,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Image URL */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -332,7 +362,6 @@ export default function EditProfileModal({
                 className="bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110]"
               />
             </div>
-
             {/* Dietary Preferences */}
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-300 mb-2">
