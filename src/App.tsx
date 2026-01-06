@@ -13,10 +13,6 @@ import { FoodProvider } from "./contexts/FoodContext";
 import CustomerProfile from "./pages/CustomerProfile";
 import { AuthProvider } from "./contexts/AuthContext";
 import FoodDetails from "./pages/FoodDetails";
-<<<<<<< HEAD
-=======
-import FoodMenu from "./pages/FoodMenu";
->>>>>>> 18491e4e4f3b633eaecc04e970ba281dd6245e46
 import VendorDetails from "./pages/VendorDetails";
 import Orders from "./pages/Orders";
 import Vendors from "./pages/Vendors";

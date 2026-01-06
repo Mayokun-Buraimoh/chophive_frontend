@@ -9,10 +9,6 @@ import {
   Clock,
   Send,
   MessageSquare,
-<<<<<<< HEAD
-=======
-  ChefHat,
->>>>>>> 18491e4e4f3b633eaecc04e970ba281dd6245e46
   Instagram,
   Facebook,
   Linkedin,
