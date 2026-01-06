@@ -1,10 +1,11 @@
-# TastyHub - Food Delivery Website
+# ChopHive - Food Delivery Website
+
 
 A modern, mobile-first food delivery website built with React, TypeScript, Tailwind CSS, and Shadcn UI components.
 
 ## Features
 
-- 🎨 Modern dark theme with orange accents
+- 🎨 Modern dark theme with red accents
 - 📱 Fully responsive mobile-first design
 - 🍔 Food menu with category filtering
 - ⭐ Customer testimonials

@@ -1,5 +1,4 @@
-import { Package, Truck, Gift, Zap } from "lucide-react";
-
+import { Package, Truck, Zap } from "lucide-react";
 interface Feature {
   icon: React.ReactNode;
   title: string;

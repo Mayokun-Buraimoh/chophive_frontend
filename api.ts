@@ -9,9 +9,12 @@ import {
   DeliveryBatch,
   Hostel,
 } from "./src/lib/interface";
-// import { useAuth } from "./src/contexts/AuthContext";
 
+<<<<<<< HEAD
 const API_BASE_URL = "https://chophive-v1-1.onrender.com/";
+=======
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+>>>>>>> 54d49c89528eeb6daf516c95553ace3ef5f340d4
 
 const api = axios.create({
   baseURL: API_BASE_URL,

@@ -29,7 +29,7 @@ const VerifyEmail = () => {
     // Hit verification endpoint
     api
       .get(`/verify-email/?token=${encodeURIComponent(token)}`)
-      .then(async (res) => {
+      .then(async () => {
         setStatus("success");
         // Attempt auto login if email/password are available
         if (email && password) {

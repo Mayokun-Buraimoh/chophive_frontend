@@ -9,7 +9,6 @@ import {
   Clock,
   Send,
   MessageSquare,
-  ChefHat,
   Instagram,
   Facebook,
   Linkedin,
