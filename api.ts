@@ -9,9 +9,8 @@ import {
   DeliveryBatch,
   Hostel,
 } from "./src/lib/interface";
-// import { useAuth } from "./src/contexts/AuthContext";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/v1";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -37,8 +36,8 @@ api.interceptors.response.use(
       if (!refresh) return Promise.reject(error);
 
       try {
-        const res = await axios.post(
-          "http://localhost:8000/api/v1/user/token/refresh/",
+        const res = await api.post(
+          "/user/token/refresh/",
           { refresh },
           { withCredentials: true }
         );
