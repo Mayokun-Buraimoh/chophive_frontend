@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { Package, Truck, Zap } from "lucide-react";
+=======
+import { Package, Truck, Gift, Zap } from "lucide-react";
+>>>>>>> 18491e4e4f3b633eaecc04e970ba281dd6245e46
 
 interface Feature {
   icon: React.ReactNode;

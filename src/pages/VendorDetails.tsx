@@ -54,6 +54,14 @@ function VendorDetails() {
     }
   }, [vendorName]);
 
+<<<<<<< HEAD
+=======
+  const formatPrice = (price: string | number) => {
+    const numPrice = typeof price === "string" ? parseFloat(price) : price;
+    return `₦${numPrice.toFixed(2)}`;
+  };
+
+>>>>>>> 18491e4e4f3b633eaecc04e970ba281dd6245e46
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">

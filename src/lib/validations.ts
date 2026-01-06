@@ -49,4 +49,68 @@ export const signupSchema = z
     path: ["password2"], // This will show the error on the password2 field
   });
 
+<<<<<<< HEAD
 export type SignupFormData = z.infer<typeof signupSchema>;
+=======
+export type SignupFormData = z.infer<typeof signupSchema>;
+
+// Checkout form validation schema
+export const checkoutSchema = z
+  .object({
+    fullName: z
+      .string()
+      .min(1, "Full name is required")
+      .min(2, "Full name must be at least 2 characters"),
+    email: z
+      .string()
+      .min(1, "Email is required")
+      .email("Please enter a valid email address"),
+    phone: z
+      .string()
+      .min(1, "Phone number is required")
+      .regex(/^\+?[\d\s-()]+$/, "Please enter a valid phone number"),
+    address: z
+      .string()
+      .min(1, "Address is required")
+      .min(5, "Please enter a complete address"),
+    city: z
+      .string()
+      .min(1, "City is required")
+      .min(2, "City must be at least 2 characters"),
+    state: z
+      .string()
+      .min(1, "State is required")
+      .min(2, "State must be at least 2 characters"),
+    zipCode: z
+      .string()
+      .min(1, "ZIP code is required")
+      .regex(/^\d{5}(-\d{4})?$/, "Please enter a valid ZIP code"),
+    deliveryInstructions: z.string().optional(),
+    paymentMethod: z.enum(["card", "cash", "paypal"], {
+      required_error: "Please select a payment method",
+    }),
+    cardNumber: z.string().optional(),
+    cardName: z.string().optional(),
+    cardExpiry: z.string().optional(),
+    cardCVC: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.paymentMethod === "card") {
+        return (
+          data.cardNumber && data.cardName && data.cardExpiry && data.cardCVC
+        );
+      }
+      return true;
+    },
+    {
+      message: "Card details are required when paying with card",
+      path: ["cardNumber"],
+    }
+  );
+
+export type CheckoutFormData = z.infer<typeof checkoutSchema>;
+
+
+
+>>>>>>> 18491e4e4f3b633eaecc04e970ba281dd6245e46
