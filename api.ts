@@ -36,8 +36,8 @@ api.interceptors.response.use(
       if (!refresh) return Promise.reject(error);
 
       try {
-        const res = await api.post(
-          "/user/token/refresh/",
+        const res = await axios.post(
+          `${API_BASE_URL}/user/token/refresh/`,
           { refresh },
           { withCredentials: true }
         );

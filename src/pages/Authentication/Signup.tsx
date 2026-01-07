@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
@@ -14,6 +14,8 @@ import { getGuestCart, clearGuestCart } from "../../lib/indexedDB";
 import { getGuestCartId } from "../../lib/cart";
 
 function Signup() {
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { login } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const {
@@ -72,7 +74,7 @@ function Signup() {
         }
       }
 
-      window.location.href = "/vendors";
+      navigate("/vendors");
     } catch (error: any) {
       console.error(
         "Google Sign-In error:",
@@ -145,18 +147,12 @@ function Signup() {
       // Save email and password in localStorage for auto-login after verify
       localStorage.setItem("pending_email", data.email);
       localStorage.setItem("pending_password", data.password);
-      window.location.href =
-        "/signup?verify=1&email=" + encodeURIComponent(data.email);
+      navigate("/signup?verify=1&email=" + encodeURIComponent(data.email));
     } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
     }
   };
 
-  // Show email verification notice if just registered
-  const [searchParams] =
-    typeof window !== "undefined"
-      ? [new URLSearchParams(window.location.search)]
-      : [new URLSearchParams()];
   const showVerifyNotice = searchParams.get("verify") === "1";
 
   return (
@@ -233,8 +229,8 @@ function Signup() {
                       id="username"
                       placeholder="Choose a username"
                       className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.username
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                          : ""
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : ""
                         }`}
                       {...register("username")}
                     />
@@ -260,8 +256,8 @@ function Signup() {
                       id="email"
                       placeholder="you@example.com"
                       className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.email
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                          : ""
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : ""
                         }`}
                       {...register("email")}
                     />
@@ -287,8 +283,8 @@ function Signup() {
                       id="password"
                       placeholder="Create a strong password"
                       className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.password
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                          : ""
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : ""
                         }`}
                       {...register("password")}
                     />
@@ -317,8 +313,8 @@ function Signup() {
                       id="password2"
                       placeholder="Confirm your password"
                       className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.password2
-                          ? "border-red-500 focus:border-red-500 focus:ring-red-500"
-                          : ""
+                        ? "border-red-500 focus:border-red-500 focus:ring-red-500"
+                        : ""
                         }`}
                       {...register("password2")}
                     />
