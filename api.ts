@@ -11,7 +11,7 @@ import {
 } from "./src/lib/interface";
 // import { useAuth } from "./src/contexts/AuthContext";
 
-const API_BASE_URL = "http://127.0.0.1:8000/api/v1";
+const API_BASE_URL = "https://chophive-backend.onrender.com/api/v1"; // Updated to production backend
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -38,7 +38,7 @@ api.interceptors.response.use(
 
       try {
         const res = await axios.post(
-          "http://localhost:8000/api/v1/user/token/refresh/",
+          `${API_BASE_URL}/user/token/refresh/`,
           { refresh },
           { withCredentials: true }
         );
