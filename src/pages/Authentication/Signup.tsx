@@ -80,7 +80,7 @@ function Signup() {
       );
       alert(
         error.response?.data?.message ||
-          "Failed to sign in with Google. Please try again."
+        "Failed to sign in with Google. Please try again."
       );
     } finally {
       setGoogleLoading(false);
@@ -232,11 +232,10 @@ function Signup() {
                       type="text"
                       id="username"
                       placeholder="Choose a username"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
-                        errors.username
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.username
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
-                      }`}
+                        }`}
                       {...register("username")}
                     />
                   </div>
@@ -260,11 +259,10 @@ function Signup() {
                       type="email"
                       id="email"
                       placeholder="you@example.com"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
-                        errors.email
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.email
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
-                      }`}
+                        }`}
                       {...register("email")}
                     />
                   </div>
@@ -288,11 +286,10 @@ function Signup() {
                       type="password"
                       id="password"
                       placeholder="Create a strong password"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
-                        errors.password
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.password
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
-                      }`}
+                        }`}
                       {...register("password")}
                     />
                   </div>
@@ -319,11 +316,10 @@ function Signup() {
                       type="password"
                       id="password2"
                       placeholder="Confirm your password"
-                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${
-                        errors.password2
+                      className={`pl-10 bg-gray-900/50 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#A32110] focus:ring-[#A32110] h-12 ${errors.password2
                           ? "border-red-500 focus:border-red-500 focus:ring-red-500"
                           : ""
-                      }`}
+                        }`}
                       {...register("password2")}
                     />
                   </div>
