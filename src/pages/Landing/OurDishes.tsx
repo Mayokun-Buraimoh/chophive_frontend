@@ -64,7 +64,7 @@ export default function OurDishes() {
           {/* 3️⃣ Foods per Vendor */}
           {vendors.map((vendor) => (
             <TabsContent key={vendor.vendor_slug} value={vendor.vendor_slug}>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {foods
                   .filter((food) => food.vendor_slug === vendor.vendor_slug)
                   .map((food) => (
