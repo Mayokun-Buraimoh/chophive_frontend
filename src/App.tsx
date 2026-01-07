@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./components/Cart";
 import Home from "./pages/Landing/Home";
@@ -25,7 +25,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <FoodProvider>
-          <BrowserRouter>
+          <HashRouter>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -44,7 +44,7 @@ function App() {
               <Route path="/verify-email" element={<VerifyEmail />} />
             </Routes>
             <Cart />
-          </BrowserRouter>
+          </HashRouter>
         </FoodProvider>
       </CartProvider>
     </AuthProvider>
