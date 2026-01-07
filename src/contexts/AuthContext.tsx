@@ -7,6 +7,7 @@ import {
     ReactNode,
   } from "react";
   import { jwtDecode } from "jwt-decode";
+import { useNavigate } from "react-router-dom";
   
   interface AuthContextType {
     userId: string | null;
@@ -25,6 +26,7 @@ import {
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
     const [userId, setUserId] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
   
     // 🔁 Restore session on refresh
     useEffect(() => {
@@ -59,7 +61,7 @@ import {
       setAccessToken(null);
       setRefreshToken(null);
       setUserId(null);
-      window.location.href = "/login";
+      navigate("/login");
     };
   
     return (
