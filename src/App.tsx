@@ -1,4 +1,4 @@
-import { HashRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import Cart from "./components/Cart";
 import Home from "./pages/Landing/Home";
@@ -26,7 +26,7 @@ function App() {
     <AuthProvider>
       <CartProvider>
         <FoodProvider>
-          <HashRouter>
+          <BrowserRouter>
             <Routes>
               <Route path="/" element={<Layout />}>
                 <Route index element={<Home />} />
@@ -56,7 +56,7 @@ function App() {
               </Route>
             </Routes>
             <Cart />
-          </HashRouter>
+          </BrowserRouter>
         </FoodProvider>
       </CartProvider>
     </AuthProvider>
