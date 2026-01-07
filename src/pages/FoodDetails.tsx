@@ -36,7 +36,7 @@ export default function FoodDetails() {
     try {
       await addToCart(food, 1);
       setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 3000);
+      setTimeout(() => setAddedToCart(false), 5000);
     } catch (error) {
       console.error("Failed to add to cart:", error);
     }
@@ -68,7 +68,7 @@ export default function FoodDetails() {
               Food item not found
             </p>
             <Button
-              onClick={() => navigate("/food-menu")}
+              onClick={() => navigate(-1)}
               className="mt-4 bg-[#A32110] hover:bg-[#A32110]/90 text-white"
             >
               Back to Menu

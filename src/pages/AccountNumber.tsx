@@ -35,7 +35,7 @@ function AccountNumber() {
     if (orderOid) {
       navigate(`/checkout/${orderOid}`);
     } else {
-      navigate("/food-menu");
+      navigate("/vendors");
     }
     // addToast("Payment cancelled", "info");
   };

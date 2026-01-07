@@ -139,9 +139,9 @@ function Contact() {
                     <div>
                       <h3 className="text-white font-semibold mb-1">Email</h3>
                       <p className="text-gray-400 text-sm">
-                        support@tastyhub.com
+                        support@chophive.com
                       </p>
-                      <p className="text-gray-400 text-sm">info@tastyhub.com</p>
+                      <p className="text-gray-400 text-sm">info@chophive.com</p>
                     </div>
                   </div>
 

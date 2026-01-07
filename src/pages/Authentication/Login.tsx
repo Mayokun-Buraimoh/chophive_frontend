@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
@@ -13,6 +13,7 @@ import { useState } from "react";
 
 function Login() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [googleLoading, setGoogleLoading] = useState(false);
   const {
     register,
@@ -35,10 +36,9 @@ function Login() {
       const res = await api.post("/user/google-signin/", {
         credential,
       });
-
       const { refresh, access } = res.data;
       login(access, refresh);
-      window.location.href = "/vendors";
+      navigate("/vendors")
     } catch (error: any) {
       console.error(
         "Google Sign-In error:",
@@ -66,10 +66,9 @@ function Login() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       const res = await api.post("/user/token/", data);
-
       const { refresh, access } = res.data;
       login(access, refresh);
-      window.location.href = "/vendors";
+      navigate("/vendors")
     } catch (error: any) {
       console.error("Login error:", error.response?.data || error.message);
     }
