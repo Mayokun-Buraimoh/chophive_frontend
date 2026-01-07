@@ -19,6 +19,7 @@ import Vendors from "./pages/Vendors";
 import PasswordReset from "./pages/Authentication/PasswordReset";
 import PasswordChange from "./pages/Authentication/PasswordChange";
 import AccountNumber from "./pages/AccountNumber";
+import Layout from "./Layout";
 
 function App() {
   return (
@@ -27,21 +28,32 @@ function App() {
         <FoodProvider>
           <HashRouter>
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/checkout/:orderOid" element={<CheckoutDetails />} />
-              <Route path="/payment-account" element={<AccountNumber />} />
-              <Route path="/order-success" element={<OrderSuccess />} />
-              <Route path="/customer-profile" element={<CustomerProfile />} />
-              <Route path="/food/:itemId" element={<FoodDetails />} />
-              <Route path="/vendors" element={<Vendors />} />
-              <Route path="/vendors/:vendorName" element={<VendorDetails />} />
-              <Route path="/orders" element={<Orders />} />
-              <Route path="/password-reset" element={<PasswordReset />} />
-              <Route path="/create-new-password" element={<PasswordChange />} />
-              <Route path="/verify-email" element={<VerifyEmail />} />
+              <Route path="/" element={<Layout />}>
+                <Route index element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route
+                  path="/checkout/:orderOid"
+                  element={<CheckoutDetails />}
+                />
+                <Route path="/payment-account" element={<AccountNumber />} />
+                <Route path="/order-success" element={<OrderSuccess />} />
+                <Route path="/customer-profile" element={<CustomerProfile />} />
+                <Route path="/food/:itemId" element={<FoodDetails />} />
+                <Route path="/vendors" element={<Vendors />} />
+                <Route
+                  path="/vendors/:vendorName"
+                  element={<VendorDetails />}
+                />
+                <Route path="/orders" element={<Orders />} />
+                <Route path="/password-reset" element={<PasswordReset />} />
+                <Route
+                  path="/create-new-password"
+                  element={<PasswordChange />}
+                />
+                <Route path="/verify-email" element={<VerifyEmail />} />
+              </Route>
             </Routes>
             <Cart />
           </HashRouter>
