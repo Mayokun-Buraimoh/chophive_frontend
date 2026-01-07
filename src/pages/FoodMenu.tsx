@@ -1,5 +1,3 @@
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { Input } from "../components/ui/input";
 import { Button } from "../components/ui/button";
 import {
@@ -93,7 +91,6 @@ function FoodMenu() {
 
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
-      <Header />
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         {/* Header Section */}
         <div className="mb-8">
@@ -326,7 +323,6 @@ function FoodMenu() {
           </div>
         )}
       </main>
-      <Footer />
     </div>
   );
 }

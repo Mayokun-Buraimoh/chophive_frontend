@@ -2,10 +2,8 @@ import { useEffect, useState } from "react";
 import { fetchUserProfile } from "../../api";
 import { UserProfile } from "../lib/interface";
 import { Loader2, UserCircle, Edit2 } from "lucide-react";
-import Header from "../components/Header";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 import { Button } from "../components/ui/button";
 import EditProfileModal from "../components/EditProfileModal";
 
@@ -67,7 +65,6 @@ export default function CustomerProfile() {
 
   return (
     <section className="min-h-screen bg-[#1E1E1E]">
-      <Header />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
@@ -156,8 +153,6 @@ export default function CustomerProfile() {
           onSuccess={handleProfileUpdate}
         />
       )}
-
-      <Footer />
     </section>
   );
 }

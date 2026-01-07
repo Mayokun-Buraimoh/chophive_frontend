@@ -3,8 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCheckout } from "../../api";
 import { Checkout, OrderItem } from "../lib/interface";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { ArrowLeft, CheckCircle, Clock, MapPin, Package } from "lucide-react";
 import { Button } from "../components/ui/button";
 
@@ -92,14 +90,14 @@ export default function CheckoutDetails() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
-        <Header />
+        {/* <Header /> */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-4xl mx-auto text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#A32110] mx-auto mb-4"></div>
             <p className="text-gray-400">Loading order details...</p>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
@@ -107,7 +105,7 @@ export default function CheckoutDetails() {
   if (error || !checkout) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
-        <Header />
+        {/* <Header /> */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="max-w-2xl mx-auto text-center">
             <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-6 mb-6">
@@ -126,15 +124,13 @@ export default function CheckoutDetails() {
             </Button>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
-      <Header />
-
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="max-w-4xl mx-auto">
           {/* Back Button */}
@@ -345,7 +341,6 @@ export default function CheckoutDetails() {
         </div>
       </div>
 
-      <Footer />
     </div>
   );
 }

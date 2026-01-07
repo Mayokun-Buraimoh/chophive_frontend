@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import { Vendor, FoodItem } from "../lib/interface";
 import api, { fetchFoodItems } from "../../api";
-import Header from "../components/Header";
 import { useParams, useNavigate } from "react-router-dom";
-import Footer from "../components/Footer";
 import { Loader2, Store, MapPin, ArrowUpRight } from "lucide-react";
 import { useCart } from "../contexts/CartContext";
 import { Button } from "../components/ui/button";
@@ -57,11 +55,11 @@ function VendorDetails() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
-        <Header />
+        {/* <Header /> */}
         <div className="flex items-center justify-center min-h-[400px]">
           <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
@@ -69,21 +67,20 @@ function VendorDetails() {
   if (!vendor) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
-        <Header />
+        {/* <Header /> */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="text-center">
             <Store className="w-16 h-16 md:w-20 md:h-20 text-gray-600 mx-auto mb-4" />
             <p className="text-red-400 text-lg md:text-xl">Vendor not found</p>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
 
   return (
     <section className="min-h-screen bg-[#1E1E1E]">
-      <Header />
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <div className="max-w-6xl mx-auto">
           {/* Vendor Header */}
@@ -212,7 +209,6 @@ function VendorDetails() {
           </div>
         </div>
       </div>
-      <Footer />
     </section>
   );
 }

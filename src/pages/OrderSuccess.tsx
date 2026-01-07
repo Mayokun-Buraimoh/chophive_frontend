@@ -1,7 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { CheckCircle, Package, Home, ShoppingBag } from "lucide-react";
 
 function OrderSuccess() {
@@ -9,7 +7,6 @@ function OrderSuccess() {
 
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
-      <Header />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
         <div className="max-w-2xl mx-auto">
@@ -122,8 +119,6 @@ function OrderSuccess() {
           </div>
         </div>
       </div>
-
-      <Footer />
     </div>
   );
 }

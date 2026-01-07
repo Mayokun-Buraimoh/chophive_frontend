@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { fetchVendors } from "../../api";
 import { Vendor } from "../lib/interface";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import { Loader2, Store, ArrowRight } from "lucide-react";
 import { Button } from "../components/ui/button";
 
@@ -34,21 +32,20 @@ export default function Vendors() {
   if (loading) {
     return (
       <div className="min-h-screen bg-[#1E1E1E]">
-        <Header />
+        {/* <Header /> */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           <div className="flex items-center justify-center min-h-[400px]">
             <Loader2 className="w-8 h-8 animate-spin text-[#A32110]" />
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
-      <Header />
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
+=      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 md:py-12">
         <div className="max-w-6xl mx-auto">
           {/* Header */}
           <div className="mb-6 md:mb-8">
@@ -126,7 +123,6 @@ export default function Vendors() {
           )}
         </div>
       </div>
-      <Footer />
     </div>
   );
 }

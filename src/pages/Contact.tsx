@@ -1,7 +1,5 @@
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
 import {
   Mail,
   Phone,
@@ -18,7 +16,6 @@ import {
 function Contact() {
   return (
     <div className="min-h-screen bg-[#1E1E1E]">
-      <Header />
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-[#A32110]/10 to-transparent py-16 md:py-24">
@@ -235,7 +232,7 @@ function Contact() {
           </div>
 
           {/* Map Section */}
-          <div className="mt-12 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 shadow-2xl">
+          {/* <div className="mt-12 bg-gray-800/50 backdrop-blur-sm rounded-2xl p-8 border border-gray-700 shadow-2xl">
             <h2 className="text-2xl md:text-3xl font-bold text-white mb-6">
               Find Us on the Map
             </h2>
@@ -250,11 +247,9 @@ function Contact() {
                 </p>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </section>
-
-      <Footer />
     </div>
   );
 }

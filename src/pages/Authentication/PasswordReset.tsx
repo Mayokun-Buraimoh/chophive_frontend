@@ -2,8 +2,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { requestPasswordReset } from "../../../api";
-import Header from "../../components/Header";
-import Footer from "../../components/Footer";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Loader2, Mail, CheckCircle } from "lucide-react";
@@ -35,7 +33,6 @@ export default function PasswordReset() {
 
   return (
     <div className="min-h-screen bg-[#1E1E1E] flex flex-col">
-      <Header />
       <div className="flex-1 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <div className="w-full max-w-md">
           <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-6 md:p-8 border border-gray-700">
@@ -127,7 +124,6 @@ export default function PasswordReset() {
           </div>
         </div>
       </div>
-      <Footer />
     </div>
   );
 }
