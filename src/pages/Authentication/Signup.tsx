@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "../../components/ui/button";
@@ -14,6 +14,7 @@ import { getGuestCart, clearGuestCart } from "../../lib/indexedDB";
 import { getGuestCartId } from "../../lib/cart";
 
 function Signup() {
+  const navigate = useNavigate();
   const { login } = useAuth();
   const [googleLoading, setGoogleLoading] = useState(false);
   const {
@@ -72,7 +73,7 @@ function Signup() {
         }
       }
 
-      window.location.href = "/vendors";
+      navigate("/vendors");
     } catch (error: any) {
       console.error(
         "Google Sign-In error:",
@@ -145,8 +146,7 @@ function Signup() {
       // Save email and password in localStorage for auto-login after verify
       localStorage.setItem("pending_email", data.email);
       localStorage.setItem("pending_password", data.password);
-      window.location.href =
-        "/signup?verify=1&email=" + encodeURIComponent(data.email);
+      navigate("/signup?verify=1&email=" + encodeURIComponent(data.email));
     } catch (error: any) {
       console.error("Signup error:", error.response?.data || error.message);
     }
