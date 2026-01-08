@@ -23,43 +23,43 @@ import Layout from "./Layout";
 
 function App() {
   return (
-    <AuthProvider>
-      <CartProvider>
-        <FoodProvider>
-          <HashRouter>
-            <Routes>
-              <Route path="/" element={<Layout />}>
-                <Route index element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/contact" element={<Contact />} />
-                <Route
-                  path="/checkout/:orderOid"
-                  element={<CheckoutDetails />}
-                />
-                <Route path="/payment-account" element={<AccountNumber />} />
-                <Route path="/order-success" element={<OrderSuccess />} />
-                <Route path="/customer-profile" element={<CustomerProfile />} />
-                <Route path="/food/:itemId" element={<FoodDetails />} />
-                <Route path="/vendors" element={<Vendors />} />
-                <Route
-                  path="/vendors/:vendorName"
-                  element={<VendorDetails />}
-                />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/password-reset" element={<PasswordReset />} />
-                <Route
-                  path="/create-new-password"
-                  element={<PasswordChange />}
-                />
-                <Route path="/verify-email" element={<VerifyEmail />} />
-              </Route>
-            </Routes>
-            <Cart />
-          </HashRouter>
-        </FoodProvider>
-      </CartProvider>
-    </AuthProvider>
+    <HashRouter>
+      <AuthProvider>
+        <CartProvider>
+          <FoodProvider>
+              <Routes>
+                <Route path="/" element={<Layout />}>
+                  <Route index element={<Home />} />
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/contact" element={<Contact />} />
+                  <Route
+                    path="/checkout/:orderOid"
+                    element={<CheckoutDetails />}
+                  />
+                  <Route path="/payment-account" element={<AccountNumber />} />
+                  <Route path="/order-success" element={<OrderSuccess />} />
+                  <Route path="/customer-profile" element={<CustomerProfile />} />
+                  <Route path="/food/:itemId" element={<FoodDetails />} />
+                  <Route path="/vendors" element={<Vendors />} />
+                  <Route
+                    path="/vendors/:vendorName"
+                    element={<VendorDetails />}
+                  />
+                  <Route path="/orders" element={<Orders />} />
+                  <Route path="/password-reset" element={<PasswordReset />} />
+                  <Route
+                    path="/create-new-password"
+                    element={<PasswordChange />}
+                  />
+                  <Route path="/verify-email" element={<VerifyEmail />} />
+                </Route>
+              </Routes>
+              <Cart />
+          </FoodProvider>
+        </CartProvider>
+      </AuthProvider>
+    </HashRouter>
   );
 }
 
