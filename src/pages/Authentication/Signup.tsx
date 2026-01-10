@@ -6,7 +6,7 @@ import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Mail, Lock, User, ChefHat, Loader2 } from "lucide-react";
 import { signupSchema, type SignupFormData } from "../../lib/validations";
-import api, { syncCartOnSignup } from "../../../api";
+import api from "../../../api";
 import { useAuth } from "../../contexts/AuthContext";
 import { useGoogleSignIn } from "../../hooks/useGoogleSignIn";
 import { useState } from "react";
