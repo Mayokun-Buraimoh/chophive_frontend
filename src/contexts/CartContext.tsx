@@ -335,3 +335,88 @@ export function useCart() {
   }
   return context;
 }
+  };
+
+const deleteItem = async (cartItemId: number) => {
+  if (!cartId && isAuthenticated) {
+    console.warn("Cart not initialized yet");
+    return;
+  }
+
+  try {
+    // 👉 GUEST USER FLOW
+    if (!isAuthenticated) {
+      const guestCartId = getGuestCartId();
+      if (!guestCartId) return;
+
+      const db = await openCartDB();
+      const tx = db.transaction("cart_items", "readwrite");
+      const store = tx.objectStore("cart_items");
+
+      await new Promise<void>((resolve, reject) => {
+        const request = store.delete(cartItemId);
+
+        request.onsuccess = () => resolve();
+        request.onerror = () => reject(request.error);
+      });
+
+      tx.oncomplete = async () => {
+        await loadCart();
+      };
+
+      return;
+    }
+
+    // 👉 AUTHENTICATED USER FLOW
+    await deleteCartItem({
+      cartId,
+      cartItemId,
+      userId,
+    });
+
+    await loadCart();
+  } catch (error) {
+    console.error("Delete cart item failed:", error);
+  }
+};
+
+const refreshCartId = async () => {
+  await loadCartId();
+};
+
+const getItemQuantity = (foodItemId: number): number => {
+  if (!cart || !cart.items) return 0;
+  const item = cart.items.find((i) => i.food_item.id === foodItemId);
+  return item ? item.quantity : 0;
+};
+
+return (
+  <CartContext.Provider
+    value={{
+      cart,
+      isOpen,
+      loading,
+      cartId,
+      openCart,
+      closeCart,
+      addToCart,
+      increaseQuantity,
+      decreaseQuantity,
+      deleteItem,
+      refreshCart: loadCart,
+      refreshCartId,
+      getItemQuantity,
+    }}
+  >
+    {children}
+  </CartContext.Provider>
+);
+}
+
+export function useCart() {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error("useCart must be used within a CartProvider");
+  }
+  return context;
+}
