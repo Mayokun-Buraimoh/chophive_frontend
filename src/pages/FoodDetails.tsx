@@ -32,14 +32,6 @@ export default function FoodDetails() {
   }, [itemId]);
 
   const handleAddToCart = async () => {
-    // Check for token directly from localStorage as a fallback/primary check
-    const token = localStorage.getItem("access_token");
-
-    if (!token) {
-      navigate("/signup");
-      return;
-    }
-
     if (!food) return;
     try {
       await addToCart(food, 1);
@@ -146,10 +138,11 @@ export default function FoodDetails() {
 
                 <div className="flex items-center gap-2 mb-6">
                   <span
-                    className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${food.is_available
+                    className={`px-3 py-1 rounded-full text-xs md:text-sm font-medium ${
+                      food.is_available
                         ? "text-green-400 bg-green-400/10"
                         : "text-red-400 bg-red-400/10"
-                      }`}
+                    }`}
                   >
                     {food.is_available ? "Available" : "Out of stock"}
                   </span>

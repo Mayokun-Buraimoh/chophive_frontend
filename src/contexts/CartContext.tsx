@@ -14,6 +14,9 @@ import {
   updateCartItemQuantity,
 } from "../../api";
 import { useAuth } from "./AuthContext";
+import { getGuestCartId } from "../lib/cart";
+import { addGuestCartItem, getGuestCart, openCartDB } from "../lib/indexedDB";
+import { mapGuestCartToCart } from "../lib/mapGuestCartToCart";
 
 interface CartContextType {
   cart: Cart | null;
@@ -60,7 +63,14 @@ export function CartProvider({ children }: { children: ReactNode }) {
     setLoading(true);
     try {
       if (!isAuthenticated) {
-        setCart(null);
+        console.warn("No user_id found. User not authenticated.");
+        const id = localStorage.getItem("guest_cart_id");
+        if (id) {
+          const data = await getGuestCart(id);
+          console.log("Guest Cart data: ", data);
+          const cartData = mapGuestCartToCart(data, id);
+          setCart(cartData);
+        }
         return;
       }
       console.log("Fetching cart...", cartId);
@@ -96,6 +106,26 @@ export function CartProvider({ children }: { children: ReactNode }) {
       console.log("user_id: " + userId);
       if (!isAuthenticated) {
         console.warn("No user_id found. User not authenticated.");
+      }
+
+      if (!isAuthenticated) {
+        const cartId = getGuestCartId();
+        const now = new Date().toISOString();
+
+        await addGuestCartItem({
+          cart_id: cartId,
+          food_item_id: food.id,
+          food_item: food,
+          qty: quantity,
+          price: food.price,
+          sub_total: (Number(food.price) * quantity).toFixed(2),
+          delivery_fee: "0.00",
+          service_fee: "0.00",
+          total: (Number(food.price) * quantity).toFixed(2),
+          created_at: now,
+          updated_at: now,
+        });
+        await loadCart();
         return;
       }
 
@@ -144,7 +174,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const increaseQuantity = async (cartItemId: number) => {
     if (!cart) return;
 
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      const guestCartId = getGuestCartId();
+      const guestCart = await getGuestCart(guestCartId);
+
+      const item = guestCart.find((i) => i.id === cartItemId);
+      if (!item) return;
+
+      await addGuestCartItem({
+        ...item,
+        qty: 1,
+        sub_total: (Number(item.price) * (item.qty + 1)).toFixed(2),
+        total: (Number(item.price) * (item.qty + 1)).toFixed(2),
+        updated_at: new Date().toISOString(),
+      });
+
+      await loadCart();
+      return;
+    }
 
     const item = cart.items.find((i) => i.id === cartItemId);
     if (!item) return;
@@ -163,7 +210,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const decreaseQuantity = async (cartItemId: number) => {
     if (!cart) return;
 
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      const guestCartId = getGuestCartId();
+      const guestCart = await getGuestCart(guestCartId);
+
+      const item = guestCart.find((i) => i.id === cartItemId);
+      if (!item) return;
+
+      await addGuestCartItem({
+        ...item,
+        qty: -1,
+        sub_total: (Number(item.price) * (item.qty - 1)).toFixed(2),
+        total: (Number(item.price) * (item.qty - 1)).toFixed(2),
+        updated_at: new Date().toISOString(),
+      });
+
+      await loadCart();
+      return;
+    }
 
     const item = cart.items.find((i) => i.id === cartItemId);
     if (!item) return;
@@ -195,7 +259,28 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
 
     try {
-      if (!isAuthenticated) return;
+      // 👉 GUEST USER FLOW
+      if (!isAuthenticated) {
+        const guestCartId = getGuestCartId();
+        if (!guestCartId) return;
+
+        const db = await openCartDB();
+        const tx = db.transaction("cart_items", "readwrite");
+        const store = tx.objectStore("cart_items");
+
+        await new Promise<void>((resolve, reject) => {
+          const request = store.delete(cartItemId);
+
+          request.onsuccess = () => resolve();
+          request.onerror = () => reject(request.error);
+        });
+
+        tx.oncomplete = async () => {
+          await loadCart();
+        };
+
+        return;
+      }
 
       // 👉 AUTHENTICATED USER FLOW
       await deleteCartItem({
